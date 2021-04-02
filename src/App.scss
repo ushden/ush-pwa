@@ -1,0 +1,39 @@
+*,
+*::after,
+*::before {
+	margin: 0;
+	padding: 0;
+}
+
+body {
+	font-family: 'Roboto', sans-serif;
+}
+
+.anim-opacity {
+	animation: opacity 1s ease-in;
+}
+
+.anim-transform {
+	animation: transform 0.4s ease-in;
+}
+
+@keyframes transform {
+	0% {
+		transform: translateX(+100%);
+	}
+	100% {
+		transform: translateX(0);
+	}
+}
+
+@keyframes opacity {
+	0% {
+		opacity: 0;
+	}
+	50% {
+		opacity: 0.5;
+	}
+	100% {
+		opacity: 1;
+	}
+}
