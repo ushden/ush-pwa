@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import MobileStepper from '@material-ui/core/MobileStepper';
 import Button from '@material-ui/core/Button';
 import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
@@ -16,10 +15,9 @@ import {
 	NAME_VALID_ERROR,
 	PASS_VALID_ERROR,
 } from '../constants/constants';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { showAlert } from '../store/alert/alertActions';
 import { useHistory } from 'react-router';
-import classesName from 'classnames';
 import { signUpUserWithEmailAndPassword } from '../store/user/userActions';
 
 const useStyles = makeStyles({
@@ -86,17 +84,17 @@ export const SignUnPage = () => {
 	};
 
 	const handleClickNext = () => {
-		// if (email === '') {
-		// 	return dispatch(showAlert(ALERT_ERROR, EMAIL_VALID_ERROR));
-		// }
+		if (email === '') {
+			return dispatch(showAlert(ALERT_ERROR, EMAIL_VALID_ERROR));
+		}
 
-		// if (pass === '' || pass.length < 6) {
-		// 	return dispatch(showAlert(ALERT_ERROR, PASS_VALID_ERROR));
-		// }
+		if (password === '' || password.length < 6) {
+			return dispatch(showAlert(ALERT_ERROR, PASS_VALID_ERROR));
+		}
 
-		// if (name === '' && activeStep === 1) {
-		// 	return dispatch(showAlert(ALERT_ERROR, NAME_VALID_ERROR));
-		// }
+		if (name === '' && activeStep === 1) {
+			return dispatch(showAlert(ALERT_ERROR, NAME_VALID_ERROR));
+		}
 
 		setActiveStep((step) => step + 1);
 	};

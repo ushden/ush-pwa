@@ -1,8 +1,9 @@
-import { Box, Button, Container } from '@material-ui/core';
+import { Box, Container } from '@material-ui/core';
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
+import { FAB } from '../components/FAB';
 import { NavigationPanel } from '../components/navigation/NavigationPanel';
-import { auth } from '../firebase';
+import { Post } from '../components/post/Post';
 import { getUser } from '../store/user/userActions';
 
 export const MainPage = () => {
@@ -10,71 +11,16 @@ export const MainPage = () => {
 
 	useEffect(() => {
 		dispatch(getUser());
-	});
+	}, [dispatch]);
 
 	return (
 		<Box component='section'>
-			<NavigationPanel />
+			<NavigationPanel title='Посты' />
 			<Container>
-				<Button onClick={() => auth.signOut()}>OUT</Button>
-				<p>Hello</p>
-				<p>Hello</p>
-				<p>Hello</p>
-				<p>Hello</p>
-				<p>Hello</p>
-				<p>Hello</p>
-				<p>Hello</p>
-				<p>Hello</p>
-				<p>Hello</p>
-				<p>Hello</p>
-				<p>Hello</p>
-				<p>Hello</p>
-				<p>Hello</p>
-				<p>Hello</p>
-				<p>Hello</p>
-				<p>Hello</p>
-				<p>Hello</p>
-				<p>Hello</p>
-				<p>Hello</p>
-				<p>Hello</p>
-				<p>Hello</p>
-				<p>Hello</p>
-				<p>Hello</p>
-				<p>Hello</p>
-				<p>Hello</p>
-				<p>Hello</p>
-				<p>Hello</p>
-				<p>Hello</p>
-				<p>Hello</p>
-				<p>Hello</p>
-				<p>Hello</p>
-				<p>Hello</p>
-				<p>Hello</p>
-				<p>Hello</p>
-				<p>Hello</p>
-				<p>Hello</p>
-				<p>Hello</p>
-				<p>Hello</p>
-				<p>Hello</p>
-				<p>Hello</p>
-				<p>Hello</p>
-				<p>Hello</p>
-				<p>Hello</p>
-				<p>Hello</p>
-				<p>Hello</p>
-				<p>Hello</p>
-				<p>Hello</p>
-				<p>Hello</p>
-				<p>Hello</p>
-				<p>Hello</p>
-				<p>Hello</p>
-				<p>Hello</p>
-				<p>Hello</p>
-				<p>Hello</p>
-				<p>Hello</p>
-				<p>Hello</p>
-				<p>Hello</p>
+				<Post />
+				<Post />
 			</Container>
+			<FAB />
 		</Box>
 	);
 };

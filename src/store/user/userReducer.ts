@@ -1,4 +1,4 @@
-import { GET_USER, USER_SIGN_UP } from '../../constants/constants';
+import { GET_USER, SIGN_OUT } from '../../constants/constants';
 import { UserActions, UserState } from '../types';
 
 const initialState: UserState = {
@@ -14,10 +14,10 @@ export const userReducer = (
 	action: UserActions
 ): UserState => {
 	switch (action.type) {
-		case USER_SIGN_UP:
-			return { ...state, ...action.payload, isLogIn: true };
 		case GET_USER:
-			return { ...state, ...action.payload };
+			return { ...state, ...action.payload, isLogIn: true };
+		case SIGN_OUT:
+			return { ...initialState };
 		default:
 			return { ...state };
 	}

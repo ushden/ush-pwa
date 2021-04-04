@@ -67,6 +67,7 @@ interface PropsType {
 	email: string;
 	setPass: React.Dispatch<React.SetStateAction<string>>;
 	setEmail: React.Dispatch<React.SetStateAction<string>>;
+	handleClickSignInUser: () => void;
 }
 
 export const SignInForm: React.FC<PropsType> = ({
@@ -74,6 +75,7 @@ export const SignInForm: React.FC<PropsType> = ({
 	email,
 	setPass,
 	setEmail,
+	handleClickSignInUser,
 }: PropsType): React.ReactElement => {
 	const classes = useStyles();
 	const history = useHistory();
@@ -148,7 +150,10 @@ export const SignInForm: React.FC<PropsType> = ({
 					onClick={() => history.goBack()}>
 					Назад
 				</Button>
-				<Button variant='contained' classes={{ root: classes.btnIn }}>
+				<Button
+					variant='contained'
+					classes={{ root: classes.btnIn }}
+					onClick={handleClickSignInUser}>
 					Войти
 				</Button>
 			</Box>

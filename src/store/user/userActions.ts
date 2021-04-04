@@ -2,14 +2,12 @@ import { AnyAction } from 'redux';
 import { ThunkAction } from 'redux-thunk';
 import {
 	GET_USER,
+	SIGN_OUT,
 	STORAGE_AVATARS,
 	USERS,
-	USER_SIGN_UP,
 } from '../../constants/constants';
 import { auth, DocData, firestore, storage } from '../../firebase';
 import { RootState } from '../rootReducer';
-import { UserState } from '../types';
-
 interface signUpPropsType {
 	name: string;
 	email: string;
@@ -17,8 +15,8 @@ interface signUpPropsType {
 	avatar: string;
 }
 
-const signUpAction = (payload: UserState) => ({ type: USER_SIGN_UP, payload });
 const getUserAction = (payload: DocData) => ({ type: GET_USER, payload });
+const signOutUserAction = () => ({ type: SIGN_OUT });
 
 const uploadUserAvatar = async (uri: string, name: string | undefined) => {
 	try {
@@ -32,6 +30,20 @@ const uploadUserAvatar = async (uri: string, name: string | undefined) => {
 	}
 };
 
+export const getUser = (): ThunkAction<void, RootState, unknown, AnyAction> => {
+	return async (dispatch) => {
+		try {
+			const id = auth.currentUser?.uid;
+			const snapshot = await firestore.collection(USERS).doc(id).get();
+			const user = snapshot.data();
+
+			dispatch(getUserAction(user));
+		} catch (error) {
+			console.error(error.code, error.message);
+		}
+	};
+};
+
 export const signUpUserWithEmailAndPassword = ({
 	email,
 	password,
@@ -40,6 +52,8 @@ export const signUpUserWithEmailAndPassword = ({
 }: signUpPropsType): ThunkAction<void, RootState, unknown, AnyAction> => {
 	return async (dispatch) => {
 		try {
+			let avatarUrl = '';
+
 			await auth
 				.createUserWithEmailAndPassword(email, password)
 				.then((user) => user);
@@ -49,8 +63,10 @@ export const signUpUserWithEmailAndPassword = ({
 			if (user) {
 				const snapshot = await uploadUserAvatar(avatar, name);
 				await snapshot?.ref.getDownloadURL().then((url) => {
-					user.updateProfile({ photoURL: url, displayName: name });
+					avatarUrl = url;
 				});
+
+				await user.updateProfile({ photoURL: avatarUrl, displayName: name });
 
 				const payload = {
 					_id: user.uid,
@@ -61,7 +77,7 @@ export const signUpUserWithEmailAndPassword = ({
 
 				await firestore.collection(USERS).doc(user.uid).set(payload);
 
-				dispatch(signUpAction(payload));
+				dispatch(getUser());
 			}
 		} catch (error) {
 			console.error(error.code, error.message);
@@ -69,14 +85,30 @@ export const signUpUserWithEmailAndPassword = ({
 	};
 };
 
-export const getUser = (): ThunkAction<void, RootState, unknown, AnyAction> => {
+export const signInUserWithEmailAndPassword = (
+	email: string,
+	password: string
+): ThunkAction<void, RootState, unknown, AnyAction> => {
 	return async (dispatch) => {
 		try {
-			const id = auth.currentUser?.uid;
-			const snapshot = await firestore.collection(USERS).doc(id).get();
-			const user = snapshot.data();
+			await auth.signInWithEmailAndPassword(email, password);
 
-			dispatch(getUserAction(user));
+			const user = auth.currentUser;
+
+			if (user) {
+				dispatch(getUser());
+			}
+		} catch (error) {
+			console.log(error.code, error.message);
+		}
+	};
+};
+
+export const signOut = (): ThunkAction<void, RootState, unknown, AnyAction> => {
+	return async (dispatch) => {
+		try {
+			await auth.signOut();
+			dispatch(signOutUserAction());
 		} catch (error) {
 			console.error(error.code, error.message);
 		}

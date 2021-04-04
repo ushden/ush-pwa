@@ -16,9 +16,8 @@ export const EMAIL_VALID_ERROR = 'Ошибка в поле email';
 export const PASS_VALID_ERROR = 'Ошибка в поле пароля';
 export const NAME_VALID_ERROR = 'Введите имя';
 
-export const USER_SIGN_UP = 'USER_SIGN_UP';
-export const USER_SIGN_IN = 'USER_SIGN_IN';
 export const GET_USER = 'GET_USER';
+export const SIGN_OUT = 'SIGN_OUT';
 
 export const USERS = 'users';
 

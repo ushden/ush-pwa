@@ -3,7 +3,7 @@ import {
 	GET_USER,
 	HIDE_ALERT,
 	SHOW_ALERT,
-	USER_SIGN_UP,
+	SIGN_OUT,
 } from '../constants/constants';
 import { DocData } from '../firebase';
 
@@ -31,18 +31,16 @@ export interface UserState {
 	_id: string;
 	name: string | null;
 	email: string | null;
-	photoUrl: string | null;
+	photoUrl: string | undefined;
 	isLogIn?: boolean;
 }
-
-interface signUpUser {
-	type: typeof USER_SIGN_UP;
-	payload: UserState;
-}
-
 interface getUser {
 	type: typeof GET_USER;
 	payload: DocData;
 }
 
-export type UserActions = signUpUser | getUser;
+interface signOutUser {
+	type: typeof SIGN_OUT;
+}
+
+export type UserActions = getUser | signOutUser;
