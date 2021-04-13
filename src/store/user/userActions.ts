@@ -1,13 +1,11 @@
 import { AnyAction } from 'redux';
 import { ThunkAction } from 'redux-thunk';
-import {
-	GET_USER,
-	SIGN_OUT,
-	STORAGE_AVATARS,
-	USERS,
-} from '../../constants/constants';
-import { auth, DocData, firestore, storage } from '../../firebase';
+import { ALERT_ERROR, STORAGE_AVATARS, USERS } from '../../constants/constants';
+import { auth, firestore } from '../../firebase';
+import { uploadImage } from '../../api/uploadImage';
 import { RootState } from '../rootReducer';
+import { User, UserActions } from '../types';
+import { showAlert } from '../alert/alertActions';
 interface signUpPropsType {
 	name: string;
 	email: string;
@@ -15,30 +13,24 @@ interface signUpPropsType {
 	avatar: string;
 }
 
-const getUserAction = (payload: DocData) => ({ type: GET_USER, payload });
-const signOutUserAction = () => ({ type: SIGN_OUT });
-
-const uploadUserAvatar = async (uri: string, name: string | undefined) => {
-	try {
-		const response = await fetch(uri);
-		const blob = await response.blob();
-		const ref = storage.ref().child(`${STORAGE_AVATARS}/${name}`);
-
-		return ref.put(blob);
-	} catch (error) {
-		console.error(error.message);
-	}
-};
+const getUserAction = (payload: User) => ({
+	type: UserActions.GET_USER,
+	payload,
+});
+const signOutUserAction = () => ({ type: UserActions.SIGN_OUT });
+const showUserLoaderAction = () => ({ type: UserActions.SHOW_USER_LOADER });
+const hideUserLoaderAction = () => ({ type: UserActions.HIDE_USER_LOADER });
 
 export const getUser = (): ThunkAction<void, RootState, unknown, AnyAction> => {
 	return async (dispatch) => {
 		try {
 			const id = auth.currentUser?.uid;
 			const snapshot = await firestore.collection(USERS).doc(id).get();
-			const user = snapshot.data();
+			const user: any = snapshot.data();
 
 			dispatch(getUserAction(user));
 		} catch (error) {
+			dispatch(showAlert(ALERT_ERROR, 'Не удалось загрузить пользователя'));
 			console.error(error.code, error.message);
 		}
 	};
@@ -52,7 +44,7 @@ export const signUpUserWithEmailAndPassword = ({
 }: signUpPropsType): ThunkAction<void, RootState, unknown, AnyAction> => {
 	return async (dispatch) => {
 		try {
-			let avatarUrl = '';
+			dispatch(showUserLoaderAction());
 
 			await auth
 				.createUserWithEmailAndPassword(email, password)
@@ -61,10 +53,7 @@ export const signUpUserWithEmailAndPassword = ({
 			const user = auth.currentUser;
 
 			if (user) {
-				const snapshot = await uploadUserAvatar(avatar, name);
-				await snapshot?.ref.getDownloadURL().then((url) => {
-					avatarUrl = url;
-				});
+				const avatarUrl = await uploadImage(avatar, name, STORAGE_AVATARS);
 
 				await user.updateProfile({ photoURL: avatarUrl, displayName: name });
 
@@ -77,10 +66,12 @@ export const signUpUserWithEmailAndPassword = ({
 
 				await firestore.collection(USERS).doc(user.uid).set(payload);
 
-				dispatch(getUser());
+				dispatch(hideUserLoaderAction());
 			}
 		} catch (error) {
-			console.error(error.code, error.message);
+			dispatch(hideUserLoaderAction());
+			dispatch(showAlert(ALERT_ERROR, 'Не удалось зарегестрироватся'));
+			console.error(error.code);
 		}
 	};
 };
@@ -91,14 +82,18 @@ export const signInUserWithEmailAndPassword = (
 ): ThunkAction<void, RootState, unknown, AnyAction> => {
 	return async (dispatch) => {
 		try {
+			dispatch(showUserLoaderAction());
 			await auth.signInWithEmailAndPassword(email, password);
 
 			const user = auth.currentUser;
 
 			if (user) {
+				dispatch(hideUserLoaderAction());
 				dispatch(getUser());
 			}
 		} catch (error) {
+			dispatch(hideUserLoaderAction());
+			dispatch(showAlert(ALERT_ERROR, 'Не удалось войти'));
 			console.log(error.code, error.message);
 		}
 	};

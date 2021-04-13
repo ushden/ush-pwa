@@ -15,10 +15,12 @@ import {
 	NAME_VALID_ERROR,
 	PASS_VALID_ERROR,
 } from '../constants/constants';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { showAlert } from '../store/alert/alertActions';
 import { useHistory } from 'react-router';
 import { signUpUserWithEmailAndPassword } from '../store/user/userActions';
+import { RootState } from '../store/rootReducer';
+import { Loader } from '../components/Loader';
 
 const useStyles = makeStyles({
 	section: {
@@ -45,6 +47,8 @@ export const SignUnPage = () => {
 	const dispatch = useDispatch();
 	const classes = useStyles();
 	const history = useHistory();
+
+	const loading = useSelector((state: RootState) => state.user.userLoading);
 
 	const handleClickSignUp = () => {
 		const payload = {
@@ -110,7 +114,11 @@ export const SignUnPage = () => {
 	return (
 		<Box component='section' className={classes.section}>
 			<Container className={classes.container}>
-				<Box component='div'>{getStepContent(activeStep)}</Box>
+				{loading ? (
+					<Loader />
+				) : (
+					<Box component='div'>{getStepContent(activeStep)}</Box>
+				)}
 			</Container>
 			<MobileStepper
 				variant='progress'

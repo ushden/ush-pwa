@@ -23,15 +23,8 @@
 	</head>
 	<body>
 		<noscript>You need to enable JavaScript to run this app.</noscript>
-		<div id="root"></div>
+		<div>
+			<h1>У Вас нет интернета, попробуйте позже. КЕК</h1>
+		</div>
 	</body>
-	<script type="application/javascript">
-		if ('serviceWorker' in navigator) {
-			window.addEventListener('load', () => {
-				navigator.serviceWorker
-					.register('service-worker.js')
-					.then((res) => res);
-			});
-		}
-	</script>
 </html>

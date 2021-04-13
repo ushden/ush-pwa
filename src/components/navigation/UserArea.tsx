@@ -28,7 +28,7 @@ const useStyles = makeStyles({
 
 export const UserArea = () => {
 	const classes = useStyles();
-	const { name, photoUrl } = useSelector((state: RootState) => state.user);
+	const { name, photoUrl } = useSelector((state: RootState) => state.user.user);
 
 	return (
 		<Box
@@ -38,7 +38,7 @@ export const UserArea = () => {
 			onClick={() => console.log('go to profile')}>
 			<Box component='div' className={classes.userAvatarWrap}>
 				<img
-					src={DEFAULT_USER_AVATAR && photoUrl}
+					src={photoUrl || DEFAULT_USER_AVATAR}
 					alt='user'
 					className={classes.userAvatar}
 				/>
@@ -47,7 +47,7 @@ export const UserArea = () => {
 				{name}
 			</Typography>
 			<Typography align='center' component='span' className={classes.userRole}>
-				Administarator
+				loh
 			</Typography>
 		</Box>
 	);

@@ -49,7 +49,9 @@ export const NavigationPanel = ({ title, backButton }: PropsType) => {
 					</Toolbar>
 				</AppBar>
 			</HideOnScroll>
-			<NavigationDrawer openMenu={openMenu} setOpenMenu={setOpenMenu} />
+			{backButton ? null : (
+				<NavigationDrawer openMenu={openMenu} setOpenMenu={setOpenMenu} />
+			)}
 		</Fragment>
 	);
 };

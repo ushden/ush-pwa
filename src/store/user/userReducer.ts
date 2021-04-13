@@ -1,23 +1,30 @@
-import { GET_USER, SIGN_OUT } from '../../constants/constants';
-import { UserActions, UserState } from '../types';
+import { UserActions, UserActionsType, UserState } from '../types';
 
 const initialState: UserState = {
-	_id: '',
-	name: '',
-	email: '',
-	photoUrl: '',
-	isLogIn: false,
+	user: {
+		_id: '',
+		name: '',
+		email: '',
+		photoUrl: '',
+		isLogIn: false,
+		savedPosts: [],
+	},
+	userLoading: false,
 };
 
 export const userReducer = (
 	state = initialState,
-	action: UserActions
+	action: UserActionsType
 ): UserState => {
 	switch (action.type) {
-		case GET_USER:
-			return { ...state, ...action.payload, isLogIn: true };
-		case SIGN_OUT:
+		case UserActions.GET_USER:
+			return { ...state, user: { ...action.payload, isLogIn: true } };
+		case UserActions.SIGN_OUT:
 			return { ...initialState };
+		case UserActions.SHOW_USER_LOADER:
+			return { ...state, userLoading: true, user: { ...state.user } };
+		case UserActions.HIDE_USER_LOADER:
+			return { ...state, userLoading: false, user: { ...state.user } };
 		default:
 			return { ...state };
 	}

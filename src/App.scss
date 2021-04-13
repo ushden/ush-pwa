@@ -1,8 +1,20 @@
+:root {
+	--main-color: '#26c6da';
+}
+
 *,
 *::after,
 *::before {
 	margin: 0;
 	padding: 0;
+}
+
+html::-webkit-scrollbar {
+	background-color: var(--main-color);
+}
+
+html::-webkit-scrollbar-thumb {
+	background-color: var(--main-color);
 }
 
 body {
@@ -36,4 +48,9 @@ body {
 	100% {
 		opacity: 1;
 	}
+}
+
+.navigation_link-active {
+	background-color: var(--main-color);
+	color: '#fff';
 }

@@ -1,4 +1,6 @@
 export const DEFAULT_USER_AVATAR = '/images/default_avatar.png';
+export const EMPTY_IMAGE = '/images/empty-img.png';
+
 export const COLOR_LIGHT = '#6ff9ff';
 export const COLOR_EXTRA_LIGHT = '#e5ffff';
 export const COLOR_DARK = '#0095a8';
@@ -16,9 +18,7 @@ export const EMAIL_VALID_ERROR = 'Ошибка в поле email';
 export const PASS_VALID_ERROR = 'Ошибка в поле пароля';
 export const NAME_VALID_ERROR = 'Введите имя';
 
-export const GET_USER = 'GET_USER';
-export const SIGN_OUT = 'SIGN_OUT';
-
 export const USERS = 'users';
-
 export const STORAGE_AVATARS = 'avatars';
+export const POSTS = 'posts';
+export const RATING = 'rating';

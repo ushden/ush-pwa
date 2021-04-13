@@ -20,6 +20,10 @@ if (firebase.apps.length === 0) {
 export type User = firebase.User;
 export type DocData = firebase.firestore.DocumentData | undefined;
 
+export const increment = firebase.firestore.FieldValue.increment(1);
+export const decrement = firebase.firestore.FieldValue.increment(-1);
+export const updateArray = firebase.firestore.FieldValue;
+
 export const auth = firebase.auth();
 export const firestore = firebase.firestore();
 export const storage = firebase.storage();

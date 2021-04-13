@@ -4,7 +4,9 @@ import { makeStyles } from '@material-ui/core/styles';
 import { COLOR_EXTRA_LIGHT } from '../constants/constants';
 import { SignInForm } from '../components/signInPage/SignInForm';
 import { signInUserWithEmailAndPassword } from '../store/user/userActions';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../store/rootReducer';
+import { Loader } from '../components/Loader';
 
 const useStyles = makeStyles({
 	section: {
@@ -28,6 +30,8 @@ export const SignInPage = (): React.ReactElement => {
 	const [email, setEmail] = useState<string>('');
 	const [pass, setPass] = useState<string>('');
 
+	const loading = useSelector((state: RootState) => state.user.userLoading);
+
 	const handleClickSignInUser = () => {
 		dispatch(signInUserWithEmailAndPassword(email, pass));
 	};
@@ -35,13 +39,17 @@ export const SignInPage = (): React.ReactElement => {
 	return (
 		<Box component='section' className={classes.section}>
 			<Container className={classes.container}>
-				<SignInForm
-					email={email}
-					pass={pass}
-					setPass={setPass}
-					setEmail={setEmail}
-					handleClickSignInUser={handleClickSignInUser}
-				/>
+				{loading ? (
+					<Loader />
+				) : (
+					<SignInForm
+						email={email}
+						pass={pass}
+						setPass={setPass}
+						setEmail={setEmail}
+						handleClickSignInUser={handleClickSignInUser}
+					/>
+				)}
 			</Container>
 		</Box>
 	);
