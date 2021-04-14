@@ -4,11 +4,13 @@ import { composeWithDevTools } from 'redux-devtools-extension';
 import { alertReducer } from './alert/alertReducer';
 import { userReducer } from './user/userReducer';
 import { postsReducer } from './posts/postsReducer';
+import { commentsReducer } from './comments/commentsReducer';
 
 const rootReducer = combineReducers({
-	posts: postsReducer,
-	user: userReducer,
 	alert: alertReducer,
+	user: userReducer,
+	posts: postsReducer,
+	comments: commentsReducer,
 });
 
 const store = createStore(

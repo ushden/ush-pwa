@@ -64,7 +64,8 @@ const useStyles = makeStyles({
 interface PostFooterPropsType {
 	like: boolean;
 	dislike: boolean;
-	count: number;
+	ratingCount: number;
+	commentsCount: number;
 	savePost: boolean;
 	handleLikeClick: any;
 	handleDislikeClick: any;
@@ -75,7 +76,8 @@ interface PostFooterPropsType {
 export const PostFooter = ({
 	like,
 	dislike,
-	count,
+	ratingCount,
+	commentsCount,
 	savePost,
 	handleLikeClick,
 	handleDislikeClick,
@@ -97,7 +99,7 @@ export const PostFooter = ({
 					<ExpandLessOutlinedIcon />
 				</IconButton>
 				<Typography component='p' className={classes.postFooterAppraisalCount}>
-					{count ? count : ' - '}
+					{ratingCount ? ratingCount : ' - '}
 				</Typography>
 				<IconButton
 					disabled={dislike}
@@ -113,7 +115,7 @@ export const PostFooter = ({
 				<IconButton className={classes.postFooterBtn}>
 					<CommentOutlinedIcon />
 				</IconButton>
-				<Typography component='p'>0</Typography>
+				<Typography component='p'>{commentsCount}</Typography>
 			</Box>
 			<Box component='div'>
 				<IconButton

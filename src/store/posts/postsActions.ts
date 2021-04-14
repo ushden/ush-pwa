@@ -134,10 +134,13 @@ export const likePost = (
 				await firestore
 					.collection(RATING)
 					.doc(postId)
-					.set({
-						likes: updateArray.arrayUnion(user.uid),
-						dislike: updateArray.arrayRemove(user.uid),
-					});
+					.set(
+						{
+							likes: updateArray.arrayUnion(user.uid),
+							dislike: updateArray.arrayRemove(user.uid),
+						},
+						{ merge: true }
+					);
 			}
 		} catch (error) {
 			console.error(error.code, error.message);
@@ -161,10 +164,13 @@ export const dislikePost = (
 				await firestore
 					.collection(RATING)
 					.doc(postId)
-					.set({
-						likes: updateArray.arrayRemove(user.uid),
-						dislike: updateArray.arrayUnion(user.uid),
-					});
+					.set(
+						{
+							likes: updateArray.arrayRemove(user.uid),
+							dislike: updateArray.arrayUnion(user.uid),
+						},
+						{ merge: true }
+					);
 			}
 		} catch (error) {
 			console.error(error.code, error.message);
@@ -207,7 +213,6 @@ export const savePost = (
 			}
 
 			dispatch(showAlert(ALERT_INFO, 'Пост сохранен'));
-			dispatch(fetchPosts());
 		} catch (error) {
 			console.error(error.code, error.message);
 			dispatch(showAlert(ALERT_ERROR, 'Произошла ошибка :('));
@@ -232,7 +237,6 @@ export const unSavePost = (
 			}
 
 			dispatch(showAlert(ALERT_INFO, 'Пост больше не сохранен'));
-			dispatch(fetchPosts());
 		} catch (error) {
 			console.error(error.code, error.message);
 			dispatch(showAlert(ALERT_ERROR, 'Произошла ошибка :('));

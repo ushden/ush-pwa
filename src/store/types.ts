@@ -29,9 +29,9 @@ export enum UserActions {
 }
 export interface User {
 	_id: string;
-	name: string | null;
-	email: string | null;
-	photoUrl: string | undefined;
+	name: string | undefined;
+	email: string | undefined;
+	photoUrl?: string | undefined;
 	isLogIn?: boolean;
 	savedPosts?: Array<string>;
 }
@@ -74,6 +74,7 @@ export interface PostType {
 	image: string;
 	createAt: string;
 	rating?: number;
+	comments?: number;
 	user: User;
 }
 
@@ -119,3 +120,47 @@ export type PostsActionsType =
 	| hidePostLoader
 	| createPost
 	| deletePost;
+
+// Comments
+export interface CommentType {
+	_id: string;
+	text: string;
+	createAt: string;
+	postId: string;
+	user: User;
+}
+export interface CommentsState {
+	comment: CommentType;
+	comments: Array<CommentType>;
+	commentsLoading: boolean;
+}
+
+export enum CommentsActions {
+	ADD_COMMENT = 'ADD_COMMENT',
+	FETCH_COMMENTS = 'FETCH_COMMENTS',
+	SHOW_COMMENT_LOADING = 'SHOW_COMMENT_LOADING',
+	HIDE_COMMENT_LOADING = 'HIDE_COMMENT_LOADING',
+}
+
+interface addCommentActionType {
+	type: CommentsActions.ADD_COMMENT;
+	payload: CommentType;
+}
+
+interface fetchCommentsActionType {
+	type: CommentsActions.FETCH_COMMENTS;
+	payload: Array<CommentType>;
+}
+interface showCommentLoadingActionType {
+	type: CommentsActions.SHOW_COMMENT_LOADING;
+}
+
+interface hideCommentsLoadingActionType {
+	type: CommentsActions.HIDE_COMMENT_LOADING;
+}
+
+export type CommentsActionsType =
+	| addCommentActionType
+	| showCommentLoadingActionType
+	| hideCommentsLoadingActionType
+	| fetchCommentsActionType;

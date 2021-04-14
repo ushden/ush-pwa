@@ -9,6 +9,7 @@ const initialState: PostsState = {
 		image: '',
 		createAt: '',
 		rating: 0,
+		comments: 0,
 		user: {
 			_id: '',
 			name: '',
@@ -51,6 +52,6 @@ export const postsReducer = (
 				posts: [...state.posts.filter((post) => post._id !== action.payload)],
 			};
 		default:
-			return { ...initialState };
+			return { ...state };
 	}
 };

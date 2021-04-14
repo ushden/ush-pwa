@@ -14,6 +14,6 @@ export const alertReducer = (state = defaultState, action: AlertActions) => {
 		case HIDE_ALERT:
 			return { ...state, visible: action.payload };
 		default:
-			return { ...defaultState };
+			return { ...state };
 	}
 };

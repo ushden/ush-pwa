@@ -48,7 +48,8 @@ export const Post = ({ post, id }: PostPropsType) => {
 
 	const [like, setLike] = useState<boolean>(false);
 	const [dislike, setDislike] = useState<boolean>(false);
-	const [count, setCount] = useState<number>(0);
+	const [RatingCount, setRatingCount] = useState<number>(0);
+	const [commentsCount, setcommentsCount] = useState<number>(0);
 
 	const [isSavePost, setIsSavePost] = useState<boolean>(false);
 
@@ -76,7 +77,21 @@ export const Post = ({ post, id }: PostPropsType) => {
 				if (doc.exists) {
 					const data = doc.data();
 
-					setCount(data?.rating);
+					setRatingCount(data?.rating);
+				}
+			});
+		return () => unsubscribe();
+	}, [id]);
+
+	useEffect(() => {
+		const unsubscribe = firestore
+			.collection(POSTS)
+			.doc(id)
+			.onSnapshot((doc) => {
+				if (doc.exists) {
+					const data = doc.data();
+
+					setcommentsCount(data?.comments);
 				}
 			});
 		return () => unsubscribe();
@@ -154,7 +169,8 @@ export const Post = ({ post, id }: PostPropsType) => {
 				<Divider />
 				<PostFooter
 					like={like}
-					count={count}
+					ratingCount={RatingCount}
+					commentsCount={commentsCount}
 					dislike={dislike}
 					handleLikeClick={handleLikeClick}
 					handleDislikeClick={handleDislikeClick}
