@@ -1,6 +1,7 @@
 import classNames from 'classnames';
 import { Box, IconButton, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
+import Skeleton from '@material-ui/lab/Skeleton';
 import ExpandLessOutlinedIcon from '@material-ui/icons/ExpandLessOutlined';
 import ExpandMoreOutlinedIcon from '@material-ui/icons/ExpandMoreOutlined';
 import CommentOutlinedIcon from '@material-ui/icons/CommentOutlined';
@@ -8,6 +9,8 @@ import BookmarkBorderOutlinedIcon from '@material-ui/icons/BookmarkBorderOutline
 import BookmarkOutlinedIcon from '@material-ui/icons/BookmarkOutlined';
 import ShareOutlinedIcon from '@material-ui/icons/ShareOutlined';
 import { COLOR_PRIMARY } from '../../constants/constants';
+import { Link } from 'react-router-dom';
+import { PostType } from '../../store/types';
 
 const useStyles = makeStyles({
 	postFooter: {
@@ -59,10 +62,15 @@ const useStyles = makeStyles({
 	postFooterBtn: {
 		color: COLOR_PRIMARY,
 	},
+	skeletonCircle: {
+		width: '1.3rem',
+		height: '1.3rem',
+	},
 });
 
 interface PostFooterPropsType {
 	like: boolean;
+	post: PostType;
 	dislike: boolean;
 	ratingCount: number;
 	commentsCount: number;
@@ -76,6 +84,7 @@ interface PostFooterPropsType {
 export const PostFooter = ({
 	like,
 	dislike,
+	post,
 	ratingCount,
 	commentsCount,
 	savePost,
@@ -99,7 +108,11 @@ export const PostFooter = ({
 					<ExpandLessOutlinedIcon />
 				</IconButton>
 				<Typography component='p' className={classes.postFooterAppraisalCount}>
-					{ratingCount ? ratingCount : ' - '}
+					{ratingCount ? (
+						ratingCount
+					) : (
+						<Skeleton variant='circle' className={classes.skeletonCircle} />
+					)}
 				</Typography>
 				<IconButton
 					disabled={dislike}
@@ -112,10 +125,18 @@ export const PostFooter = ({
 				</IconButton>
 			</Box>
 			<Box component='div' className={classes.postFooterComents}>
-				<IconButton className={classes.postFooterBtn}>
-					<CommentOutlinedIcon />
-				</IconButton>
-				<Typography component='p'>{commentsCount}</Typography>
+				<Link to={{ pathname: `/post/${post._id}`, state: post }}>
+					<IconButton className={classes.postFooterBtn}>
+						<CommentOutlinedIcon />
+					</IconButton>
+				</Link>
+				<Typography component='p'>
+					{commentsCount ? (
+						commentsCount
+					) : (
+						<Skeleton variant='circle' className={classes.skeletonCircle} />
+					)}
+				</Typography>
 			</Box>
 			<Box component='div'>
 				<IconButton

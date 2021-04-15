@@ -26,11 +26,17 @@ export const MainPage = () => {
 
 	const posts = useSelector((state: RootState) => state.posts.posts);
 	const loading = useSelector((state: RootState) => state.posts.postLoading);
+	const user = useSelector((state: RootState) => state.user.user);
 
 	useEffect(() => {
-		dispatch(getUser());
-		dispatch(fetchPosts());
-	}, [dispatch]);
+		if (user._id === '') {
+			dispatch(getUser());
+		}
+		if (posts.length === 0) {
+			dispatch(fetchPosts());
+		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, []);
 
 	return (
 		<Box component='section'>

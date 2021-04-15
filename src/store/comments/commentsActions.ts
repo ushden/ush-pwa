@@ -1,10 +1,22 @@
+import { ANIME, DEAD, EMOJI, SAD, SMILE } from './../../constants/constants';
 import { CommentType, CommentsActions } from './../types';
 import { AnyAction } from 'redux';
 import { ThunkAction } from 'redux-thunk';
-import { ALERT_ERROR, COMMENTS, POSTS } from '../../constants/constants';
+import {
+	ALERT_ERROR,
+	ALERT_SUCCESS,
+	COMMENTS,
+	POSTS,
+} from '../../constants/constants';
 import { showAlert } from '../alert/alertActions';
 import { RootState } from '../rootReducer';
-import { auth, firestore, increment, updateArray } from '../../firebase';
+import {
+	auth,
+	decrement,
+	firestore,
+	increment,
+	updateArray,
+} from '../../firebase';
 
 const showCommentLoadingAction = () => ({
 	type: CommentsActions.SHOW_COMMENT_LOADING,
@@ -14,6 +26,10 @@ const hideCommentLoadingAction = () => ({
 });
 const fetchCommentsActions = (payload: Array<CommentType>) => ({
 	type: CommentsActions.FETCH_COMMENTS,
+	payload,
+});
+const deleteCommentAction = (payload: string) => ({
+	type: CommentsActions.DELETE_COMMENT,
 	payload,
 });
 
@@ -37,6 +53,7 @@ export const addComment = (
 						_id: user.uid,
 						name: user.displayName,
 						email: user.email,
+						photoUrl: user.photoURL,
 					},
 				};
 
@@ -75,6 +92,67 @@ export const fetchComments = (
 		} catch (error) {
 			console.error(error.code, error.message);
 			dispatch(showAlert(ALERT_ERROR, 'Не удалось добавить комментарий :('));
+		}
+	};
+};
+
+export const deleteComment = (
+	comment: CommentType
+): ThunkAction<void, RootState, unknown, AnyAction> => {
+	return async (dispatch) => {
+		try {
+			await firestore
+				.collection(COMMENTS)
+				.doc(comment.postId)
+				.update({
+					comments: updateArray.arrayRemove(comment),
+				});
+			await firestore.collection(POSTS).doc(comment.postId).update({
+				comments: decrement,
+			});
+
+			dispatch(deleteCommentAction(comment._id));
+			dispatch(showAlert(ALERT_SUCCESS, 'Комментарий успешно удален :)'));
+		} catch (error) {
+			console.error(error.code, error.message);
+			dispatch(showAlert(ALERT_ERROR, 'Произошла ошибка :('));
+		}
+	};
+};
+
+export const addCommentEmoji = (
+	comment: CommentType,
+	type: string
+): ThunkAction<void, RootState, unknown, AnyAction> => {
+	return async (dispatch) => {
+		try {
+			await firestore
+				.collection(EMOJI)
+				.doc(comment._id)
+				.set(
+					{
+						smile:
+							type === SMILE
+								? updateArray.arrayUnion(comment.user._id)
+								: updateArray.arrayRemove(comment.user._id),
+						sad:
+							type === SAD
+								? updateArray.arrayUnion(comment.user._id)
+								: updateArray.arrayRemove(comment.user._id),
+						dead:
+							type === DEAD
+								? updateArray.arrayUnion(comment.user._id)
+								: updateArray.arrayRemove(comment.user._id),
+						anime:
+							type === ANIME
+								? updateArray.arrayUnion(comment.user._id)
+								: updateArray.arrayRemove(comment.user._id),
+					},
+					{ merge: true }
+				);
+		} catch (error) {
+			console.error(error.code, error.message);
+			dispatch(showAlert(ALERT_ERROR, 'Произошла ошибка'));
 		}
 	};
 };

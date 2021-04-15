@@ -19,6 +19,7 @@ import { auth, firestore } from '../../firebase';
 import { PostHeader } from './PostHeader';
 import { PostBody } from './PostBody';
 import { PostFooter } from './PostFooter';
+import { Modal } from '../Modal';
 
 const useStyles = makeStyles({
 	post: {
@@ -52,6 +53,8 @@ export const Post = ({ post, id }: PostPropsType) => {
 	const [commentsCount, setcommentsCount] = useState<number>(0);
 
 	const [isSavePost, setIsSavePost] = useState<boolean>(false);
+
+	const [openModal, setOpenModal] = useState<boolean>(false);
 
 	useEffect(() => {
 		const unsubscribe = firestore
@@ -152,6 +155,10 @@ export const Post = ({ post, id }: PostPropsType) => {
 		}
 	};
 
+	const handleVisibleModal = () => {
+		setOpenModal((visible) => !visible);
+	};
+
 	return (
 		<Paper
 			component='article'
@@ -165,9 +172,10 @@ export const Post = ({ post, id }: PostPropsType) => {
 					handleMenuCloseClick={handleMenuCloseClick}
 					handleDeletePostClick={handleDeletePostClick}
 				/>
-				<PostBody post={post} />
+				<PostBody post={post} onOpenModalHandle={handleVisibleModal} />
 				<Divider />
 				<PostFooter
+					post={post}
 					like={like}
 					ratingCount={RatingCount}
 					commentsCount={commentsCount}
@@ -179,6 +187,11 @@ export const Post = ({ post, id }: PostPropsType) => {
 					handleClickSavePost={handleClickSavePost}
 				/>
 			</Container>
+			<Modal
+				visible={openModal}
+				onCloseModal={handleVisibleModal}
+				photoUrl={post.image}
+			/>
 		</Paper>
 	);
 };

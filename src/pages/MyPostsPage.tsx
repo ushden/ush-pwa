@@ -1,4 +1,4 @@
-import { Box, Container } from '@material-ui/core';
+import { Box, Container, Typography } from '@material-ui/core';
 import { useSelector } from 'react-redux';
 import { Loader } from '../components/Loader';
 import { NavigationPanel } from '../components/navigation/NavigationPanel';
@@ -13,6 +13,19 @@ export const MyPostsPage = () => {
 		state.posts.posts.filter((post) => post.user._id === user?.uid)
 	);
 	const loading = useSelector((state: RootState) => state.posts.postLoading);
+
+	if (posts.length === 0) {
+		return (
+			<Box component='section'>
+				<NavigationPanel title='Мои посты' />
+				<Typography
+					component='h3'
+					style={{ color: '#ccc', textAlign: 'center', marginTop: '2rem' }}>
+					Создайте свой первый пост!
+				</Typography>
+			</Box>
+		);
+	}
 
 	return (
 		<Box component='section'>

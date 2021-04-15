@@ -140,11 +140,17 @@ export enum CommentsActions {
 	FETCH_COMMENTS = 'FETCH_COMMENTS',
 	SHOW_COMMENT_LOADING = 'SHOW_COMMENT_LOADING',
 	HIDE_COMMENT_LOADING = 'HIDE_COMMENT_LOADING',
+	DELETE_COMMENT = 'DELETE_COMMENT',
 }
 
 interface addCommentActionType {
 	type: CommentsActions.ADD_COMMENT;
 	payload: CommentType;
+}
+
+interface deleteCommentActionType {
+	type: CommentsActions.DELETE_COMMENT;
+	payload: string;
 }
 
 interface fetchCommentsActionType {
@@ -163,4 +169,5 @@ export type CommentsActionsType =
 	| addCommentActionType
 	| showCommentLoadingActionType
 	| hideCommentsLoadingActionType
-	| fetchCommentsActionType;
+	| fetchCommentsActionType
+	| deleteCommentActionType;

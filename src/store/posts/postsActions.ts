@@ -89,6 +89,7 @@ export const createPost = (
 				dispatch(createPostAction(payload));
 				dispatch(hidePostLoaderAction());
 				dispatch(showAlert(ALERT_SUCCESS, 'Поздравляю, Вы создали пост! УРА!'));
+				dispatch(fetchPosts());
 			}
 		} catch (error) {
 			console.error(error.code, error.message);

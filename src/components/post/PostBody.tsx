@@ -1,11 +1,13 @@
 import { Box, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
+import Skeleton from '@material-ui/lab/Skeleton';
+
 import { Link } from 'react-router-dom';
 import { COLOR_DARK, EMPTY_IMAGE } from '../../constants/constants';
 import { PostType } from '../../store/types';
-
 interface PostBodyPropsType {
 	post: PostType;
+	onOpenModalHandle: () => void;
 }
 
 const useStyles = makeStyles({
@@ -29,7 +31,7 @@ const useStyles = makeStyles({
 	},
 });
 
-export const PostBody = ({ post }: PostBodyPropsType) => {
+export const PostBody = ({ post, onOpenModalHandle }: PostBodyPropsType) => {
 	const classes = useStyles();
 
 	return (
@@ -42,11 +44,16 @@ export const PostBody = ({ post }: PostBodyPropsType) => {
 				</Link>
 			</Typography>
 			<Box component='div' className={classes.postBodyImgWrap}>
-				<img
-					src={post.image || EMPTY_IMAGE}
-					alt={post.title}
-					className={classes.postBodyImg}
-				/>
+				{post.image ? (
+					<img
+						src={post.image || EMPTY_IMAGE}
+						alt={post.title}
+						className={classes.postBodyImg}
+						onClick={onOpenModalHandle}
+					/>
+				) : (
+					<Skeleton variant='rect' />
+				)}
 			</Box>
 			<Typography component='p'>{post.description}</Typography>
 		</Box>

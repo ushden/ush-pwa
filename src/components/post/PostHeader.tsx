@@ -57,6 +57,9 @@ const useStyles = makeStyles({
 	postMenuIcon: {
 		color: COLOR_PRIMARY,
 	},
+	menuItem: {
+		padding: '0 0.2rem',
+	},
 });
 
 interface PostHeaderPropsType {
@@ -101,7 +104,7 @@ export const PostHeader = ({
 					open={Boolean(anchorEl)}
 					onClose={handleMenuCloseClick}
 					keepMounted>
-					<MenuItem>
+					<MenuItem className={classes.menuItem}>
 						<Button
 							variant='text'
 							className={classes.postMenuDelete}

@@ -1,4 +1,4 @@
-import { Box, Container } from '@material-ui/core';
+import { Box, Container, Typography } from '@material-ui/core';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Loader } from '../components/Loader';
@@ -11,24 +11,34 @@ import { getUser } from '../store/user/userActions';
 export const SavedPostsPage = () => {
 	const dispatch = useDispatch();
 
-	const savePostsId = useSelector(
-		(state: RootState) => state.user.user.savedPosts
-	);
+	const user = useSelector((state: RootState) => state.user.user);
 	const posts = useSelector((state: RootState) =>
-		state.posts.posts.filter((post) => savePostsId?.includes(post._id))
+		state.posts.posts.filter((post) => user?.savedPosts?.includes(post._id))
 	);
 	const loading = useSelector((state: RootState) => state.posts.postLoading);
 
 	useEffect(() => {
-		dispatch(getUser());
-		dispatch(fetchPosts());
-	}, [dispatch]);
+		if (user?._id === '') {
+			dispatch(getUser());
+		}
+
+		if (posts.length === 0) {
+			dispatch(fetchPosts());
+		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, []);
 
 	return (
 		<Box component='section'>
 			<NavigationPanel title='Сохранненые посты' />
 			<Container>
-				{loading ? (
+				{posts.length === 0 ? (
+					<Typography
+						component='h3'
+						style={{ color: '#ccc', textAlign: 'center', marginTop: '2rem' }}>
+						Нет сохранненых постов
+					</Typography>
+				) : loading ? (
 					<Loader />
 				) : (
 					<Box component='div'>

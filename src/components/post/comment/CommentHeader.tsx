@@ -1,4 +1,13 @@
-import { Avatar, Box, IconButton } from '@material-ui/core';
+import {
+	Avatar,
+	Box,
+	IconButton,
+	Menu,
+	MenuItem,
+	Button,
+	Fade,
+} from '@material-ui/core';
+import DeleteForeverOutlinedIcon from '@material-ui/icons/DeleteForeverOutlined';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import { makeStyles } from '@material-ui/styles';
 
@@ -11,6 +20,9 @@ interface PropsType {
 	avatar: string | undefined;
 	name: string | undefined;
 	createAt: string | undefined;
+	anchorEl: null | HTMLElement;
+	handleDeleteComment: () => void;
+	handleMenuToggle: (event: React.MouseEvent<HTMLElement>) => void;
 }
 
 const useStyles = makeStyles({
@@ -45,9 +57,24 @@ const useStyles = makeStyles({
 		fontSize: '0.6rem',
 		color: 'gray',
 	},
+	menuItem: {
+		padding: '0 0.2rem',
+	},
+	postMenuDelete: {
+		padding: 0,
+		fontWeight: 'inherit',
+		alignItems: 'center',
+	},
 });
 
-export const CommentHeader = ({ avatar, name, createAt }: PropsType) => {
+export const CommentHeader = ({
+	avatar,
+	name,
+	createAt,
+	anchorEl,
+	handleDeleteComment,
+	handleMenuToggle,
+}: PropsType) => {
 	const classes = useStyles();
 
 	return (
@@ -68,10 +95,29 @@ export const CommentHeader = ({ avatar, name, createAt }: PropsType) => {
 				</Box>
 			</Box>
 			<Box component='div'>
-				<IconButton className={classes.btn}>
+				<IconButton className={classes.btn} onClick={handleMenuToggle}>
 					<MoreVertIcon className={classes.icon} />
 				</IconButton>
 			</Box>
+			<Menu
+				id='post-menu'
+				TransitionComponent={Fade}
+				anchorEl={anchorEl}
+				open={Boolean(anchorEl)}
+				onClose={handleMenuToggle}
+				keepMounted>
+				<MenuItem className={classes.menuItem}>
+					<Button
+						variant='text'
+						className={classes.postMenuDelete}
+						onClick={handleDeleteComment}>
+						<DeleteForeverOutlinedIcon
+							style={{ color: COLOR_PRIMARY, marginRight: '0.2rem' }}
+						/>
+						Удалить комментарий
+					</Button>
+				</MenuItem>
+			</Menu>
 		</Box>
 	);
 };

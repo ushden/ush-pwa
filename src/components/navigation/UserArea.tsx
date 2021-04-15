@@ -1,5 +1,6 @@
 import { Box, Typography } from '@material-ui/core';
 import { DEFAULT_USER_AVATAR } from '../../constants/constants';
+import Skeleton from '@material-ui/lab/Skeleton';
 
 import { makeStyles } from '@material-ui/styles';
 import { useSelector } from 'react-redux';
@@ -10,6 +11,7 @@ const useStyles = makeStyles({
 		textAlign: 'center',
 	},
 	userAvatar: {
+		display: 'inline-block',
 		width: '5rem',
 		height: '5rem',
 		borderRadius: '50%',
@@ -37,15 +39,24 @@ export const UserArea = () => {
 			paddingBottom={1}
 			onClick={() => console.log('go to profile')}>
 			<Box component='div' className={classes.userAvatarWrap}>
-				<img
-					src={photoUrl || DEFAULT_USER_AVATAR}
-					alt='user'
-					className={classes.userAvatar}
-				/>
+				{photoUrl ? (
+					<img
+						src={photoUrl || DEFAULT_USER_AVATAR}
+						alt='user'
+						className={classes.userAvatar}
+					/>
+				) : (
+					<Skeleton variant='circle' className={classes.userAvatar} />
+				)}
 			</Box>
-			<Typography align='center' component='h3' className={classes.userName}>
-				{name}
-			</Typography>
+			{name ? (
+				<Typography align='center' component='h3' className={classes.userName}>
+					{name}
+				</Typography>
+			) : (
+				<Skeleton variant='text' />
+			)}
+
 			<Typography align='center' component='span' className={classes.userRole}>
 				loh
 			</Typography>

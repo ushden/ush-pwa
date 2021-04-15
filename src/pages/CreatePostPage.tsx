@@ -103,7 +103,7 @@ export const CreatePostPage = () => {
 
 		setTimeout(() => {
 			history.goBack();
-		}, 5000);
+		}, 4000);
 	};
 
 	return (

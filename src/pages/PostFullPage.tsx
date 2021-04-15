@@ -30,7 +30,9 @@ export const PostFull = () => {
 		(state: RootState) => state.posts.postLoading
 	);
 	const post = useSelector((state: RootState) => state.posts.post);
-	const comments = useSelector((state: RootState) => state.comments.comments);
+	const comments = useSelector((state: RootState) =>
+		state.comments.comments.sort((a: any, b: any) => b - a)
+	);
 
 	const classes = useStyles();
 	const dispatch = useDispatch();
@@ -39,7 +41,8 @@ export const PostFull = () => {
 
 	useEffect(() => {
 		dispatch(fetchPost(id));
-	}, [dispatch, id, post._id]);
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, []);
 
 	useEffect(() => {
 		const unsubscribe = firestore
@@ -52,8 +55,8 @@ export const PostFull = () => {
 		return () => unsubscribe();
 	}, [dispatch, id]);
 
-	const onEmojiClickHandle = (event: any, emojiObject: any) => {
-		setComment((text) => `${text} ${emojiObject.emoji}`);
+	const onEmojiClickHandle = (_: any, emojiObject: any) => {
+		setComment((text) => `${text}${emojiObject.emoji}`);
 	};
 
 	const handleAddCommentBtnClick = () => {

@@ -6,7 +6,7 @@ import SaveOutlinedIcon from '@material-ui/icons/SaveOutlined';
 import ExitToAppOutlinedIcon from '@material-ui/icons/ExitToAppOutlined';
 import NotesOutlinedIcon from '@material-ui/icons/NotesOutlined';
 import { makeStyles } from '@material-ui/styles';
-import { NavLink } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 import { COLOR_DARK } from '../../constants/constants';
 import { signOut } from '../../store/user/userActions';
 import { useDispatch } from 'react-redux';
@@ -84,12 +84,14 @@ export const NavigationLinks = () => {
 			<Divider />
 			<ListItem>
 				<ExitToAppOutlinedIcon className={classes.navListIcon} />
-				<Button
-					variant='text'
-					onClick={() => dispatch(signOut())}
-					className={classes.outBtn}>
-					Выйти
-				</Button>
+				<Link to='/' style={{ textDecoration: 'none' }}>
+					<Button
+						variant='text'
+						onClick={() => dispatch(signOut())}
+						className={classes.outBtn}>
+						Выйти
+					</Button>
+				</Link>
 			</ListItem>
 		</List>
 	);

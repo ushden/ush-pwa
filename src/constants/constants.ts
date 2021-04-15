@@ -23,3 +23,9 @@ export const STORAGE_AVATARS = 'avatars';
 export const POSTS = 'posts';
 export const RATING = 'rating';
 export const COMMENTS = 'comments';
+export const EMOJI = 'emoji';
+
+export const SMILE = 'SMILE';
+export const SAD = 'SAD';
+export const DEAD = 'DEAD';
+export const ANIME = 'ANIME';
