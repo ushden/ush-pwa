@@ -126,30 +126,34 @@ export const addCommentEmoji = (
 ): ThunkAction<void, RootState, unknown, AnyAction> => {
 	return async (dispatch) => {
 		try {
-			await firestore
-				.collection(EMOJI)
-				.doc(comment._id)
-				.set(
-					{
-						smile:
-							type === SMILE
-								? updateArray.arrayUnion(comment.user._id)
-								: updateArray.arrayRemove(comment.user._id),
-						sad:
-							type === SAD
-								? updateArray.arrayUnion(comment.user._id)
-								: updateArray.arrayRemove(comment.user._id),
-						dead:
-							type === DEAD
-								? updateArray.arrayUnion(comment.user._id)
-								: updateArray.arrayRemove(comment.user._id),
-						anime:
-							type === ANIME
-								? updateArray.arrayUnion(comment.user._id)
-								: updateArray.arrayRemove(comment.user._id),
-					},
-					{ merge: true }
-				);
+			const user = auth.currentUser;
+
+			if (user) {
+				await firestore
+					.collection(EMOJI)
+					.doc(comment._id)
+					.set(
+						{
+							smile:
+								type === SMILE
+									? updateArray.arrayUnion(user.uid)
+									: updateArray.arrayRemove(user.uid),
+							sad:
+								type === SAD
+									? updateArray.arrayUnion(user.uid)
+									: updateArray.arrayRemove(user.uid),
+							dead:
+								type === DEAD
+									? updateArray.arrayUnion(user.uid)
+									: updateArray.arrayRemove(user.uid),
+							anime:
+								type === ANIME
+									? updateArray.arrayUnion(user.uid)
+									: updateArray.arrayRemove(user.uid),
+						},
+						{ merge: true }
+					);
+			}
 		} catch (error) {
 			console.error(error.code, error.message);
 			dispatch(showAlert(ALERT_ERROR, 'Произошла ошибка'));

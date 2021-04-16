@@ -49,8 +49,8 @@ export const Post = ({ post, id }: PostPropsType) => {
 
 	const [like, setLike] = useState<boolean>(false);
 	const [dislike, setDislike] = useState<boolean>(false);
-	const [RatingCount, setRatingCount] = useState<number>(0);
-	const [commentsCount, setcommentsCount] = useState<number>(0);
+	const [ratingCount, setRatingCount] = useState<number | null>(null);
+	const [commentsCount, setCommentsCount] = useState<number | null>(null);
 
 	const [isSavePost, setIsSavePost] = useState<boolean>(false);
 
@@ -94,7 +94,7 @@ export const Post = ({ post, id }: PostPropsType) => {
 				if (doc.exists) {
 					const data = doc.data();
 
-					setcommentsCount(data?.comments);
+					setCommentsCount(data?.comments);
 				}
 			});
 		return () => unsubscribe();
@@ -177,7 +177,7 @@ export const Post = ({ post, id }: PostPropsType) => {
 				<PostFooter
 					post={post}
 					like={like}
-					ratingCount={RatingCount}
+					ratingCount={ratingCount}
 					commentsCount={commentsCount}
 					dislike={dislike}
 					handleLikeClick={handleLikeClick}

@@ -43,7 +43,7 @@ export const SavedPostsPage = () => {
 				) : (
 					<Box component='div'>
 						{posts.map((post) => (
-							<Post post={post} id={post._id} />
+							<Post post={post} id={post._id} key={post._id} />
 						))}
 					</Box>
 				)}

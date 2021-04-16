@@ -7,13 +7,15 @@ import { CommentBody } from './CommentBody';
 import { CommentFooter } from './CommentFooter';
 import { CommentType } from '../../../store/types';
 import { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import {
 	addCommentEmoji,
 	deleteComment,
 } from '../../../store/comments/commentsActions';
 import { ANIME, DEAD, EMOJI, SAD, SMILE } from '../../../constants/constants';
 import { firestore } from '../../../firebase';
+import { RootState } from '../../../store/rootReducer';
+import { getUser } from '../../../store/user/userActions';
 
 const useStyles = makeStyles({
 	comment: {
@@ -44,6 +46,8 @@ export const Comment = ({ comment }: CommentPropsType) => {
 	const classes = useStyles();
 	const dispatch = useDispatch();
 
+	const user = useSelector((state: RootState) => state.user.user);
+
 	const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 	const [emoji, setEmoji] = useState<EmojiType>({
 		smile: null,
@@ -59,7 +63,38 @@ export const Comment = ({ comment }: CommentPropsType) => {
 	});
 
 	useEffect(() => {
+		if (user._id === '') {
+			dispatch(getUser());
+		}
+	}, [dispatch, user._id]);
+
+	useEffect(() => {
 		firestore
+			.collection(EMOJI)
+			.doc(comment._id)
+			.get()
+			.then((doc) => {
+				const data = doc.data();
+
+				setEmoji({
+					smile: data?.smile.includes(user._id),
+					sad: data?.sad.includes(user._id),
+					dead: data?.dead.includes(user._id),
+					anime: data?.anime.includes(user._id),
+				});
+
+				setCommentCount({
+					smile: data?.smile.length || 0,
+					sad: data?.sad.length || 0,
+					dead: data?.dead.length || 0,
+					anime: data?.anime.length || 0,
+				});
+			});
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, []);
+
+	useEffect(() => {
+		const unsubscribe = firestore
 			.collection(EMOJI)
 			.doc(comment._id)
 			.onSnapshot((doc) => {
@@ -67,21 +102,23 @@ export const Comment = ({ comment }: CommentPropsType) => {
 					const data = doc.data();
 
 					setEmoji({
-						smile: data?.smile.includes(comment.user._id),
-						sad: data?.sad.includes(comment.user._id),
-						dead: data?.dead.includes(comment.user._id),
-						anime: data?.anime.includes(comment.user._id),
+						smile: data?.smile.includes(user._id),
+						sad: data?.sad.includes(user._id),
+						dead: data?.dead.includes(user._id),
+						anime: data?.anime.includes(user._id),
 					});
 
 					setCommentCount({
-						smile: data?.smile.length,
-						sad: data?.sad.length,
-						dead: data?.dead.length,
-						anime: data?.anime.length,
+						smile: data?.smile.length || 0,
+						sad: data?.sad.length || 0,
+						dead: data?.dead.length || 0,
+						anime: data?.anime.length || 0,
 					});
 				}
 			});
-	}, [comment._id, comment.user._id]);
+
+		return () => unsubscribe();
+	}, [comment._id, user._id]);
 
 	const handleDeleteComment = () => {
 		dispatch(deleteComment(comment));

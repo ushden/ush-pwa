@@ -5,6 +5,7 @@ import Skeleton from '@material-ui/lab/Skeleton';
 import { makeStyles } from '@material-ui/styles';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store/rootReducer';
+import { useHistory } from 'react-router';
 
 const useStyles = makeStyles({
 	userAvatarWrap: {
@@ -30,6 +31,7 @@ const useStyles = makeStyles({
 
 export const UserArea = () => {
 	const classes = useStyles();
+	const history = useHistory();
 	const { name, photoUrl } = useSelector((state: RootState) => state.user.user);
 
 	return (
@@ -37,7 +39,7 @@ export const UserArea = () => {
 			component='div'
 			paddingTop={1}
 			paddingBottom={1}
-			onClick={() => console.log('go to profile')}>
+			onClick={() => history.push('/profile')}>
 			<Box component='div' className={classes.userAvatarWrap}>
 				{photoUrl ? (
 					<img

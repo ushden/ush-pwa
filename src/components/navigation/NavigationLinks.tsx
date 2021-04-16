@@ -13,7 +13,7 @@ import { useDispatch } from 'react-redux';
 
 const useStyles = makeStyles({
 	navList: {
-		width: '12rem',
+		width: '14rem',
 	},
 	navListIcon: {
 		marginRight: '1rem',

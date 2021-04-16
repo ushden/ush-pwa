@@ -72,8 +72,8 @@ interface PostFooterPropsType {
 	like: boolean;
 	post: PostType;
 	dislike: boolean;
-	ratingCount: number;
-	commentsCount: number;
+	ratingCount: number | null;
+	commentsCount: number | null;
 	savePost: boolean;
 	handleLikeClick: any;
 	handleDislikeClick: any;
@@ -108,10 +108,10 @@ export const PostFooter = ({
 					<ExpandLessOutlinedIcon />
 				</IconButton>
 				<Typography component='p' className={classes.postFooterAppraisalCount}>
-					{ratingCount ? (
-						ratingCount
-					) : (
+					{ratingCount === null ? (
 						<Skeleton variant='circle' className={classes.skeletonCircle} />
+					) : (
+						ratingCount
 					)}
 				</Typography>
 				<IconButton
@@ -131,10 +131,10 @@ export const PostFooter = ({
 					</IconButton>
 				</Link>
 				<Typography component='p'>
-					{commentsCount ? (
-						commentsCount
-					) : (
+					{commentsCount === null ? (
 						<Skeleton variant='circle' className={classes.skeletonCircle} />
+					) : (
+						commentsCount
 					)}
 				</Typography>
 			</Box>

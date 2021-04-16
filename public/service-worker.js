@@ -39,21 +39,46 @@ self.addEventListener('fetch', async (event) => {
 		return;
 	}
 
-	const cache = await caches.match(event.request);
+	// const cache = await caches.match(event.request);
 
-	try {
-		if (cache) {
-			return cache;
-		} else {
-			const response = await fetch(event.request);
-			const cache = await caches.open(dynamicCacheName);
+	// try {
+	// 	if (cache) {
+	// 		return cache;
+	// 	} else {
+	// 		const response = await fetch(event.request);
+	// 		const cache = await caches.open(dynamicCacheName);
 
-			await cache.put(event.request.url, response.clone());
-			return response;
-		}
-	} catch (error) {
-		const cache = await caches.open(staticCacheName);
+	// 		await cache.put(event.request.url, response.clone());
+	// 		return response;
+	// 	}
+	// } catch (error) {
+	// 	const cache = await caches.open(staticCacheName);
 
-		return cache.match('offline.html');
+	// 	return cache.match('offline.html');
+	// }
+
+	if (event.request.mode === 'navigate') {
+		event.respondWith(
+			(async () => {
+				try {
+					const preloadResponse = await event.preloadResponse;
+					if (preloadResponse) {
+						return preloadResponse;
+					}
+
+					const networkResponse = await fetch(event.request);
+					return networkResponse;
+				} catch (error) {
+					console.log(
+						'[Service Worker] Fetch failed; returning offline page instead.',
+						error
+					);
+
+					const cache = await caches.open(staticCacheName);
+					const cachedResponse = await cache.match('offline.html');
+					return cachedResponse;
+				}
+			})()
+		);
 	}
 });

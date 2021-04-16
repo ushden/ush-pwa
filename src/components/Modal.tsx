@@ -8,7 +8,7 @@ import { COLOR_PRIMARY } from '../constants/constants';
 interface ModalProps {
 	visible: boolean;
 	onCloseModal: () => void;
-	photoUrl: string;
+	photoUrl: string | undefined;
 }
 
 const useStyles = makeStyles({

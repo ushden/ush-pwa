@@ -95,6 +95,8 @@ export const CreatePostPage = () => {
 			title,
 			description,
 			image,
+			rating: 0,
+			comments: 0,
 			createAt: new Date().toLocaleString(),
 			user: { ...user },
 		};
