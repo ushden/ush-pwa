@@ -1,19 +1,20 @@
-import { Fragment, useEffect } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
 
 import './App.scss';
 
 import { Alert } from './components/Alert';
+import { Splash } from './components/Splash';
 import { useUserState } from './hooks/useUserState';
 import { MainPageNavigation } from './navigation/MainPageNavigation';
 import { WelcomePageNavigation } from './navigation/WelcomePageNavigation';
 
 export default function App() {
 	const user = useUserState();
+	const [showSplash, setShowSplash] = useState(true);
 
 	const handleOnLoad = () => {
-		// сделать сплэш скрин или загрузку какую-то
-		console.log('app loaded');
+		setTimeout(() => setShowSplash(false), 2000);
 	};
 
 	useEffect(() => {
@@ -25,6 +26,7 @@ export default function App() {
 	return (
 		<Router>
 			<Fragment>
+				<Splash visible={showSplash} />
 				<Alert />
 				{user ? <MainPageNavigation /> : <WelcomePageNavigation />}
 			</Fragment>

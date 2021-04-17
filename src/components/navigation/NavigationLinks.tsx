@@ -2,6 +2,7 @@ import { Button, Divider, List, ListItem } from '@material-ui/core';
 import LibraryBooksOutlinedIcon from '@material-ui/icons/LibraryBooksOutlined';
 import MessageOutlinedIcon from '@material-ui/icons/MessageOutlined';
 import AccountCircleOutlinedIcon from '@material-ui/icons/AccountCircleOutlined';
+import PeopleAltOutlinedIcon from '@material-ui/icons/PeopleAltOutlined';
 import SaveOutlinedIcon from '@material-ui/icons/SaveOutlined';
 import ExitToAppOutlinedIcon from '@material-ui/icons/ExitToAppOutlined';
 import NotesOutlinedIcon from '@material-ui/icons/NotesOutlined';
@@ -61,6 +62,15 @@ export const NavigationLinks = () => {
 					activeClassName='navigation_link-active'
 					className={classes.navLink}>
 					Чаты
+				</NavLink>
+			</ListItem>
+			<ListItem>
+				<PeopleAltOutlinedIcon className={classes.navListIcon} />
+				<NavLink
+					to='/users'
+					activeClassName='navigation_link-active'
+					className={classes.navLink}>
+					Люди
 				</NavLink>
 			</ListItem>
 			<ListItem>

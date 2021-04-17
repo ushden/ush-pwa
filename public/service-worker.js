@@ -1,11 +1,12 @@
 /* eslint-disable no-restricted-globals */
-const staticCacheName = 's-app-v1';
-const dynamicCacheName = 'd-app-v1';
+const staticCacheName = 's-app-v2';
+// const dynamicCacheName = 'd-app-v2';
 
 const assetUrls = [
 	'index.html',
 	'offline.html',
 	'404.html',
+	'images/splash.png',
 	'images/default_avatar.png',
 	'images/empty-img.png',
 	'images/icons/icon-128x128.png',
@@ -29,7 +30,7 @@ self.addEventListener('activate', async (event) => {
 	await Promise.all(
 		cacheNames
 			.filter((name) => name !== staticCacheName)
-			.filter((name) => name !== dynamicCacheName)
+			// .filter((name) => name !== dynamicCacheName)
 			.map((name) => caches.delete(name))
 	);
 });

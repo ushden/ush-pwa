@@ -1,8 +1,8 @@
 {
-	"name": "Social Ush Progressive Web App",
+	"name": "Social Ush",
 	"short_name": "Social PWA",
-	"theme_color": "#fff",
-	"background_color": "#fff",
+	"theme_color": "#0095a8",
+	"background_color": "#0095a8",
 	"display": "standalone",
 	"orientation": "portrait",
 	"scope": "/",

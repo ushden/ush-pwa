@@ -8,11 +8,13 @@ import {
 	MenuItem,
 	Typography,
 } from '@material-ui/core';
+import { Link } from 'react-router-dom';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import DeleteForeverOutlinedIcon from '@material-ui/icons/DeleteForeverOutlined';
 import { makeStyles } from '@material-ui/styles';
 import { COLOR_PRIMARY } from '../../constants/constants';
 import { PostType } from '../../store/types';
+import { Modal } from '../Modal';
 
 const useStyles = makeStyles({
 	postHeader: {
@@ -32,8 +34,15 @@ const useStyles = makeStyles({
 		width: '1.7rem',
 		height: '1.7rem',
 	},
+	postInfoAvatarBtn: {
+		padding: 0,
+	},
 	postInfoName: {
 		fontSize: '0.8rem',
+	},
+	postInfoNameLink: {
+		textDecoration: 'none',
+		color: 'inherit',
 	},
 	postInfoData: {
 		color: '#ccc',
@@ -65,9 +74,11 @@ const useStyles = makeStyles({
 interface PostHeaderPropsType {
 	post: PostType;
 	anchorEl: HTMLElement | null;
-	handleMenuCloseClick: any;
-	handleDeletePostClick: any;
-	handleMenuOpenClick: any;
+	handleMenuCloseClick: () => void;
+	handleDeletePostClick: () => void;
+	handleMenuOpenClick: (event: React.MouseEvent<HTMLElement>) => void;
+	handleVisibleModal: () => void;
+	openModal: boolean;
 }
 
 export const PostHeader = ({
@@ -76,20 +87,30 @@ export const PostHeader = ({
 	handleMenuCloseClick,
 	handleDeletePostClick,
 	handleMenuOpenClick,
+	handleVisibleModal,
+	openModal,
 }: PostHeaderPropsType) => {
 	const classes = useStyles();
 
 	return (
 		<Box component='div' className={classes.postHeader}>
 			<Box className={classes.postInfo} component='div'>
-				<Avatar
-					src={post.user.photoUrl}
-					className={classes.postInfoAvatar}
-					alt='userName'
-				/>
+				<IconButton
+					className={classes.postInfoAvatarBtn}
+					onClick={handleVisibleModal}>
+					<Avatar
+						src={post.user.photoUrl}
+						className={classes.postInfoAvatar}
+						alt={post.user.name}
+					/>
+				</IconButton>
 				<Box component='div' className={classes.postInfoWrap}>
 					<Typography component='h4' className={classes.postInfoName}>
-						{post.user.name}
+						<Link
+							to={`/user/${post.user._id}`}
+							className={classes.postInfoNameLink}>
+							{post.user.name}
+						</Link>
 					</Typography>
 					<Typography component='p' className={classes.postInfoData}>
 						{post.createAt}
@@ -124,6 +145,11 @@ export const PostHeader = ({
 					<MoreVertIcon className={classes.postMenuIcon} />
 				</IconButton>
 			</Box>
+			<Modal
+				visible={openModal}
+				onCloseModal={handleVisibleModal}
+				photoUrl={post.user.photoUrl}
+			/>
 		</Box>
 	);
 };

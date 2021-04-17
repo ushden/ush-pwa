@@ -5,12 +5,14 @@ import { alertReducer } from './alert/alertReducer';
 import { userReducer } from './user/userReducer';
 import { postsReducer } from './posts/postsReducer';
 import { commentsReducer } from './comments/commentsReducer';
+import { usersReducer } from './users/usersReducer';
 
 const rootReducer = combineReducers({
 	alert: alertReducer,
 	user: userReducer,
 	posts: postsReducer,
 	comments: commentsReducer,
+	users: usersReducer,
 });
 
 const store = createStore(

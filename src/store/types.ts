@@ -29,7 +29,7 @@ export enum UserActions {
 }
 export interface User {
 	_id: string;
-	name: string | undefined;
+	name: string;
 	email: string | undefined;
 	photoUrl?: string | undefined;
 	isLogIn?: boolean;
@@ -59,6 +59,43 @@ export type UserActionsType =
 	| signOutUser
 	| showUserLoader
 	| hideUserLoader;
+
+// users
+export enum UsersActions {
+	FETCH_USERS = 'FETCH_USERS',
+	FETCH_ANOTHER_USER = 'FETCH_ANOTHER_USER',
+	SHOW_USERS_LOADING = 'SHOW_USERS_LOADING',
+	HIDE_USERS_LOADING = 'HIDE_USERS_LOADING',
+}
+
+export interface UsersState {
+	anotherUser: User;
+	users: Array<User>;
+	usersLoading: boolean;
+}
+
+interface fetchAnotherUser {
+	type: UsersActions.FETCH_ANOTHER_USER;
+	payload: User;
+}
+interface fetchUsersAction {
+	type: UsersActions.FETCH_USERS;
+	payload: Array<User>;
+}
+
+interface showUsersLoadingAction {
+	type: UsersActions.SHOW_USERS_LOADING;
+}
+
+interface hideUsersLoadingAction {
+	type: UsersActions.HIDE_USERS_LOADING;
+}
+
+export type UsersActionsType =
+	| fetchUsersAction
+	| showUsersLoadingAction
+	| hideUsersLoadingAction
+	| fetchAnotherUser;
 
 // post
 export interface PostsState {

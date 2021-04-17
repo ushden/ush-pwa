@@ -75,10 +75,10 @@ interface PostFooterPropsType {
 	ratingCount: number | null;
 	commentsCount: number | null;
 	savePost: boolean;
-	handleLikeClick: any;
-	handleDislikeClick: any;
-	handleClickShare: any;
-	handleClickSavePost: any;
+	handleLikeClick: () => void;
+	handleDislikeClick: () => void;
+	handleClickShare: () => void;
+	handleClickSavePost: () => void;
 }
 
 export const PostFooter = ({

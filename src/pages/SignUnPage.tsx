@@ -35,6 +35,13 @@ const useStyles = makeStyles({
 		alignItems: 'center',
 		justifyContent: 'center',
 	},
+	loaderWrap: {
+		width: '100vw',
+		height: '100vh',
+		display: 'flex',
+		alignItems: 'center',
+		justifyContent: 'center',
+	},
 });
 
 export const SignUnPage = () => {
@@ -115,7 +122,9 @@ export const SignUnPage = () => {
 		<Box component='section' className={classes.section}>
 			<Container className={classes.container}>
 				{loading ? (
-					<Loader />
+					<Box className={classes.loaderWrap}>
+						<Loader />
+					</Box>
 				) : (
 					<Box component='div'>{getStepContent(activeStep)}</Box>
 				)}

@@ -6,11 +6,10 @@ export const Loader = () => {
 		<Box
 			component='div'
 			style={{
-				width: '100vw',
-				height: '100vh',
 				display: 'flex',
 				alignItems: 'center',
 				justifyContent: 'center',
+				marginTop: '2rem',
 			}}>
 			<CircularProgress />
 		</Box>

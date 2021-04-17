@@ -17,6 +17,7 @@ const useStyles = makeStyles({
 	postBodyTitle: {
 		fontSize: '1.2rem',
 		fontWeight: 'bold',
+		marginBottom: '0.5rem',
 	},
 	postBodyTitleLink: {
 		textDecoration: 'none',

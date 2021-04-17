@@ -2,6 +2,7 @@ import {
 	ALERT_ERROR,
 	ALERT_INFO,
 	ALERT_SUCCESS,
+	COMMENTS,
 	RATING,
 	USERS,
 } from './../../constants/constants';
@@ -186,10 +187,10 @@ export const deletePost = (
 	return async (dispatch) => {
 		try {
 			await firestore.collection(POSTS).doc(id).delete();
+			await firestore.collection(COMMENTS).doc(id).delete();
 
 			dispatch(deletePostAction(id));
 			dispatch(showAlert(ALERT_SUCCESS, 'Пост успешно удален :)'));
-			dispatch(fetchPosts());
 		} catch (error) {
 			console.error(error.code, error.message);
 			dispatch(showAlert(ALERT_ERROR, 'Произошла ошибка :('));

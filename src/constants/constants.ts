@@ -4,7 +4,8 @@ export const EMPTY_IMAGE = '/images/empty-img.png';
 export const COLOR_LIGHT = '#6ff9ff';
 export const COLOR_EXTRA_LIGHT = '#e5ffff';
 export const COLOR_DARK = '#0095a8';
-export const COLOR_PRIMARY = '#26c6da';
+export const COLOR_PRIMARY = '#0095a8';
+// export const COLOR_PRIMARY = '#26c6da';
 
 export const ALERT_ERROR = 'error';
 export const ALERT_SUCCESS = 'success';
@@ -17,6 +18,7 @@ export const HIDE_ALERT = 'HIDE_ALERT';
 export const EMAIL_VALID_ERROR = 'Ошибка в поле email';
 export const PASS_VALID_ERROR = 'Ошибка в поле пароля';
 export const NAME_VALID_ERROR = 'Введите имя';
+export const ERROR_MESSAGE = 'Произошла ошибка :(';
 
 export const USERS = 'users';
 export const STORAGE_AVATARS = 'avatars';
@@ -24,6 +26,7 @@ export const POSTS = 'posts';
 export const RATING = 'rating';
 export const COMMENTS = 'comments';
 export const EMOJI = 'emoji';
+export const CHATS = 'chats';
 
 export const SMILE = 'SMILE';
 export const SAD = 'SAD';

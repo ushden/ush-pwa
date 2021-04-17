@@ -55,6 +55,7 @@ export const Post = ({ post, id }: PostPropsType) => {
 	const [isSavePost, setIsSavePost] = useState<boolean>(false);
 
 	const [openModal, setOpenModal] = useState<boolean>(false);
+	const [openModalAvatar, setOpenModalAvatar] = useState<boolean>(false);
 
 	useEffect(() => {
 		const unsubscribe = firestore
@@ -159,6 +160,10 @@ export const Post = ({ post, id }: PostPropsType) => {
 		setOpenModal((visible) => !visible);
 	};
 
+	const handleVisibleModalAvatar = () => {
+		setOpenModalAvatar((visible) => !visible);
+	};
+
 	return (
 		<Paper
 			component='article'
@@ -171,6 +176,8 @@ export const Post = ({ post, id }: PostPropsType) => {
 					handleMenuOpenClick={handleMenuOpenClick}
 					handleMenuCloseClick={handleMenuCloseClick}
 					handleDeletePostClick={handleDeletePostClick}
+					handleVisibleModal={handleVisibleModalAvatar}
+					openModal={openModalAvatar}
 				/>
 				<PostBody post={post} onOpenModalHandle={handleVisibleModal} />
 				<Divider />

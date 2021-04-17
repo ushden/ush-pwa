@@ -21,6 +21,13 @@ const useStyles = makeStyles({
 		alignItems: 'center',
 		justifyContent: 'center',
 	},
+	loaderWrap: {
+		width: '100vw',
+		height: '100vh',
+		display: 'flex',
+		alignItems: 'center',
+		justifyContent: 'center',
+	},
 });
 
 export const SignInPage = (): React.ReactElement => {
@@ -40,7 +47,9 @@ export const SignInPage = (): React.ReactElement => {
 		<Box component='section' className={classes.section}>
 			<Container className={classes.container}>
 				{loading ? (
-					<Loader />
+					<Box className={classes.loaderWrap}>
+						<Loader />
+					</Box>
 				) : (
 					<SignInForm
 						email={email}
