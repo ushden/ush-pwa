@@ -1,0 +1,137 @@
+import {
+	CardActions,
+	IconButton,
+	InputAdornment,
+	TextField,
+	withStyles,
+} from '@material-ui/core';
+import DeadIcon from '@material-ui/icons/SentimentVeryDissatisfiedOutlined';
+import FileIcon from '@material-ui/icons/AttachFileOutlined';
+import SendIcon from '@material-ui/icons/SendOutlined';
+import { makeStyles } from '@material-ui/styles';
+import { ChangeEvent, FC, ReactElement } from 'react';
+import { COLOR_PRIMARY } from '../../constants/constants';
+import classNames from 'classnames';
+
+const useStyles = makeStyles({
+	form: {
+		position: 'fixed',
+		bottom: 0,
+		left: 0,
+		right: 0,
+		width: '100%',
+		backgroundColor: '#fff',
+		padding: 0,
+	},
+	input: {
+		width: '100%',
+		height: '100%',
+		padding: '0.2rem',
+		boxShadow: '0px -3px 17px -8px rgba(0,0,0,0.5)',
+	},
+	btn: {
+		padding: 0,
+		color: COLOR_PRIMARY,
+	},
+	fileIcon: {
+		paddingTop: '0.2rem',
+	},
+});
+
+const MessageInput = withStyles({
+	root: {
+		'& label.Mui-focused': {
+			color: 'transparent',
+		},
+		'& .MuiInput-underline:after': {
+			border: 'none',
+			display: 'none',
+		},
+		'& .MuiInput-underline:before': {
+			border: 'none',
+			display: 'none',
+		},
+		'& .MuiOutlinedInput-root': {
+			'&.Mui-focused fieldset': {
+				border: 'none',
+			},
+		},
+	},
+})(TextField);
+
+interface MessageLeftProps {
+	inputValue: string;
+	onChangeMessageInput: (e: ChangeEvent<HTMLInputElement>) => void;
+	showIcons: boolean;
+	onClickSend: () => void;
+	onChangeFileInput: (
+		e: React.ChangeEvent<HTMLInputElement> | any
+	) => Promise<void>;
+}
+
+export const SendMessageForm: FC<MessageLeftProps> = (props): ReactElement => {
+	const {
+		inputValue,
+		onChangeMessageInput,
+		showIcons,
+		onClickSend,
+		onChangeFileInput,
+	} = props;
+	const classes = useStyles();
+
+	const renderFileIcon = () => {
+		return (
+			<>
+				<input
+					type='file'
+					id='message-file-pick'
+					style={{ display: 'none' }}
+					accept='image/*'
+					onChange={onChangeFileInput}
+				/>
+				<IconButton className={classes.btn}>
+					<label htmlFor='message-file-pick'>
+						<FileIcon className={classNames(classes.fileIcon, 'anim-scale')} />
+					</label>
+				</IconButton>
+			</>
+		);
+	};
+
+	return (
+		<CardActions className={classes.form}>
+			<MessageInput
+				className={classes.input}
+				value={inputValue}
+				onChange={onChangeMessageInput}
+				placeholder='Ваше сообщение...'
+				multiline
+				rowsMax={4}
+				InputProps={{
+					startAdornment: (
+						<InputAdornment position='start'>
+							{showIcons ? (
+								<IconButton className={classes.btn}>
+									<DeadIcon className='anim-scale' />
+								</IconButton>
+							) : (
+								renderFileIcon()
+							)}
+						</InputAdornment>
+					),
+					endAdornment: (
+						<InputAdornment position='end'>
+							{showIcons ? (
+								<IconButton className={classes.btn} onClick={onClickSend}>
+									<SendIcon className='anim-scale' />
+								</IconButton>
+							) : (
+								<></>
+							)}
+						</InputAdornment>
+					),
+				}}
+			/>
+		</CardActions>
+	);
+};

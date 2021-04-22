@@ -88,9 +88,14 @@ export const createPost = (
 				await firestore.collection(POSTS).doc(post._id).set(payload);
 
 				dispatch(createPostAction(payload));
-				dispatch(hidePostLoaderAction());
-				dispatch(showAlert(ALERT_SUCCESS, 'Поздравляю, Вы создали пост! УРА!'));
-				dispatch(fetchPosts());
+				setTimeout(() => dispatch(hidePostLoaderAction()), 200);
+				setTimeout(
+					() =>
+						dispatch(
+							showAlert(ALERT_SUCCESS, 'Поздравляю, Вы создали пост! УРА!')
+						),
+					200
+				);
 			}
 		} catch (error) {
 			console.error(error.code, error.message);

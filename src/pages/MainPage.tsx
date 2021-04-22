@@ -29,14 +29,14 @@ export const MainPage = () => {
 	const user = useSelector((state: RootState) => state.user.user);
 
 	useEffect(() => {
-		if (user._id === '') {
-			dispatch(getUser());
-		}
 		if (posts.length === 0) {
 			dispatch(fetchPosts());
 		}
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, []);
+
+		if (!user._id) {
+			dispatch(getUser());
+		}
+	}, [dispatch, posts.length, user._id]);
 
 	return (
 		<Box component='section'>

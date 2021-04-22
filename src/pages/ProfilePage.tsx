@@ -73,10 +73,10 @@ export const ProfilePage = () => {
 	};
 
 	useEffect(() => {
-		if (user._id === '') {
+		if (!user._id) {
 			dispatch(getUser());
 		}
-	});
+	}, [dispatch, user._id]);
 
 	return (
 		<Box component='section'>

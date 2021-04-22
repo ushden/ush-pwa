@@ -6,6 +6,8 @@ import { Loader } from '../components/Loader';
 import { NavigationPanel } from '../components/navigation/NavigationPanel';
 import { UserListItem } from '../components/usersPage/UserListItem';
 import { RootState } from '../store/rootReducer';
+import { selectUser, selectUsersLoading } from '../store/selectors';
+import { getUser } from '../store/user/userActions';
 import { fetchUsers } from '../store/users/usersActions';
 
 // const useStyles = makeStyles({
@@ -15,14 +17,21 @@ import { fetchUsers } from '../store/users/usersActions';
 export const UsersPage = () => {
 	// const classes = useStyles();
 	const dispatch = useDispatch();
-	const users = useSelector((state: RootState) => state.users.users);
-	const loading = useSelector((state: RootState) => state.users.usersLoading);
+	const user = useSelector(selectUser);
+	const users = useSelector((state: RootState) =>
+		state.users.users.filter((u) => u._id !== user._id)
+	);
+	const loading = useSelector(selectUsersLoading);
 
 	useEffect(() => {
+		if (user._id === '') {
+			dispatch(getUser());
+		}
+
 		if (users.length === 0) {
 			dispatch(fetchUsers());
 		}
-	}, [dispatch, users.length]);
+	}, [dispatch, user._id, users.length]);
 
 	return (
 		<Box component='section'>

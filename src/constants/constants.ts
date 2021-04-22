@@ -27,6 +27,7 @@ export const RATING = 'rating';
 export const COMMENTS = 'comments';
 export const EMOJI = 'emoji';
 export const CHATS = 'chats';
+export const MESSAGES = 'messages';
 
 export const SMILE = 'SMILE';
 export const SAD = 'SAD';

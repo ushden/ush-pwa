@@ -13,9 +13,9 @@ import {
 	deleteComment,
 } from '../../../store/comments/commentsActions';
 import { ANIME, DEAD, EMOJI, SAD, SMILE } from '../../../constants/constants';
-import { firestore } from '../../../firebase';
 import { RootState } from '../../../store/rootReducer';
 import { getUser } from '../../../store/user/userActions';
+import { useFirestoreSubscribe } from '../../../hooks/useFirestoreSubscribe';
 
 const useStyles = makeStyles({
 	comment: {
@@ -47,6 +47,7 @@ export const Comment = ({ comment }: CommentPropsType) => {
 	const dispatch = useDispatch();
 
 	const user = useSelector((state: RootState) => state.user.user);
+	const emojiData = useFirestoreSubscribe(EMOJI, comment._id);
 
 	const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 	const [emoji, setEmoji] = useState<EmojiType>({
@@ -69,56 +70,26 @@ export const Comment = ({ comment }: CommentPropsType) => {
 	}, [dispatch, user._id]);
 
 	useEffect(() => {
-		firestore
-			.collection(EMOJI)
-			.doc(comment._id)
-			.get()
-			.then((doc) => {
-				const data = doc.data();
+		setEmoji({
+			smile: emojiData?.smile.includes(user._id),
+			sad: emojiData?.sad.includes(user._id),
+			dead: emojiData?.dead.includes(user._id),
+			anime: emojiData?.anime.includes(user._id),
+		});
 
-				setEmoji({
-					smile: data?.smile.includes(user._id),
-					sad: data?.sad.includes(user._id),
-					dead: data?.dead.includes(user._id),
-					anime: data?.anime.includes(user._id),
-				});
-
-				setCommentCount({
-					smile: data?.smile.length || 0,
-					sad: data?.sad.length || 0,
-					dead: data?.dead.length || 0,
-					anime: data?.anime.length || 0,
-				});
-			});
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, []);
-
-	useEffect(() => {
-		const unsubscribe = firestore
-			.collection(EMOJI)
-			.doc(comment._id)
-			.onSnapshot((doc) => {
-				if (doc.exists) {
-					const data = doc.data();
-
-					setEmoji({
-						smile: data?.smile.includes(user._id),
-						sad: data?.sad.includes(user._id),
-						dead: data?.dead.includes(user._id),
-						anime: data?.anime.includes(user._id),
-					});
-
-					setCommentCount({
-						smile: data?.smile.length || 0,
-						sad: data?.sad.length || 0,
-						dead: data?.dead.length || 0,
-						anime: data?.anime.length || 0,
-					});
-				}
-			});
-
-		return () => unsubscribe();
-	}, [comment._id, user._id]);
+		setCommentCount({
+			smile: emojiData?.smile.length || 0,
+			sad: emojiData?.sad.length || 0,
+			dead: emojiData?.dead.length || 0,
+			anime: emojiData?.anime.length || 0,
+		});
+	}, [
+		emojiData?.anime,
+		emojiData?.dead,
+		emojiData?.sad,
+		emojiData?.smile,
+		user._id,
+	]);
 
 	const handleDeleteComment = () => {
 		dispatch(deleteComment(comment));

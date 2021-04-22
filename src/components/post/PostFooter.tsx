@@ -74,53 +74,43 @@ interface PostFooterPropsType {
 	dislike: boolean;
 	ratingCount: number | null;
 	commentsCount: number | null;
-	savePost: boolean;
+	isSavePost: boolean;
 	handleLikeClick: () => void;
 	handleDislikeClick: () => void;
 	handleClickShare: () => void;
 	handleClickSavePost: () => void;
 }
 
-export const PostFooter = ({
-	like,
-	dislike,
-	post,
-	ratingCount,
-	commentsCount,
-	savePost,
-	handleLikeClick,
-	handleDislikeClick,
-	handleClickShare,
-	handleClickSavePost,
-}: PostFooterPropsType) => {
+export const PostFooter = (props: PostFooterPropsType) => {
 	const classes = useStyles();
+	const { post } = props;
 
 	return (
 		<Box component='div' className={classes.postFooter}>
 			<Box component='div' className={classes.postFooterAppraisal}>
 				<IconButton
-					disabled={like}
+					disabled={props.like}
 					className={classNames(
 						classes.postFooterAppraisalBtn,
-						like ? classes.postLikeBtn : ''
+						props.like ? classes.postLikeBtn : ''
 					)}
-					onClick={handleLikeClick}>
+					onClick={props.handleLikeClick}>
 					<ExpandLessOutlinedIcon />
 				</IconButton>
 				<Typography component='p' className={classes.postFooterAppraisalCount}>
-					{ratingCount === null ? (
+					{props.ratingCount === null ? (
 						<Skeleton variant='circle' className={classes.skeletonCircle} />
 					) : (
-						ratingCount
+						props.ratingCount
 					)}
 				</Typography>
 				<IconButton
-					disabled={dislike}
+					disabled={props.dislike}
 					className={classNames(
 						classes.postFooterAppraisalBtn,
-						dislike ? classes.postDislikeBtn : ''
+						props.dislike ? classes.postDislikeBtn : ''
 					)}
-					onClick={handleDislikeClick}>
+					onClick={props.handleDislikeClick}>
 					<ExpandMoreOutlinedIcon />
 				</IconButton>
 			</Box>
@@ -131,24 +121,28 @@ export const PostFooter = ({
 					</IconButton>
 				</Link>
 				<Typography component='p'>
-					{commentsCount === null ? (
+					{props.commentsCount === null ? (
 						<Skeleton variant='circle' className={classes.skeletonCircle} />
 					) : (
-						commentsCount
+						props.commentsCount
 					)}
 				</Typography>
 			</Box>
 			<Box component='div'>
 				<IconButton
 					className={classes.postFooterBtn}
-					onClick={handleClickSavePost}>
-					{savePost ? <BookmarkOutlinedIcon /> : <BookmarkBorderOutlinedIcon />}
+					onClick={props.handleClickSavePost}>
+					{props.isSavePost ? (
+						<BookmarkOutlinedIcon />
+					) : (
+						<BookmarkBorderOutlinedIcon />
+					)}
 				</IconButton>
 			</Box>
 			<Box component='div'>
 				<IconButton
 					className={classes.postFooterBtn}
-					onClick={handleClickShare}>
+					onClick={props.handleClickShare}>
 					<ShareOutlinedIcon />
 				</IconButton>
 			</Box>

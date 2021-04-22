@@ -8,6 +8,7 @@ const initialState: UsersState = {
 		photoUrl: '',
 		isLogIn: false,
 		savedPosts: [],
+		chatWithUsers: [],
 	},
 	users: [],
 	usersLoading: false,

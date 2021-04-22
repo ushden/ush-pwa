@@ -29,6 +29,17 @@ body {
 	animation: transform 0.4s ease-in;
 }
 
+.anim-scale {
+	transition: all 0.3s cubic-bezier(0.88, 0.19, 0.37, 1.11);
+	animation-name: scale;
+	animation-duration: 0.2s;
+	animation-iteration-count: 1;
+	animation-direction: normal;
+	animation-timing-function: cubic-bezier(0.88, 0.19, 0.37, 1.11);
+	animation-fill-mode: both;
+	animation-delay: 0.1s;
+}
+
 @keyframes transform {
 	0% {
 		transform: translateX(+100%);
@@ -47,6 +58,15 @@ body {
 	}
 	100% {
 		opacity: 1;
+	}
+}
+
+@keyframes scale {
+	0% {
+		transform: scale(0);
+	}
+	100% {
+		transform: scale(1);
 	}
 }
 

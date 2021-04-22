@@ -27,6 +27,11 @@ export enum UserActions {
 	SHOW_USER_LOADER = 'SHOW_LOADER',
 	HIDE_USER_LOADER = 'HIDE_LOADER',
 }
+
+interface chatWhithUsers {
+	userId: string;
+	chatId: string;
+}
 export interface User {
 	_id: string;
 	name: string;
@@ -34,6 +39,7 @@ export interface User {
 	photoUrl?: string | undefined;
 	isLogIn?: boolean;
 	savedPosts?: Array<string>;
+	chatWithUsers?: Array<chatWhithUsers>;
 }
 
 export interface UserState {
@@ -208,3 +214,70 @@ export type CommentsActionsType =
 	| hideCommentsLoadingActionType
 	| fetchCommentsActionType
 	| deleteCommentActionType;
+
+// Chats
+export enum ChatsActions {
+	FETCH_CHATS = 'FETCH_CHATS',
+	FETCH_CHAT = 'FETCH_CHAT',
+	FETCH_MESSAGES = 'FETCH_MESSAGES',
+	CREATE_CHAT = 'CREATE_CHAT',
+	SHOW_CHAT_LOADING = 'SHOW_CHAT_LOADING',
+	HIDE_CHAT_LOADING = 'HIDE_CHAT_LOADING',
+}
+interface fetchMesagesAction {
+	type: ChatsActions.FETCH_MESSAGES;
+	payload: Array<Message>;
+}
+interface createChatAction {
+	type: ChatsActions.CREATE_CHAT;
+	payload: Chat;
+}
+interface fetchChatsAction {
+	type: ChatsActions.FETCH_CHATS;
+	payload: Array<Chat>;
+}
+
+interface fetchChatAction {
+	type: ChatsActions.FETCH_CHAT;
+	payload: Chat;
+}
+
+interface showChatLoadingAction {
+	type: ChatsActions.SHOW_CHAT_LOADING;
+}
+
+interface hideChatLoadingAction {
+	type: ChatsActions.HIDE_CHAT_LOADING;
+}
+
+export type ChatsActionsType =
+	| fetchChatAction
+	| fetchChatsAction
+	| showChatLoadingAction
+	| hideChatLoadingAction
+	| createChatAction
+	| fetchMesagesAction;
+
+export interface Message {
+	_id: string;
+	text?: string;
+	image?: string;
+	createdAt: string;
+	chatId: string;
+	user: User;
+}
+export interface Chat {
+	_id: string;
+	createAt: string;
+	users: {
+		firstUser: User;
+		secondUser: User;
+	};
+}
+
+export interface ChatsState {
+	chat: Chat;
+	chats: Array<Chat>;
+	messages: Array<Message>;
+	chatsLoading: boolean;
+}

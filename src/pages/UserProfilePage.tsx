@@ -1,13 +1,20 @@
 import { Box, Paper, Typography, Button, makeStyles } from '@material-ui/core';
 import Skeleton from '@material-ui/lab/Skeleton';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useParams } from 'react-router';
+import { useHistory, useParams } from 'react-router';
 import { NavigationPanel } from '../components/navigation/NavigationPanel';
-import { RootState } from '../store/rootReducer';
 import { fetchAnotherUser } from '../store/users/usersActions';
 import { Modal } from '../components/Modal';
 import { DEFAULT_USER_AVATAR } from '../constants/constants';
+import { createChat } from '../store/chats/chatActions';
+import { getUser } from '../store/user/userActions';
+import {
+	selectAnotherUser,
+	selectUser,
+	selectUsersLoading,
+} from '../store/selectors';
+import { Chat } from '../store/types';
 
 const useStyles = makeStyles({
 	userAvatarBlock: {
@@ -69,22 +76,68 @@ const useStyles = makeStyles({
 
 export const UserProfilePage = () => {
 	const classes = useStyles();
+	const history = useHistory();
 	const { id }: { id: string } = useParams();
 	const dispatch = useDispatch();
 
-	const anotherUser = useSelector(
-		(state: RootState) => state.users.anotherUser
-	);
-	const loading = useSelector((state: RootState) => state.users.usersLoading);
-
-	useEffect(() => {
-		dispatch(fetchAnotherUser(id));
-	}, [dispatch, id]);
+	const anotherUser = useSelector(selectAnotherUser);
+	const user = useSelector(selectUser);
+	const loading = useSelector(selectUsersLoading);
 
 	const [modalVisible, setModalVisible] = useState<boolean>(false);
+	const [replaceChatId, setReplaceChatId] = useState<null | string>(null);
+
+	const isChatCreated = useMemo(() => {
+		return user.chatWithUsers?.some((chat) => {
+			if (chat.userId === anotherUser._id) {
+				setReplaceChatId(chat.chatId);
+				return true;
+			}
+
+			setReplaceChatId(null);
+
+			return false;
+		});
+	}, [anotherUser._id, user.chatWithUsers]);
+
+	useEffect(() => {
+		dispatch(getUser());
+		dispatch(fetchAnotherUser(id));
+	}, [dispatch, id, user._id]);
 
 	const handleToggleModal = () => {
 		setModalVisible((visible) => !visible);
+	};
+
+	const handleWriteToUser = () => {
+		if (isChatCreated && replaceChatId) {
+			history.push(`/chat/${replaceChatId}`);
+			return;
+		}
+
+		const payload: Chat = {
+			_id: Date.now().toString(),
+			createAt: new Date().toLocaleString(),
+			users: {
+				firstUser: {
+					_id: user._id,
+					name: user.name,
+					email: user.email,
+					photoUrl: user.photoUrl,
+				},
+				secondUser: {
+					_id: anotherUser._id,
+					name: anotherUser.name,
+					email: anotherUser.email,
+					photoUrl: anotherUser.photoUrl,
+				},
+			},
+		};
+
+		if (user && anotherUser) {
+			dispatch(createChat(payload));
+			setTimeout(() => history.push(`/chat/${payload._id}`), 500);
+		}
 	};
 
 	return (
@@ -154,7 +207,9 @@ export const UserProfilePage = () => {
 					</Box>
 				</Box>
 				<Box component='div' className={classes.btnWrap}>
-					<Button variant='outlined'>Написать</Button>
+					<Button variant='outlined' onClick={handleWriteToUser}>
+						Написать
+					</Button>
 					<Button variant='outlined'>Подписаться</Button>
 				</Box>
 			</Paper>

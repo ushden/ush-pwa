@@ -77,27 +77,20 @@ interface PostHeaderPropsType {
 	handleMenuCloseClick: () => void;
 	handleDeletePostClick: () => void;
 	handleMenuOpenClick: (event: React.MouseEvent<HTMLElement>) => void;
-	handleVisibleModal: () => void;
-	openModal: boolean;
+	handleVisibleModalAvatar: () => void;
+	openModalAvatar: boolean;
 }
 
-export const PostHeader = ({
-	post,
-	anchorEl,
-	handleMenuCloseClick,
-	handleDeletePostClick,
-	handleMenuOpenClick,
-	handleVisibleModal,
-	openModal,
-}: PostHeaderPropsType) => {
+export const PostHeader = (props: PostHeaderPropsType) => {
 	const classes = useStyles();
+	const { post } = props;
 
 	return (
 		<Box component='div' className={classes.postHeader}>
 			<Box className={classes.postInfo} component='div'>
 				<IconButton
 					className={classes.postInfoAvatarBtn}
-					onClick={handleVisibleModal}>
+					onClick={props.handleVisibleModalAvatar}>
 					<Avatar
 						src={post.user.photoUrl}
 						className={classes.postInfoAvatar}
@@ -121,15 +114,15 @@ export const PostHeader = ({
 				<Menu
 					id='post-menu'
 					TransitionComponent={Fade}
-					anchorEl={anchorEl}
-					open={Boolean(anchorEl)}
-					onClose={handleMenuCloseClick}
+					anchorEl={props.anchorEl}
+					open={Boolean(props.anchorEl)}
+					onClose={props.handleMenuCloseClick}
 					keepMounted>
 					<MenuItem className={classes.menuItem}>
 						<Button
 							variant='text'
 							className={classes.postMenuDelete}
-							onClick={handleDeletePostClick}>
+							onClick={props.handleDeletePostClick}>
 							<DeleteForeverOutlinedIcon
 								style={{ color: COLOR_PRIMARY, marginRight: '0.2rem' }}
 							/>
@@ -141,13 +134,13 @@ export const PostHeader = ({
 					className={classes.postMenuBtn}
 					aria-label='menu'
 					aria-controls='post-menu'
-					onClick={handleMenuOpenClick}>
+					onClick={props.handleMenuOpenClick}>
 					<MoreVertIcon className={classes.postMenuIcon} />
 				</IconButton>
 			</Box>
 			<Modal
-				visible={openModal}
-				onCloseModal={handleVisibleModal}
+				visible={props.openModalAvatar}
+				onCloseModal={props.handleVisibleModalAvatar}
 				photoUrl={post.user.photoUrl}
 			/>
 		</Box>

@@ -8,7 +8,6 @@ import {
 import TextField from '@material-ui/core/TextField';
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useHistory } from 'react-router';
 import { Loader } from '../components/Loader';
 
 import { NavigationPanel } from '../components/navigation/NavigationPanel';
@@ -58,7 +57,6 @@ const useStyles = makeStyles({
 export const CreatePostPage = () => {
 	const classes = useStyles();
 	const dispatch = useDispatch();
-	const history = useHistory();
 
 	const user = useSelector((state: RootState) => state.user.user);
 	const loading = useSelector((state: RootState) => state.posts.postLoading);
@@ -103,9 +101,9 @@ export const CreatePostPage = () => {
 
 		dispatch(createPost(post));
 
-		setTimeout(() => {
-			history.goBack();
-		}, 4000);
+		setTitle('');
+		setDescription('');
+		setImage(null);
 	};
 
 	return (

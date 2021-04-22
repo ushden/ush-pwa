@@ -6,6 +6,7 @@ import { userReducer } from './user/userReducer';
 import { postsReducer } from './posts/postsReducer';
 import { commentsReducer } from './comments/commentsReducer';
 import { usersReducer } from './users/usersReducer';
+import { chatsReducer } from './chats/chatsReducer';
 
 const rootReducer = combineReducers({
 	alert: alertReducer,
@@ -13,6 +14,7 @@ const rootReducer = combineReducers({
 	posts: postsReducer,
 	comments: commentsReducer,
 	users: usersReducer,
+	chats: chatsReducer,
 });
 
 const store = createStore(
