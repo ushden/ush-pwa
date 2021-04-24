@@ -6,11 +6,13 @@ import { Loader } from '../components/Loader';
 import { FAB } from '../components/FAB';
 import { NavigationPanel } from '../components/navigation/NavigationPanel';
 import { Post } from '../components/post/Post';
-// import { POSTS } from '../constants/constants';
-// import { firestore } from '../firebase';
 import { fetchPosts } from '../store/posts/postsActions';
-import { RootState } from '../store/rootReducer';
 import { getUser } from '../store/user/userActions';
+import {
+	selectPosts,
+	selectPostsLoading,
+	selectUser,
+} from '../store/selectors';
 
 const useStyles = makeStyles({
 	container: {
@@ -24,9 +26,9 @@ export const MainPage = () => {
 	const dispatch = useDispatch();
 	const classes = useStyles();
 
-	const posts = useSelector((state: RootState) => state.posts.posts);
-	const loading = useSelector((state: RootState) => state.posts.postLoading);
-	const user = useSelector((state: RootState) => state.user.user);
+	const posts = useSelector(selectPosts);
+	const loading = useSelector(selectPostsLoading);
+	const user = useSelector(selectUser);
 
 	useEffect(() => {
 		if (posts.length === 0) {

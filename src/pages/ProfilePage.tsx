@@ -5,7 +5,7 @@ import Skeleton from '@material-ui/lab/Skeleton';
 import { NavigationPanel } from '../components/navigation/NavigationPanel';
 import { DEFAULT_USER_AVATAR } from '../constants/constants';
 import { RootState } from '../store/rootReducer';
-import { Modal } from '../components/Modal';
+import { Modal } from '../components/ImageModal';
 import { useEffect, useState } from 'react';
 import { getUser } from '../store/user/userActions';
 import { Post } from '../components/post/Post';

@@ -31,5 +31,5 @@ export const useLastMessage = (chatId: string): string => {
 		return () => unsubscribe();
 	}, [chatId]);
 
-	return message?.text;
+	return message?.image ? 'Изображение' : message?.text;
 };

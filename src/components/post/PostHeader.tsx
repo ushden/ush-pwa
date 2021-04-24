@@ -14,7 +14,7 @@ import DeleteForeverOutlinedIcon from '@material-ui/icons/DeleteForeverOutlined'
 import { makeStyles } from '@material-ui/styles';
 import { COLOR_PRIMARY } from '../../constants/constants';
 import { PostType } from '../../store/types';
-import { Modal } from '../Modal';
+import { Modal } from '../ImageModal';
 
 const useStyles = makeStyles({
 	postHeader: {

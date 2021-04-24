@@ -12,14 +12,20 @@ import { useDispatch, useSelector } from 'react-redux';
 import { CHATS, MESSAGES } from '../../constants/constants';
 import { firestore } from '../../firebase';
 import {
+	deleteMessage,
 	fetchMessages,
 	sendImageMessage,
 	sendMessage,
 } from '../../store/chats/chatActions';
-import { selectChatsLoading, selectMessages } from '../../store/selectors';
-import { User } from '../../store/types';
+import {
+	selectChatsLoading,
+	selectImageLoading,
+	selectMessages,
+} from '../../store/selectors';
+import { Message, User } from '../../store/types';
 import { Loader } from '../Loader';
 import { MessageLeft } from './MessageLeft';
+import { MessageModal } from './MessageModal';
 import { MessageRight } from './MessageRight';
 
 import { SendMessageForm } from './SendMessageForm';
@@ -29,13 +35,17 @@ const useStyles = makeStyles({
 		width: '100%',
 		height: '100%',
 		padding: 0,
-		marginBottom: '2.3rem',
+		marginBottom: '2.8rem',
 		overflow: 'auto',
 	},
 	content: {
 		padding: 0,
 	},
 	list: {},
+	endMessageBlock: {
+		width: '100%',
+		height: 1,
+	},
 });
 
 interface MessagesViewProps {
@@ -51,11 +61,15 @@ export const MessagesView: FC<MessagesViewProps> = ({
 	const dispatch = useDispatch();
 	const messages = useSelector(selectMessages);
 	const loading = useSelector(selectChatsLoading);
+	const imageLoading = useSelector(selectImageLoading);
 	const messagesEndRef = useRef<HTMLSpanElement>(null);
 
 	const [inputValue, setInputValue] = useState<string>('');
 	const [showIcons, setShowIcons] = useState<boolean>(false);
 	const [file, setFile] = useState<any>(null);
+	const [visibleEmoji, setVisibleEmoji] = useState<boolean>(false);
+	const [visibleModal, setVisibleModal] = useState<boolean>(false);
+	const [message, setMessage] = useState<Message | null>(null);
 
 	useEffect(() => {
 		if (file) {
@@ -81,7 +95,11 @@ export const MessagesView: FC<MessagesViewProps> = ({
 		if (messages.length && !loading) {
 			scrollToBottom();
 		}
-	}, [loading, messages.length]);
+
+		if (visibleEmoji) {
+			scrollToBottom();
+		}
+	}, [loading, messages.length, visibleEmoji]);
 
 	const scrollToBottom = () => {
 		messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -104,6 +122,7 @@ export const MessagesView: FC<MessagesViewProps> = ({
 
 		setInputValue('');
 		setShowIcons(false);
+		setVisibleEmoji(false);
 	};
 
 	const handleFileInputChange = async (
@@ -120,30 +139,68 @@ export const MessagesView: FC<MessagesViewProps> = ({
 		reader.readAsDataURL(file);
 	};
 
+	const handleMessageClick = (e: any, m: Message): void => {
+		setMessage(m);
+		visibleModal ? setVisibleModal(false) : setVisibleModal(true);
+	};
+
+	const handleEmojiClick = (_: any, emojiObject: any) => {
+		setInputValue((text) => `${text}${emojiObject.emoji}`);
+	};
+
+	const handleDeleteMessage = () => {
+		dispatch(deleteMessage(chatId, message?._id));
+		setVisibleModal(false);
+	};
+
 	if (loading) {
 		return <Loader />;
 	}
 
 	return (
 		<Card classes={{ root: classes.view }}>
+			{message && (
+				<MessageModal
+					open={visibleModal}
+					onClose={handleMessageClick}
+					message={message}
+					onDeleteClick={handleDeleteMessage}
+				/>
+			)}
 			<CardContent className={classes.content}>
 				<List disablePadding dense className={classes.list}>
 					{messages.map((message) => {
 						if (message.user._id === user._id) {
-							return <MessageRight message={message} key={message._id} />;
+							return (
+								<MessageRight
+									onMessageClick={handleMessageClick}
+									message={message}
+									key={message._id}
+								/>
+							);
 						}
 
-						return <MessageLeft message={message} key={message._id} />;
+						return (
+							<MessageLeft
+								onMessageClick={handleMessageClick}
+								message={message}
+								key={message._id}
+							/>
+						);
 					})}
 				</List>
-				<span ref={messagesEndRef}></span>
+				{imageLoading ? <Loader /> : null}
 			</CardContent>
+			<span ref={messagesEndRef} className={classes.endMessageBlock}></span>
 			<SendMessageForm
 				inputValue={inputValue}
 				onChangeMessageInput={handleMessageInputChange}
 				showIcons={showIcons}
 				onClickSend={handleSendMessage}
 				onChangeFileInput={handleFileInputChange}
+				onEmojiClick={handleEmojiClick}
+				visibleEmoji={visibleEmoji}
+				setVisibleEmoji={setVisibleEmoji}
 			/>
 		</Card>
 	);

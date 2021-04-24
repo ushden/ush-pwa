@@ -5,28 +5,31 @@ import { Loader } from '../components/Loader';
 import { NavigationPanel } from '../components/navigation/NavigationPanel';
 import { Post } from '../components/post/Post';
 import { fetchPosts } from '../store/posts/postsActions';
-import { RootState } from '../store/rootReducer';
+import {
+	selectPosts,
+	selectPostsLoading,
+	selectUser,
+} from '../store/selectors';
 import { getUser } from '../store/user/userActions';
 
 export const SavedPostsPage = () => {
 	const dispatch = useDispatch();
 
-	const user = useSelector((state: RootState) => state.user.user);
-	const posts = useSelector((state: RootState) =>
-		state.posts.posts.filter((post) => user?.savedPosts?.includes(post._id))
+	const user = useSelector(selectUser);
+	const posts = useSelector(selectPosts).filter((post) =>
+		user?.savedPosts?.includes(post._id)
 	);
-	const loading = useSelector((state: RootState) => state.posts.postLoading);
+	const loading = useSelector(selectPostsLoading);
 
 	useEffect(() => {
-		if (user?._id === '') {
+		if (!user?._id) {
 			dispatch(getUser());
 		}
 
 		if (posts.length === 0) {
 			dispatch(fetchPosts());
 		}
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, []);
+	}, [dispatch, posts.length, user?._id]);
 
 	return (
 		<Box component='section'>

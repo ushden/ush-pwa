@@ -10,6 +10,7 @@ import {
 	COLOR_PRIMARY,
 } from '../constants/constants';
 import { useHistory } from 'react-router';
+import { InstalModal } from '../components/InstalModal';
 
 const useStyles = makeStyles({
 	welcomePage: {
@@ -72,43 +73,46 @@ export const WelcomePage = () => {
 	};
 
 	return (
-		<Paper
-			elevation={3}
-			variant='elevation'
-			className={classesName(classes.welcomePage, 'anim-opacity')}>
-			<Container className={classes.welcomeContainer}>
-				<Box component='div' className={classes.welcomeBlock}>
-					<img
-						src='/images/icons/icon-512x512.png'
-						alt='Club 48'
-						className={classes.logo}
-					/>
-					<Typography component='h2' className={classes.title}>
-						Добро пожаловать!
-					</Typography>
-					<Typography variant='body1'>
-						В приложение Club 48. Здесь я может напишу какой-то крутой текст.
-						Что в приложении будет, какие возможности будут и еще что-то
-						придумаю
-					</Typography>
-					<Box component='div' className={classes.buttons}>
-						<Button
-							variant='contained'
-							className={classes.btnLog}
-							onClick={handleClickSignIn}
-							endIcon={<TouchAppOutlinedIcon />}>
-							Войти
-						</Button>
-						<Button
-							variant='outlined'
-							onClick={handleClickSignUp}
-							className={classes.btnReg}
-							endIcon={<InsertEmoticonOutlinedIcon />}>
-							Регистрация
-						</Button>
+		<>
+			{/* <InstalModal /> */}
+			<Paper
+				elevation={3}
+				variant='elevation'
+				className={classesName(classes.welcomePage, 'anim-opacity')}>
+				<Container className={classes.welcomeContainer}>
+					<Box component='div' className={classes.welcomeBlock}>
+						<img
+							src='/images/icons/icon-512x512.png'
+							alt='Club 48'
+							className={classes.logo}
+						/>
+						<Typography component='h2' className={classes.title}>
+							Добро пожаловать!
+						</Typography>
+						<Typography variant='body1'>
+							В приложение Club 48. Здесь я может напишу какой-то крутой текст.
+							Что в приложении будет, какие возможности будут и еще что-то
+							придумаю
+						</Typography>
+						<Box component='div' className={classes.buttons}>
+							<Button
+								variant='contained'
+								className={classes.btnLog}
+								onClick={handleClickSignIn}
+								endIcon={<TouchAppOutlinedIcon />}>
+								Войти
+							</Button>
+							<Button
+								variant='outlined'
+								onClick={handleClickSignUp}
+								className={classes.btnReg}
+								endIcon={<InsertEmoticonOutlinedIcon />}>
+								Регистрация
+							</Button>
+						</Box>
 					</Box>
-				</Box>
-			</Container>
-		</Paper>
+				</Container>
+			</Paper>
+		</>
 	);
 };

@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useHistory, useParams } from 'react-router';
 import { NavigationPanel } from '../components/navigation/NavigationPanel';
 import { fetchAnotherUser } from '../store/users/usersActions';
-import { Modal } from '../components/Modal';
+import { Modal } from '../components/ImageModal';
 import { DEFAULT_USER_AVATAR } from '../constants/constants';
 import { createChat } from '../store/chats/chatActions';
 import { getUser } from '../store/user/userActions';

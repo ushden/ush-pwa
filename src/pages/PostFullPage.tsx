@@ -38,6 +38,7 @@ export const PostFull = () => {
 	const dispatch = useDispatch();
 
 	const [comment, setComment] = useState<string>('');
+	const [visibleEmoji, setVisibleEmoji] = useState<boolean>(false);
 
 	useEffect(() => {
 		dispatch(fetchPost(id));
@@ -85,6 +86,8 @@ export const PostFull = () => {
 					handleAddCommentBtnClick={handleAddCommentBtnClick}
 					comment={comment}
 					setComment={setComment}
+					visibleEmoji={visibleEmoji}
+					setVisibleEmoji={setVisibleEmoji}
 				/>
 			</Container>
 		</Box>

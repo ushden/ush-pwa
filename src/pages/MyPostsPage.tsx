@@ -4,15 +4,15 @@ import { Loader } from '../components/Loader';
 import { NavigationPanel } from '../components/navigation/NavigationPanel';
 import { Post } from '../components/post/Post';
 import { useUserState } from '../hooks/useUserState';
-import { RootState } from '../store/rootReducer';
+import { selectPosts, selectPostsLoading } from '../store/selectors';
 
 export const MyPostsPage = () => {
 	const user = useUserState();
 
-	const posts = useSelector((state: RootState) =>
-		state.posts.posts.filter((post) => post.user._id === user?.uid)
+	const posts = useSelector(selectPosts).filter(
+		(post) => post.user._id === user?.uid
 	);
-	const loading = useSelector((state: RootState) => state.posts.postLoading);
+	const loading = useSelector(selectPostsLoading);
 
 	if (posts.length === 0) {
 		return (

@@ -31,6 +31,12 @@ const fetchMessagesAction = (payload: Array<DocData | Message>) => ({
 	type: ChatsActions.FETCH_MESSAGES,
 	payload,
 });
+const showImageLoadingAction = () => ({
+	type: ChatsActions.SHOW_IMAGE_LOADING,
+});
+const hideImageLoadingAction = () => ({
+	type: ChatsActions.HIDE_IMAGE_LOADING,
+});
 
 export const createChat = (
 	payload: Chat
@@ -179,6 +185,8 @@ export const sendImageMessage = (
 ): ThunkAction<void, RootState, unknown, AnyAction> => {
 	return async (dispatch) => {
 		try {
+			dispatch(showImageLoadingAction());
+
 			const random = Date.now().toString();
 			const image = await uploadImage(uri, random, `chat/${chatId}`);
 
@@ -196,9 +204,30 @@ export const sendImageMessage = (
 				.collection(MESSAGES)
 				.doc(payload._id)
 				.set(payload);
+
+			dispatch(hideImageLoadingAction());
 		} catch (error) {
 			console.error(error.code, error.message);
 			dispatch(showAlert(ALERT_ERROR, 'Не удалось отправить изображение'));
+		}
+	};
+};
+
+export const deleteMessage = (
+	chatId: string,
+	messageId: string | undefined
+): ThunkAction<void, RootState, unknown, AnyAction> => {
+	return async (dispath) => {
+		try {
+			await firestore
+				.collection(CHATS)
+				.doc(chatId)
+				.collection(MESSAGES)
+				.doc(messageId)
+				.delete();
+		} catch (error) {
+			console.error(error.code, error.message);
+			dispath(showAlert(ALERT_ERROR, 'Не удалось удалить сообщение'));
 		}
 	};
 };

@@ -22,6 +22,7 @@ const initialState: ChatsState = {
 	chats: [],
 	messages: [],
 	chatsLoading: false,
+	imageLoading: false,
 };
 
 export const chatsReducer = (
@@ -41,6 +42,10 @@ export const chatsReducer = (
 			return { ...state, chatsLoading: true };
 		case ChatsActions.HIDE_CHAT_LOADING:
 			return { ...state, chatsLoading: false };
+		case ChatsActions.HIDE_IMAGE_LOADING:
+			return { ...state, imageLoading: false };
+		case ChatsActions.SHOW_IMAGE_LOADING:
+			return { ...state, imageLoading: true };
 		default:
 			return { ...state };
 	}

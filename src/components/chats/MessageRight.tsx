@@ -8,6 +8,7 @@ import {
 } from '@material-ui/core';
 import classNames from 'classnames';
 import { FC } from 'react';
+
 import { COLOR_PRIMARY } from '../../constants/constants';
 import { Message } from '../../store/types';
 
@@ -60,9 +61,10 @@ const useStyles = makeStyles({
 
 interface MessageProps {
 	message: Message;
+	onMessageClick: (_: any, m: Message) => void;
 }
 
-export const MessageRight: FC<MessageProps> = ({ message }) => {
+export const MessageRight: FC<MessageProps> = ({ message, onMessageClick }) => {
 	const classes = useStyles();
 
 	const renderImageMessage = () => {
@@ -85,6 +87,7 @@ export const MessageRight: FC<MessageProps> = ({ message }) => {
 		<ListItem
 			className={classNames(classes.bubble, 'anim-scale')}
 			alignItems='center'
+			onClick={(e) => onMessageClick(e, message)}
 			button>
 			<ListItemText className={classes.messageInfo}>
 				<Typography component='span' className={classes.name}>

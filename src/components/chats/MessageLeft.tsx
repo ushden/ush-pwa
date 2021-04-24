@@ -6,8 +6,9 @@ import {
 	makeStyles,
 	Typography,
 } from '@material-ui/core';
-import classNames from 'classnames';
 import { FC } from 'react';
+import classNames from 'classnames';
+
 import { Message } from '../../store/types';
 
 const useStyles = makeStyles({
@@ -49,19 +50,28 @@ const useStyles = makeStyles({
 		backgroundColor: 'rgba(0, 0, 0, 0.05)',
 		padding: '0.2rem',
 	},
+	image: {
+		maxWidth: '100%',
+		objectFit: 'contain',
+	},
 });
 
 interface MessageProps {
 	message: Message;
+	onMessageClick: (_: any, m: Message) => void;
 }
 
-export const MessageLeft: FC<MessageProps> = ({ message }) => {
+export const MessageLeft: FC<MessageProps> = ({ message, onMessageClick }) => {
 	const classes = useStyles();
 
 	const renderImageMessage = () => {
 		return (
 			<Typography className={classes.imageMessage}>
-				<img src={message.image} alt={message.user.name} />
+				<img
+					src={message.image}
+					alt={message.user.name}
+					className={classes.image}
+				/>
 			</Typography>
 		);
 	};
@@ -74,6 +84,7 @@ export const MessageLeft: FC<MessageProps> = ({ message }) => {
 		<ListItem
 			className={classNames(classes.bubble, 'anim-scale')}
 			alignItems='center'
+			onClick={(e) => onMessageClick(e, message)}
 			button>
 			<ListItemAvatar className={classes.avatarWrap}>
 				<Avatar

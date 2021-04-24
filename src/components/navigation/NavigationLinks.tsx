@@ -8,7 +8,7 @@ import ExitToAppOutlinedIcon from '@material-ui/icons/ExitToAppOutlined';
 import NotesOutlinedIcon from '@material-ui/icons/NotesOutlined';
 import { makeStyles } from '@material-ui/styles';
 import { Link, NavLink } from 'react-router-dom';
-import { COLOR_DARK } from '../../constants/constants';
+import { COLOR_DARK, COLOR_PRIMARY } from '../../constants/constants';
 import { signOut } from '../../store/user/userActions';
 import { useDispatch } from 'react-redux';
 
@@ -42,6 +42,8 @@ export const NavigationLinks = () => {
 				<NavLink
 					to='/'
 					activeClassName='navigation_link-active'
+					exact
+					activeStyle={{ backgroundColor: COLOR_PRIMARY, color: '#fff' }}
 					className={classes.navLink}>
 					Посты
 				</NavLink>
@@ -51,6 +53,7 @@ export const NavigationLinks = () => {
 				<NavLink
 					to='/my-posts'
 					activeClassName='navigation_link-active'
+					activeStyle={{ backgroundColor: COLOR_PRIMARY, color: '#fff' }}
 					className={classes.navLink}>
 					Мои посты
 				</NavLink>
@@ -60,6 +63,7 @@ export const NavigationLinks = () => {
 				<NavLink
 					to='/chats'
 					activeClassName='navigation_link-active'
+					activeStyle={{ backgroundColor: COLOR_PRIMARY, color: '#fff' }}
 					className={classes.navLink}>
 					Чаты
 				</NavLink>
@@ -69,6 +73,7 @@ export const NavigationLinks = () => {
 				<NavLink
 					to='/users'
 					activeClassName='navigation_link-active'
+					activeStyle={{ backgroundColor: COLOR_PRIMARY, color: '#fff' }}
 					className={classes.navLink}>
 					Люди
 				</NavLink>
@@ -77,6 +82,7 @@ export const NavigationLinks = () => {
 				<AccountCircleOutlinedIcon className={classes.navListIcon} />
 				<NavLink
 					to='/profile'
+					activeStyle={{ backgroundColor: COLOR_PRIMARY, color: '#fff' }}
 					activeClassName='navigation_link-active'
 					className={classes.navLink}>
 					Профиль
@@ -87,6 +93,7 @@ export const NavigationLinks = () => {
 				<NavLink
 					to='/save'
 					activeClassName='navigation_link-active'
+					activeStyle={{ backgroundColor: COLOR_PRIMARY, color: '#fff' }}
 					className={classes.navLink}>
 					Сохраненные
 				</NavLink>

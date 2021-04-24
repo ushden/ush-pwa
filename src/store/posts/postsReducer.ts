@@ -29,7 +29,7 @@ export const postsReducer = (
 		case PostsActions.CREATE_POST:
 			return { ...state, posts: [...state.posts, action.payload] };
 		case PostsActions.FETCH_POSTS:
-			return { ...state, posts: [...state.posts, ...action.payload] };
+			return { ...state, posts: [...action.payload] };
 		case PostsActions.FETCH_POST:
 			return { ...state, post: { ...action.payload }, posts: [...state.posts] };
 		case PostsActions.SHOW_POST_LOADER:

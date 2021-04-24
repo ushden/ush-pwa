@@ -223,6 +223,14 @@ export enum ChatsActions {
 	CREATE_CHAT = 'CREATE_CHAT',
 	SHOW_CHAT_LOADING = 'SHOW_CHAT_LOADING',
 	HIDE_CHAT_LOADING = 'HIDE_CHAT_LOADING',
+	SHOW_IMAGE_LOADING = 'SHOW_IMAGE_LOADING',
+	HIDE_IMAGE_LOADING = 'HIDE_IMAGE_LOADING',
+}
+interface hideImageLoading {
+	type: ChatsActions.SHOW_IMAGE_LOADING;
+}
+interface showImageLoading {
+	type: ChatsActions.HIDE_IMAGE_LOADING;
 }
 interface fetchMesagesAction {
 	type: ChatsActions.FETCH_MESSAGES;
@@ -256,7 +264,9 @@ export type ChatsActionsType =
 	| showChatLoadingAction
 	| hideChatLoadingAction
 	| createChatAction
-	| fetchMesagesAction;
+	| fetchMesagesAction
+	| showImageLoading
+	| hideImageLoading;
 
 export interface Message {
 	_id: string;
@@ -280,4 +290,5 @@ export interface ChatsState {
 	chats: Array<Chat>;
 	messages: Array<Message>;
 	chatsLoading: boolean;
+	imageLoading: boolean;
 }

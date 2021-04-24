@@ -20,7 +20,7 @@ import { auth } from '../../firebase';
 import { PostHeader } from './PostHeader';
 import { PostBody } from './PostBody';
 import { PostFooter } from './PostFooter';
-import { Modal } from '../Modal';
+import { Modal } from '../ImageModal';
 
 const useStyles = makeStyles({
 	post: {

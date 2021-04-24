@@ -12,6 +12,7 @@ import { makeStyles } from '@material-ui/styles';
 import { ChangeEvent, FC, ReactElement } from 'react';
 import { COLOR_PRIMARY } from '../../constants/constants';
 import classNames from 'classnames';
+import { Emoji } from '../Emoji';
 
 const useStyles = makeStyles({
 	form: {
@@ -22,19 +23,33 @@ const useStyles = makeStyles({
 		width: '100%',
 		backgroundColor: '#fff',
 		padding: 0,
+		flexDirection: 'column',
+	},
+	inputWrap: {
+		width: '100%',
+		margin: 0,
 	},
 	input: {
 		width: '100%',
 		height: '100%',
-		padding: '0.2rem',
+		padding: '0.5rem',
 		boxShadow: '0px -3px 17px -8px rgba(0,0,0,0.5)',
 	},
 	btn: {
 		padding: 0,
 		color: COLOR_PRIMARY,
 	},
-	fileIcon: {
-		paddingTop: '0.2rem',
+	icon: {
+		paddingTop: '0.5rem',
+		paddingBottom: '0.5rem',
+		width: '1.8rem',
+		height: '1.8rem',
+	},
+	sendIcon: {
+		marginRight: '0.4rem',
+	},
+	emojiIcon: {
+		marginLeft: '0.3rem',
 	},
 });
 
@@ -64,9 +79,12 @@ interface MessageLeftProps {
 	onChangeMessageInput: (e: ChangeEvent<HTMLInputElement>) => void;
 	showIcons: boolean;
 	onClickSend: () => void;
+	onEmojiClick: (_: any, emojiObject: any) => void;
 	onChangeFileInput: (
 		e: React.ChangeEvent<HTMLInputElement> | any
 	) => Promise<void>;
+	visibleEmoji: boolean;
+	setVisibleEmoji: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export const SendMessageForm: FC<MessageLeftProps> = (props): ReactElement => {
@@ -76,6 +94,9 @@ export const SendMessageForm: FC<MessageLeftProps> = (props): ReactElement => {
 		showIcons,
 		onClickSend,
 		onChangeFileInput,
+		onEmojiClick,
+		visibleEmoji,
+		setVisibleEmoji,
 	} = props;
 	const classes = useStyles();
 
@@ -91,7 +112,7 @@ export const SendMessageForm: FC<MessageLeftProps> = (props): ReactElement => {
 				/>
 				<IconButton className={classes.btn}>
 					<label htmlFor='message-file-pick'>
-						<FileIcon className={classNames(classes.fileIcon, 'anim-scale')} />
+						<FileIcon className={classNames(classes.icon, 'anim-scale')} />
 					</label>
 				</IconButton>
 			</>
@@ -99,39 +120,56 @@ export const SendMessageForm: FC<MessageLeftProps> = (props): ReactElement => {
 	};
 
 	return (
-		<CardActions className={classes.form}>
-			<MessageInput
-				className={classes.input}
-				value={inputValue}
-				onChange={onChangeMessageInput}
-				placeholder='Ваше сообщение...'
-				multiline
-				rowsMax={4}
-				InputProps={{
-					startAdornment: (
-						<InputAdornment position='start'>
-							{showIcons ? (
-								<IconButton className={classes.btn}>
-									<DeadIcon className='anim-scale' />
-								</IconButton>
-							) : (
-								renderFileIcon()
-							)}
-						</InputAdornment>
-					),
-					endAdornment: (
-						<InputAdornment position='end'>
-							{showIcons ? (
-								<IconButton className={classes.btn} onClick={onClickSend}>
-									<SendIcon className='anim-scale' />
-								</IconButton>
-							) : (
-								<></>
-							)}
-						</InputAdornment>
-					),
-				}}
-			/>
-		</CardActions>
+		<>
+			<Emoji onEmojiClickHandle={onEmojiClick} visible={visibleEmoji} />
+			<CardActions className={classes.form}>
+				<MessageInput
+					className={classes.input}
+					value={inputValue}
+					onChange={onChangeMessageInput}
+					placeholder='Ваше сообщение...'
+					multiline
+					rowsMax={4}
+					InputProps={{
+						startAdornment: (
+							<InputAdornment position='start'>
+								{showIcons ? (
+									<IconButton
+										className={classes.btn}
+										onClick={() => setVisibleEmoji((open) => !open)}>
+										<DeadIcon
+											className={classNames(
+												classes.icon,
+												'anim-scale',
+												classes.emojiIcon
+											)}
+										/>
+									</IconButton>
+								) : (
+									renderFileIcon()
+								)}
+							</InputAdornment>
+						),
+						endAdornment: (
+							<InputAdornment position='end'>
+								{showIcons ? (
+									<IconButton className={classes.btn} onClick={onClickSend}>
+										<SendIcon
+											className={classNames(
+												classes.icon,
+												'anim-scale',
+												classes.sendIcon
+											)}
+										/>
+									</IconButton>
+								) : (
+									<></>
+								)}
+							</InputAdornment>
+						),
+					}}
+				/>
+			</CardActions>
+		</>
 	);
 };

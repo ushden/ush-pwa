@@ -1,11 +1,12 @@
-import { Box, Button, TextField } from '@material-ui/core';
+import { Box, Button, TextField, IconButton } from '@material-ui/core';
+import EmojiEmotionsOutlinedIcon from '@material-ui/icons/EmojiEmotionsOutlined';
 import { makeStyles } from '@material-ui/styles';
 import { useSelector } from 'react-redux';
 
 import { COLOR_PRIMARY } from '../../../constants/constants';
-import { RootState } from '../../../store/rootReducer';
 import { Loader } from '../../Loader';
-import { Emoji } from './Emoji';
+import { Emoji } from '../../Emoji';
+import { selectCommentsLoading } from '../../../store/selectors';
 
 const useStyles = makeStyles({
 	addCommentBlock: {
@@ -31,6 +32,16 @@ const useStyles = makeStyles({
 			color: '#fff',
 		},
 	},
+	emojiPiker: {
+		padding: '0.5rem',
+		marginLeft: '1rem',
+		marginBottom: '0.4rem',
+		color: COLOR_PRIMARY,
+	},
+	emojiPikerIcon: {
+		fontSize: '2rem',
+		color: COLOR_PRIMARY,
+	},
 });
 
 interface AddFormPropsType {
@@ -38,6 +49,8 @@ interface AddFormPropsType {
 	handleAddCommentBtnClick: () => void;
 	comment: string;
 	setComment: React.Dispatch<React.SetStateAction<string>>;
+	visibleEmoji: boolean;
+	setVisibleEmoji: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export const AddCommentForm = ({
@@ -45,14 +58,15 @@ export const AddCommentForm = ({
 	handleAddCommentBtnClick,
 	comment,
 	setComment,
+	visibleEmoji,
+	setVisibleEmoji,
 }: AddFormPropsType) => {
 	const classes = useStyles();
-	const loading = useSelector(
-		(state: RootState) => state.comments.commentsLoading
-	);
+	const loading = useSelector(selectCommentsLoading);
 
 	return (
 		<Box component='div' className={classes.addCommentBlock}>
+			<Emoji onEmojiClickHandle={onEmojiClickHandle} visible={visibleEmoji} />
 			<TextField
 				id='add-comment'
 				label='Добавить комментарий'
@@ -73,7 +87,11 @@ export const AddCommentForm = ({
 						onClick={handleAddCommentBtnClick}>
 						Добавить комментарий
 					</Button>
-					<Emoji onEmojiClickHandle={onEmojiClickHandle} />
+					<IconButton
+						className={classes.emojiPiker}
+						onClick={() => setVisibleEmoji((open) => !open)}>
+						<EmojiEmotionsOutlinedIcon className={classes.emojiPikerIcon} />
+					</IconButton>
 				</Box>
 			)}
 		</Box>
