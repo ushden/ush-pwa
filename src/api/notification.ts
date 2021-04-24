@@ -5,7 +5,7 @@ export const getToken = async () => {
 	try {
 		const token = await messaging.getToken({
 			vapidKey:
-				'BO4zgbncEzrrDHbUxjiRbVg6qzeuENlZHXVdk7taKqEkn1q2f2D3PvkZaVEzALQguh_I5szBJgd8jNhQbSmz6dc',
+				'',
 		});
 		if (token) {
 			return token;
@@ -37,7 +37,7 @@ interface sendNotificationParams {
 export const sendNotification = async (payload: sendNotificationParams) => {
 	try {
 		const key =
-			'AAAAW0Br-bw:APA91bHfsBm0cbvRkU1Kjqv3VicPkPFxYTebNcyGkJAvOiMi9tZGMP0wq2pqONEfxpbSQuR681I3ivcNPEGlO3HUUnPvE8fG4_bj88rodRIY6J4m6V1MvLohAZPcDOY7zqMcGcvJqum6';
+			'';
 		const to = payload.token;
 		const notification = {
 			title: payload.title,
