@@ -1,8 +1,10 @@
 import { Box, List, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { getToken, setToken } from '../api/notification';
 import { ListChatItem } from '../components/chats/ListChatItem';
+import { PermissionModal } from '../components/chats/PermissionModal';
 import { Loader } from '../components/Loader';
 import { NavigationPanel } from '../components/navigation/NavigationPanel';
 import { CHATS } from '../constants/constants';
@@ -35,6 +37,20 @@ export const ChatsPage = () => {
 			chat.users.secondUser._id === user._id
 	);
 	const loading = useSelector(selectChatsLoading);
+	const [visibleModal, setVisibleModal] = useState<boolean>(true);
+
+	useEffect(() => {
+		(async () => {
+			const token = await getToken();
+
+			if (token) {
+				setVisibleModal(false);
+				await setToken(token);
+			}
+
+			setVisibleModal(false);
+		})();
+	}, [dispatch]);
 
 	useEffect(() => {
 		if (!user._id) {
@@ -53,6 +69,7 @@ export const ChatsPage = () => {
 	return (
 		<Box component='section'>
 			<NavigationPanel title='Чаты' />
+			<PermissionModal visibleModal={visibleModal} />
 			{loading ? (
 				<Loader />
 			) : (

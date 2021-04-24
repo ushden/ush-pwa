@@ -74,7 +74,7 @@ export const WelcomePage = () => {
 
 	return (
 		<>
-			{/* <InstalModal /> */}
+			<InstalModal />
 			<Paper
 				elevation={3}
 				variant='elevation'

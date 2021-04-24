@@ -38,6 +38,7 @@ export interface User {
 	email: string | undefined;
 	photoUrl?: string | undefined;
 	isLogIn?: boolean;
+	pushToken?: string;
 	savedPosts?: Array<string>;
 	chatWithUsers?: Array<chatWhithUsers>;
 }

@@ -7,6 +7,7 @@ const initialState: UserState = {
 		email: '',
 		photoUrl: '',
 		isLogIn: false,
+		pushToken: '',
 		savedPosts: [],
 		chatWithUsers: [],
 	},

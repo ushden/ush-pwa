@@ -9,6 +9,7 @@ import {
 	useState,
 } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { sendNotification } from '../../api/notification';
 import { CHATS, MESSAGES } from '../../constants/constants';
 import { firestore } from '../../firebase';
 import {
@@ -18,6 +19,7 @@ import {
 	sendMessage,
 } from '../../store/chats/chatActions';
 import {
+	selectChat,
 	selectChatsLoading,
 	selectImageLoading,
 	selectMessages,
@@ -62,6 +64,7 @@ export const MessagesView: FC<MessagesViewProps> = ({
 	const messages = useSelector(selectMessages);
 	const loading = useSelector(selectChatsLoading);
 	const imageLoading = useSelector(selectImageLoading);
+	const chat = useSelector(selectChat);
 	const messagesEndRef = useRef<HTMLSpanElement>(null);
 
 	const [inputValue, setInputValue] = useState<string>('');
@@ -115,9 +118,24 @@ export const MessagesView: FC<MessagesViewProps> = ({
 		}
 	};
 
-	const handleSendMessage = () => {
+	const handleSendMessage = async () => {
 		if (inputValue) {
 			dispatch(sendMessage(chatId, inputValue, user));
+		}
+
+		const interlocutor =
+			chat.users.firstUser._id === user._id
+				? chat.users.secondUser
+				: chat.users.firstUser;
+
+		if (interlocutor.pushToken) {
+			const payload = {
+				token: interlocutor.pushToken,
+				title: 'Новое сообщение',
+				body: inputValue,
+				url: window.location.href,
+			};
+			await sendNotification(payload);
 		}
 
 		setInputValue('');

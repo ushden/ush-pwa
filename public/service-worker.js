@@ -1,11 +1,12 @@
 /* eslint-disable no-restricted-globals */
-const staticCacheName = 's-app-v2';
+const staticCacheName = 's-app-v2.0.2';
 // const dynamicCacheName = 'd-app-v2';
 
 const assetUrls = [
 	'index.html',
 	'offline.html',
 	'404.html',
+	'manifest.json',
 	'images/splash.png',
 	'images/default_avatar.png',
 	'images/empty-img.png',
