@@ -21,7 +21,7 @@ const messaging = firebase.messaging();
 messaging.onBackgroundMessage((payload) => {
 	const notificationTitle = payload.notification.title;
 	const notificationOptions = {
-		body: `У Вас новое сообщение ${payload.notification.body}`,
+		body: payload.notification.body,
 		icon: '/images/icons/icon-72x72.png',
 		tag: 'data-notification',
 		data: {

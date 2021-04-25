@@ -5,8 +5,7 @@ import { User } from '../store/types';
 export const getToken = async () => {
 	try {
 		const token = await messaging.getToken({
-			vapidKey:
-				'',
+			vapidKey: process.env.REACT_APP_VAPID_KEY,
 		});
 		if (token) {
 			return token;
@@ -37,8 +36,7 @@ interface sendNotificationParams {
 
 export const sendNotification = async (payload: sendNotificationParams) => {
 	try {
-		const key =
-			'';
+		const key = process.env.REACT_APP_SERVER_KEY;
 		const to = payload.token;
 		const notification = {
 			title: payload.title,

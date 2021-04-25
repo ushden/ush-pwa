@@ -131,7 +131,7 @@ export const MessagesView: FC<MessagesViewProps> = ({
 		if (token) {
 			const payload = {
 				token: token,
-				title: 'Новое сообщение',
+				title: `${user.name} написал Вам:`,
 				body: inputValue,
 				url: window.location.href,
 			};
