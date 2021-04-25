@@ -9,7 +9,7 @@ import {
 	useState,
 } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { sendNotification } from '../../api/notification';
+import { fetchToken, sendNotification } from '../../api/notification';
 import { CHATS, MESSAGES } from '../../constants/constants';
 import { firestore } from '../../firebase';
 import {
@@ -21,7 +21,6 @@ import {
 import {
 	selectChat,
 	selectChatsLoading,
-	selectImageLoading,
 	selectMessages,
 } from '../../store/selectors';
 import { Message, User } from '../../store/types';
@@ -63,7 +62,6 @@ export const MessagesView: FC<MessagesViewProps> = ({
 	const dispatch = useDispatch();
 	const messages = useSelector(selectMessages);
 	const loading = useSelector(selectChatsLoading);
-	const imageLoading = useSelector(selectImageLoading);
 	const chat = useSelector(selectChat);
 	const messagesEndRef = useRef<HTMLSpanElement>(null);
 
@@ -128,9 +126,11 @@ export const MessagesView: FC<MessagesViewProps> = ({
 				? chat.users.secondUser
 				: chat.users.firstUser;
 
-		if (interlocutor.pushToken) {
+		const token = await fetchToken(interlocutor._id);
+
+		if (token) {
 			const payload = {
-				token: interlocutor.pushToken,
+				token: token,
 				title: 'Новое сообщение',
 				body: inputValue,
 				url: window.location.href,
@@ -207,7 +207,6 @@ export const MessagesView: FC<MessagesViewProps> = ({
 						);
 					})}
 				</List>
-				{imageLoading ? <Loader /> : null}
 			</CardContent>
 			<span ref={messagesEndRef} className={classes.endMessageBlock}></span>
 			<SendMessageForm

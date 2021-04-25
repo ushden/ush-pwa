@@ -1,5 +1,6 @@
 import { USERS } from '../constants/constants';
-import { auth, firestore, messaging } from '../firebase';
+import { auth, DocData, firestore, messaging } from '../firebase';
+import { User } from '../store/types';
 
 export const getToken = async () => {
 	try {
@@ -46,7 +47,7 @@ export const sendNotification = async (payload: sendNotificationParams) => {
 			click_action: payload.url,
 		};
 
-		const res = await fetch('https://fcm.googleapis.com/fcm/send', {
+		await fetch('https://fcm.googleapis.com/fcm/send', {
 			method: 'POST',
 			headers: {
 				Authorization: 'key=' + key,
@@ -57,9 +58,20 @@ export const sendNotification = async (payload: sendNotificationParams) => {
 				to: to,
 			}),
 		});
-
-		console.log(res);
 	} catch (error) {
 		console.error(error.code, error.message);
+	}
+};
+
+export const fetchToken = async (userId: string) => {
+	try {
+		const doc = await firestore.collection(USERS).doc(userId).get();
+		const user: DocData | User = doc.data();
+
+		if (user?.pushToken) {
+			return user?.pushToken;
+		}
+	} catch (error) {
+		console.log(error.code, error.message);
 	}
 };

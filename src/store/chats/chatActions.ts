@@ -3,6 +3,8 @@ import { ThunkAction } from 'redux-thunk';
 import { uploadImage } from '../../api/uploadImage';
 import {
 	ALERT_ERROR,
+	ALERT_INFO,
+	ALERT_SUCCESS,
 	CHATS,
 	ERROR_MESSAGE,
 	MESSAGES,
@@ -30,12 +32,6 @@ const fetchChatAction = (payload: DocData | Chat) => ({
 const fetchMessagesAction = (payload: Array<DocData | Message>) => ({
 	type: ChatsActions.FETCH_MESSAGES,
 	payload,
-});
-const showImageLoadingAction = () => ({
-	type: ChatsActions.SHOW_IMAGE_LOADING,
-});
-const hideImageLoadingAction = () => ({
-	type: ChatsActions.HIDE_IMAGE_LOADING,
 });
 
 export const createChat = (
@@ -185,7 +181,7 @@ export const sendImageMessage = (
 ): ThunkAction<void, RootState, unknown, AnyAction> => {
 	return async (dispatch) => {
 		try {
-			dispatch(showImageLoadingAction());
+			dispatch(showAlert(ALERT_INFO, 'Загрузка изображения...'));
 
 			const random = Date.now().toString();
 			const image = await uploadImage(uri, random, `chat/${chatId}`);
@@ -205,7 +201,7 @@ export const sendImageMessage = (
 				.doc(payload._id)
 				.set(payload);
 
-			dispatch(hideImageLoadingAction());
+			dispatch(showAlert(ALERT_SUCCESS, 'Успешно!'));
 		} catch (error) {
 			console.error(error.code, error.message);
 			dispatch(showAlert(ALERT_ERROR, 'Не удалось отправить изображение'));
