@@ -2,6 +2,8 @@ import { Box, Container } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+
+import { getToken, setToken } from '../api/notification';
 import { Loader } from '../components/Loader';
 import { FAB } from '../components/FAB';
 import { NavigationPanel } from '../components/navigation/NavigationPanel';
@@ -29,6 +31,16 @@ export const MainPage = () => {
 	const posts = useSelector(selectPosts);
 	const loading = useSelector(selectPostsLoading);
 	const user = useSelector(selectUser);
+
+	useEffect(() => {
+		(async () => {
+			const token = await getToken();
+
+			if (token) {
+				return await setToken(token);
+			}
+		})();
+	}, [dispatch]);
 
 	useEffect(() => {
 		if (posts.length === 0) {

@@ -97,7 +97,7 @@ export const ProfileHeader: FC<ProfileHeaderProps> = ({
 					align='center'
 					component='span'
 					className={classes.userRole}>
-					loh
+					Admninistrator
 				</Typography>
 			</Box>
 			{currentUserId === user._id ? (

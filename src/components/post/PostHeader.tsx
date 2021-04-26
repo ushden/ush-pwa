@@ -15,6 +15,7 @@ import { makeStyles } from '@material-ui/styles';
 import { COLOR_PRIMARY } from '../../constants/constants';
 import { PostType } from '../../store/types';
 import { Modal } from '../ImageModal';
+import { Skeleton } from '@material-ui/lab';
 
 const useStyles = makeStyles({
 	postHeader: {
@@ -98,16 +99,25 @@ export const PostHeader = (props: PostHeaderPropsType) => {
 					/>
 				</IconButton>
 				<Box component='div' className={classes.postInfoWrap}>
-					<Typography component='h4' className={classes.postInfoName}>
-						<Link
-							to={`/user/${post.user._id}`}
-							className={classes.postInfoNameLink}>
-							{post.user.name}
-						</Link>
-					</Typography>
-					<Typography component='p' className={classes.postInfoData}>
-						{post.createAt}
-					</Typography>
+					{post.user.name && post.createAt ? (
+						<>
+							<Typography component='h4' className={classes.postInfoName}>
+								<Link
+									to={`/user/${post.user._id}`}
+									className={classes.postInfoNameLink}>
+									{post.user.name}
+								</Link>
+							</Typography>
+							<Typography component='p' className={classes.postInfoData}>
+								{post.createAt}
+							</Typography>
+						</>
+					) : (
+						<>
+							<Skeleton variant='text' />
+							<Skeleton variant='text' />
+						</>
+					)}
 				</Box>
 			</Box>
 			<Box className={classes.postMenu} component='div'>

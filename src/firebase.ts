@@ -30,7 +30,7 @@ export const firestore = firebase.firestore();
 export const storage = firebase.storage();
 export const messaging = firebase.messaging();
 
-messaging.onMessage((payload) => {
-	console.log('Message received. ', payload);
-	// ...
-});
+// messaging.onMessage((payload) => {
+// 	console.log('Message received. ', payload);
+// 	// ...
+// });
