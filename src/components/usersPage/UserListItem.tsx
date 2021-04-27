@@ -5,14 +5,16 @@ import {
 	ListItemAvatar,
 	ListItemText,
 	ListItemSecondaryAction,
-	Avatar,
 	makeStyles,
+	Badge,
 } from '@material-ui/core';
 import { Link } from 'react-router-dom';
 import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
 import { COLOR_PRIMARY } from '../../constants/constants';
 import { User } from '../../store/types';
 import classNames from 'classnames';
+import { ImageAvatar } from '../ImageAvatar';
+import { useUserStatus } from '../../hooks/useUserStatus';
 
 const useStyles = makeStyles({
 	listIcon: {
@@ -31,13 +33,19 @@ interface UserItemProps {
 
 export const UserListItem = ({ user }: UserItemProps) => {
 	const classes = useStyles();
+	const status = useUserStatus(user._id);
+	console.log(status, user._id);
 
 	return (
 		<Fragment>
 			<Link to={`/user/${user._id}`} className={classes.link}>
 				<ListItem alignItems='flex-start' button className='anim-scale'>
 					<ListItemAvatar className='anim-scale'>
-						<Avatar alt={user.name} src={user.photoUrl} />
+						<Badge
+							variant='dot'
+							color={status === 'online' ? 'primary' : 'secondary'}>
+							<ImageAvatar src={user.photoUrl} alt={user.name} />
+						</Badge>
 					</ListItemAvatar>
 					<ListItemText
 						primary={user.name}

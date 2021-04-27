@@ -1,6 +1,7 @@
 import { RootState } from './rootReducer';
 
 export const selectUser = (state: RootState) => state.user.user;
+export const selectUsers = (state: RootState) => state.users.users;
 export const selectAnotherUser = (state: RootState) => state.users.anotherUser;
 export const selectUsersLoading = (state: RootState) =>
 	state.users.usersLoading;

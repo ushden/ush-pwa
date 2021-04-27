@@ -2,29 +2,24 @@ import { Box, List } from '@material-ui/core';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Loader } from '../components/Loader';
-// import { makeStyles } from '@material-ui/styles';
 import { NavigationPanel } from '../components/navigation/NavigationPanel';
 import { UserListItem } from '../components/usersPage/UserListItem';
-import { RootState } from '../store/rootReducer';
-import { selectUser, selectUsersLoading } from '../store/selectors';
+import {
+	selectUser,
+	selectUsers,
+	selectUsersLoading,
+} from '../store/selectors';
 import { getUser } from '../store/user/userActions';
 import { fetchUsers } from '../store/users/usersActions';
 
-// const useStyles = makeStyles({
-
-// });
-
 export const UsersPage = () => {
-	// const classes = useStyles();
 	const dispatch = useDispatch();
 	const user = useSelector(selectUser);
-	const users = useSelector((state: RootState) =>
-		state.users.users.filter((u) => u._id !== user._id)
-	);
+	const users = useSelector(selectUsers).filter((u) => u._id !== user._id);
 	const loading = useSelector(selectUsersLoading);
 
 	useEffect(() => {
-		if (user._id === '') {
+		if (!user._id) {
 			dispatch(getUser());
 		}
 

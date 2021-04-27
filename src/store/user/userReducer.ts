@@ -6,7 +6,10 @@ const initialState: UserState = {
 		name: '',
 		email: '',
 		photoUrl: '',
-		isLogIn: false,
+		isLogIn: {
+			status: 'offline',
+			lastChanged: '',
+		},
 		pushToken: '',
 		savedPosts: [],
 		chatWithUsers: [],
@@ -20,7 +23,7 @@ export const userReducer = (
 ): UserState => {
 	switch (action.type) {
 		case UserActions.GET_USER:
-			return { ...state, user: { ...action.payload, isLogIn: true } };
+			return { ...state, user: { ...action.payload } };
 		case UserActions.SIGN_OUT:
 			return { ...initialState };
 		case UserActions.SHOW_USER_LOADER:

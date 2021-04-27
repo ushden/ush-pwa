@@ -37,7 +37,10 @@ export interface User {
 	name: string;
 	email: string | undefined;
 	photoUrl?: string | undefined;
-	isLogIn?: boolean;
+	isLogIn?: {
+		status: string;
+		lastChanged: string;
+	};
 	pushToken?: string;
 	savedPosts?: Array<string>;
 	chatWithUsers?: Array<chatWhithUsers>;

@@ -6,7 +6,10 @@ const initialState: UsersState = {
 		name: '',
 		email: '',
 		photoUrl: '',
-		isLogIn: false,
+		isLogIn: {
+			status: 'offline',
+			lastChanged: '',
+		},
 		savedPosts: [],
 		chatWithUsers: [],
 	},

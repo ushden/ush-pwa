@@ -1,4 +1,3 @@
-import { Box } from '@material-ui/core';
 import { Fragment, useEffect, useState } from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
 
@@ -27,11 +26,9 @@ export default function App() {
 	return (
 		<Router>
 			<Fragment>
-				<Splash visible={showSplash} />
 				<Alert />
-				<Box component='div' className='app-container'>
-					{user ? <MainPageNavigation /> : <WelcomePageNavigation />}
-				</Box>
+				<Splash visible={showSplash} />
+				{user ? <MainPageNavigation /> : <WelcomePageNavigation />}
 			</Fragment>
 		</Router>
 	);

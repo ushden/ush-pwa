@@ -8,9 +8,12 @@ export const getToken = async () => {
 			vapidKey: process.env.REACT_APP_VAPID_KEY,
 		});
 		if (token) {
+			await setToken(token);
+
 			return token;
 		}
 	} catch (error) {
+		console.log(error.code, error.message);
 		return false;
 	}
 };
@@ -45,7 +48,7 @@ export const sendNotification = async (payload: sendNotificationParams) => {
 			click_action: payload.url,
 		};
 
-		await fetch('https://fcm.googleapis.com/fcm/send', {
+		const res = await fetch('https://fcm.googleapis.com/fcm/send', {
 			method: 'POST',
 			headers: {
 				Authorization: 'key=' + key,
@@ -56,6 +59,8 @@ export const sendNotification = async (payload: sendNotificationParams) => {
 				to: to,
 			}),
 		});
+
+		console.log('notification.ts - ', res);
 	} catch (error) {
 		console.error(error.code, error.message);
 	}
@@ -72,4 +77,14 @@ export const fetchToken = async (userId: string) => {
 	} catch (error) {
 		console.log(error.code, error.message);
 	}
+};
+
+export const checkPermission = async () => {
+	const permission = await Notification.requestPermission();
+
+	if (permission === 'granted') {
+		return true;
+	}
+
+	return false;
 };

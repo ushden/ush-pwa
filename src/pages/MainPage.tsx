@@ -3,7 +3,7 @@ import { makeStyles } from '@material-ui/styles';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { getToken, setToken } from '../api/notification';
+import { checkPermission, getToken } from '../api/notification';
 import { Loader } from '../components/Loader';
 import { FAB } from '../components/FAB';
 import { NavigationPanel } from '../components/navigation/NavigationPanel';
@@ -15,6 +15,8 @@ import {
 	selectPostsLoading,
 	selectUser,
 } from '../store/selectors';
+import { showAlert } from '../store/alert/alertActions';
+import { ALERT_WARNING } from '../constants/constants';
 
 const useStyles = makeStyles({
 	container: {
@@ -34,11 +36,15 @@ export const MainPage = () => {
 
 	useEffect(() => {
 		(async () => {
-			const token = await getToken();
+			const permission = await checkPermission();
 
-			if (token) {
-				return await setToken(token);
+			if (!permission) {
+				return dispatch(
+					showAlert(ALERT_WARNING, 'Разрешите уведомления в настройках')
+				);
 			}
+
+			await getToken();
 		})();
 	}, [dispatch]);
 

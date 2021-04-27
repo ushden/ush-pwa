@@ -1,7 +1,7 @@
 import { FC, useState } from 'react';
 import Skeleton from '@material-ui/lab/Skeleton';
 
-export const Image: FC<
+export const ImageAvatar: FC<
 	React.DetailedHTMLProps<
 		React.ImgHTMLAttributes<HTMLImageElement>,
 		HTMLImageElement
@@ -25,18 +25,19 @@ export const Image: FC<
 			{isError && !isLoading && <div>*Заглушка для ошибки*</div>}
 			{!isError && isLoading && (
 				<Skeleton
-					variant='rect'
+					variant='circle'
 					style={{
-						width: '12rem',
-						height: '12rem',
-						maxWidth: '100%',
-						objectFit: 'contain',
+						width: '2.8rem',
+						height: '2.8rem',
 					}}
 				/>
 			)}
 			<img
 				style={{
 					display: isError || isLoading ? 'none' : 'initial',
+					borderRadius: '50%',
+					width: '2.8rem',
+					height: '2.8rem',
 				}}
 				alt={alt || 'Club 48'}
 				onLoad={handleLoad}
