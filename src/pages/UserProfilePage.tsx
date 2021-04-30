@@ -25,6 +25,7 @@ import { ProfileBody } from '../components/usersPage/ProfileBody';
 import { Post } from '../components/post/Post';
 import { firestore } from '../firebase';
 import { SUBSCRIPTIONS } from '../constants/constants';
+import { fetchToken, sendNotification } from '../api/notification';
 
 export const UserProfilePage = () => {
 	const history = useHistory();
@@ -115,11 +116,31 @@ export const UserProfilePage = () => {
 		}
 	};
 
-	const handleSubscribeClick = () => {
+	const handleSubscribeClick = async () => {
 		if (isSubscribe) {
 			dispatch(unsubscribeOnUser(id));
+
+			const token: string = await fetchToken(id);
+			const payload = {
+				token,
+				title: `Пользователь ${anotherUser?.name} отписался на Вас!`,
+				body: 'Вот мудак!',
+				url: window.location.href,
+			};
+
+			await sendNotification(payload);
 		} else {
 			dispatch(subscribeOnUser(id));
+
+			const token: string = await fetchToken(id);
+			const payload = {
+				token,
+				title: `Пользователь ${anotherUser?.name} подписался на Вас!`,
+				body: 'Подпишитесь в ответ :)',
+				url: window.location.href,
+			};
+
+			await sendNotification(payload);
 		}
 	};
 
