@@ -34,7 +34,6 @@ interface UserItemProps {
 export const UserListItem = ({ user }: UserItemProps) => {
 	const classes = useStyles();
 	const status = useUserStatus(user._id);
-	console.log(status, user._id);
 
 	return (
 		<Fragment>

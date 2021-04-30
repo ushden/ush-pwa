@@ -22,7 +22,17 @@ export const ImageAvatar: FC<
 
 	return (
 		<>
-			{isError && !isLoading && <div>*Заглушка для ошибки*</div>}
+			{isError && !isLoading && (
+				<img
+					src='/images/default_avatar.png'
+					style={{
+						borderRadius: '50%',
+						width: '2.8rem',
+						height: '2.8rem',
+					}}
+					alt={alt || 'Club 48'}
+				/>
+			)}
 			{!isError && isLoading && (
 				<Skeleton
 					variant='circle'
@@ -38,6 +48,7 @@ export const ImageAvatar: FC<
 					borderRadius: '50%',
 					width: '2.8rem',
 					height: '2.8rem',
+					objectFit: 'cover',
 				}}
 				alt={alt || 'Club 48'}
 				onLoad={handleLoad}

@@ -30,8 +30,5 @@ messaging.onBackgroundMessage((payload) => {
 		},
 	};
 
-	console.log('firebase-messaging-sw - payload - ', payload);
-	console.log('firebase-messaging-sw - ', notificationOptions);
-
 	self.registration.showNotification(notificationTitle, notificationOptions);
 });

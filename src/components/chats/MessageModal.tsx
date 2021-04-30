@@ -59,7 +59,7 @@ export const MessageModal = ({
 	const classes = useStyles();
 
 	return (
-		<Dialog open={open} onClose={onClose} maxWidth='xl'>
+		<Dialog open={open} maxWidth='xl'>
 			<DialogContent>
 				{message?.text ? (
 					<Box className={classes.messageInfo}>

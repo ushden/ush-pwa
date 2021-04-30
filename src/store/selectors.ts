@@ -5,6 +5,8 @@ export const selectUsers = (state: RootState) => state.users.users;
 export const selectAnotherUser = (state: RootState) => state.users.anotherUser;
 export const selectUsersLoading = (state: RootState) =>
 	state.users.usersLoading;
+export const selectSubscribeOn = (state: RootState) =>
+	state.user.user.subscribeOn;
 
 export const selectChats = (state: RootState) => state.chats.chats;
 export const selectChat = (state: RootState) => state.chats.chat;

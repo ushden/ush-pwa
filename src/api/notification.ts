@@ -48,7 +48,7 @@ export const sendNotification = async (payload: sendNotificationParams) => {
 			click_action: payload.url,
 		};
 
-		const res = await fetch('https://fcm.googleapis.com/fcm/send', {
+		await fetch('https://fcm.googleapis.com/fcm/send', {
 			method: 'POST',
 			headers: {
 				Authorization: 'key=' + key,
@@ -59,8 +59,6 @@ export const sendNotification = async (payload: sendNotificationParams) => {
 				to: to,
 			}),
 		});
-
-		console.log('notification.ts - ', res);
 	} catch (error) {
 		console.error(error.code, error.message);
 	}

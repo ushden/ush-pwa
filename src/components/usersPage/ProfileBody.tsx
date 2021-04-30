@@ -35,9 +35,17 @@ const useStyles = makeStyles({
 
 interface ProfileBodyProps {
 	posts: Array<PostType>;
+	rating: number;
+	subscribs: number | undefined;
+	followers: number | undefined;
 }
 
-export const ProfileBody: FC<ProfileBodyProps> = ({ posts }): ReactElement => {
+export const ProfileBody: FC<ProfileBodyProps> = ({
+	posts,
+	rating,
+	subscribs,
+	followers,
+}): ReactElement => {
 	const classes = useStyles();
 
 	return (
@@ -56,7 +64,7 @@ export const ProfileBody: FC<ProfileBodyProps> = ({ posts }): ReactElement => {
 						<StarsOutlinedIcon className={classes.listItemIcon} />
 						Рейтинг
 					</Typography>
-					<Typography component='span'>0</Typography>
+					<Typography component='span'>{rating * 0.48}</Typography>
 				</ListItem>
 				<Divider />
 				<ListItem className={classes.listItem} button>
@@ -64,7 +72,7 @@ export const ProfileBody: FC<ProfileBodyProps> = ({ posts }): ReactElement => {
 						<EmojiPeopleOutlinedIcon className={classes.listItemIcon} />
 						Подписчиков
 					</Typography>
-					<Typography component='span'>0</Typography>
+					<Typography component='span'>{followers || 0}</Typography>
 				</ListItem>
 				<Divider />
 				<ListItem className={classes.listItem} button>
@@ -72,7 +80,7 @@ export const ProfileBody: FC<ProfileBodyProps> = ({ posts }): ReactElement => {
 						<SupervisorAccountOutlinedIcon className={classes.listItemIcon} />
 						Подписок
 					</Typography>
-					<Typography component='span'>0</Typography>
+					<Typography component='span'>{subscribs || 0}</Typography>
 				</ListItem>
 				<Divider />
 			</List>

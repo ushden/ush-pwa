@@ -10,6 +10,8 @@ import { UserProfilePage } from '../pages/UserProfilePage';
 import { ChatsPage } from '../pages/ChatsPage';
 import { ChatPage } from '../pages/ChatPage';
 import { Box } from '@material-ui/core';
+import { UpdateProfile } from '../pages/UpdateProfile';
+import { SubscribesPosts } from '../pages/SubscribesPosts';
 
 export const MainPageNavigation = () => {
 	return (
@@ -25,6 +27,8 @@ export const MainPageNavigation = () => {
 				<Route path='/profile' render={() => <ProfilePage />} />
 				<Route path='/users' render={() => <UsersPage />} />
 				<Route path='/user/:id' render={() => <UserProfilePage />} />
+				<Route path='/update-profile' render={() => <UpdateProfile />} />
+				<Route path='/subscribe-posts' render={() => <SubscribesPosts />} />
 			</Switch>
 		</Box>
 	);

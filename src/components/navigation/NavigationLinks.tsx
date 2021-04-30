@@ -5,6 +5,7 @@ import AccountCircleOutlinedIcon from '@material-ui/icons/AccountCircleOutlined'
 import PeopleAltOutlinedIcon from '@material-ui/icons/PeopleAltOutlined';
 import SaveOutlinedIcon from '@material-ui/icons/SaveOutlined';
 import ExitToAppOutlinedIcon from '@material-ui/icons/ExitToAppOutlined';
+import SubscriptionsOutlinedIcon from '@material-ui/icons/SubscriptionsOutlined';
 import NotesOutlinedIcon from '@material-ui/icons/NotesOutlined';
 import { makeStyles } from '@material-ui/styles';
 import { Link, NavLink } from 'react-router-dom';
@@ -46,6 +47,17 @@ export const NavigationLinks = () => {
 					activeStyle={{ backgroundColor: COLOR_PRIMARY, color: '#fff' }}
 					className={classes.navLink}>
 					Посты
+				</NavLink>
+			</ListItem>
+			<ListItem>
+				<SubscriptionsOutlinedIcon className={classes.navListIcon} />
+				<NavLink
+					to='/subscribe-posts'
+					activeClassName='navigation_link-active'
+					exact
+					activeStyle={{ backgroundColor: COLOR_PRIMARY, color: '#fff' }}
+					className={classes.navLink}>
+					Подписки
 				</NavLink>
 			</ListItem>
 			<ListItem>

@@ -4,12 +4,14 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { NavigationPanel } from '../components/navigation/NavigationPanel';
 import { Modal } from '../components/ImageModal';
-import { getUser } from '../store/user/userActions';
+import { fetchSubscriptions, getUser } from '../store/user/userActions';
 import { Post } from '../components/post/Post';
 import { selectPosts, selectUser } from '../store/selectors';
 import { ProfileBody } from '../components/usersPage/ProfileBody';
 import { ProfileHeader } from '../components/usersPage/ProfileHeader';
 import { fetchPosts } from '../store/posts/postsActions';
+import { firestore } from '../firebase';
+import { USERS } from '../constants/constants';
 
 export const ProfilePage = () => {
 	const dispatch = useDispatch();
@@ -17,6 +19,16 @@ export const ProfilePage = () => {
 	const posts = useSelector(selectPosts).filter(
 		(post) => post.user._id === user._id
 	);
+	const rating = posts.reduce((acc, el) => {
+		if (el.rating) {
+			return acc + el.rating;
+		}
+
+		return 0;
+	}, 0);
+	const subscribs = user.subscribs;
+	const followers = user.followers;
+
 	const [modalVisible, setModalVisible] = useState<boolean>(false);
 
 	const handleToggleModal = () => {
@@ -33,6 +45,18 @@ export const ProfilePage = () => {
 		}
 	}, [dispatch, posts.length, user._id]);
 
+	useEffect(() => {
+		const unsubscribe = firestore
+			.collection(USERS)
+			.doc(user._id)
+			.onSnapshot(() => {
+				dispatch(getUser());
+				dispatch(fetchSubscriptions());
+			});
+
+		return () => unsubscribe();
+	}, [dispatch, user._id]);
+
 	return (
 		<Box component='section'>
 			<NavigationPanel title='Профиль' />
@@ -41,7 +65,12 @@ export const ProfilePage = () => {
 				user={user}
 				currentUserId={user._id}
 			/>
-			<ProfileBody posts={posts} />
+			<ProfileBody
+				posts={posts}
+				rating={rating}
+				subscribs={subscribs}
+				followers={followers}
+			/>
 			<Box>
 				{posts.map((post) => (
 					<Post post={post} id={post._id} key={post._id} />

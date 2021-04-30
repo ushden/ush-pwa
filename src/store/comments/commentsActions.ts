@@ -88,7 +88,11 @@ export const fetchComments = (
 			const doc = await firestore.collection(COMMENTS).doc(postId).get();
 			const data = doc.data();
 
-			dispatch(fetchCommentsActions(data?.comments));
+			if (data) {
+				dispatch(fetchCommentsActions(data?.comments));
+			}
+
+			return null;
 		} catch (error) {
 			console.error(error.code, error.message);
 			dispatch(showAlert(ALERT_ERROR, 'Не удалось добавить комментарий :('));

@@ -1,11 +1,11 @@
 import { Box, Typography } from '@material-ui/core';
-import { DEFAULT_USER_AVATAR } from '../../constants/constants';
 import Skeleton from '@material-ui/lab/Skeleton';
 
 import { makeStyles } from '@material-ui/styles';
 import { useSelector } from 'react-redux';
-import { RootState } from '../../store/rootReducer';
 import { useHistory } from 'react-router';
+import { UserAvatar } from '../usersPage/UserAvatar';
+import { selectUser } from '../../store/selectors';
 
 const useStyles = makeStyles({
 	userAvatarWrap: {
@@ -32,7 +32,7 @@ const useStyles = makeStyles({
 export const UserArea = () => {
 	const classes = useStyles();
 	const history = useHistory();
-	const { name, photoUrl } = useSelector((state: RootState) => state.user.user);
+	const { name, photoUrl } = useSelector(selectUser);
 
 	return (
 		<Box
@@ -41,15 +41,7 @@ export const UserArea = () => {
 			paddingBottom={1}
 			onClick={() => history.push('/profile')}>
 			<Box component='div' className={classes.userAvatarWrap}>
-				{photoUrl ? (
-					<img
-						src={photoUrl || DEFAULT_USER_AVATAR}
-						alt='user'
-						className={classes.userAvatar}
-					/>
-				) : (
-					<Skeleton variant='circle' className={classes.userAvatar} />
-				)}
+				<UserAvatar src={photoUrl} alt={name} />
 			</Box>
 			{name ? (
 				<Typography align='center' component='h3' className={classes.userName}>
@@ -60,7 +52,7 @@ export const UserArea = () => {
 			)}
 
 			<Typography align='center' component='span' className={classes.userRole}>
-				loh
+				Admninistrator
 			</Typography>
 		</Box>
 	);

@@ -10,6 +10,10 @@ const initialState: UserState = {
 			status: 'offline',
 			lastChanged: '',
 		},
+		subscribs: 0,
+		followers: 0,
+		subscribeOn: [],
+		followMe: [],
 		pushToken: '',
 		savedPosts: [],
 		chatWithUsers: [],
@@ -26,6 +30,11 @@ export const userReducer = (
 			return { ...state, user: { ...action.payload } };
 		case UserActions.SIGN_OUT:
 			return { ...initialState };
+		case UserActions.FETCH_USER_SUBSCRIPTIONS:
+			return {
+				...state,
+				user: { ...state.user, subscribeOn: [...action.payload] },
+			};
 		case UserActions.SHOW_USER_LOADER:
 			return { ...state, userLoading: true, user: { ...state.user } };
 		case UserActions.HIDE_USER_LOADER:

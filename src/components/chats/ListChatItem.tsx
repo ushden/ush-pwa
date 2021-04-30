@@ -5,7 +5,6 @@ import {
 	ListItemAvatar,
 	ListItemText,
 	ListItemSecondaryAction,
-	Avatar,
 	makeStyles,
 } from '@material-ui/core';
 import { Link } from 'react-router-dom';
@@ -16,6 +15,7 @@ import { Chat } from '../../store/types';
 import { getChatAvatar, getChatName } from '../../utils/getChatInfo';
 import { useLastMessage } from '../../hooks/useLastMessage';
 import { Skeleton } from '@material-ui/lab';
+import { ImageAvatar } from '../ImageAvatar';
 
 const useStyles = makeStyles({
 	listIcon: {
@@ -38,6 +38,8 @@ interface ListChatItemProps {
 export const ListChatItem = ({ chat }: ListChatItemProps) => {
 	const classes = useStyles();
 	const lastMessage = useLastMessage(chat._id);
+	const chatName = getChatName(chat);
+	const chatAvatar = getChatAvatar(chat);
 
 	const setLastMessage = () => {
 		if (lastMessage === undefined) {
@@ -57,12 +59,9 @@ export const ListChatItem = ({ chat }: ListChatItemProps) => {
 				className={classNames(classes.link, 'anim-scale')}>
 				<ListItem alignItems='flex-start' button className='anim-scale'>
 					<ListItemAvatar className='anim-scale'>
-						<Avatar alt={getChatName(chat)} src={getChatAvatar(chat)} />
+						<ImageAvatar src={chatAvatar} alt={chatName} />
 					</ListItemAvatar>
-					<ListItemText
-						primary={getChatName(chat)}
-						secondary={setLastMessage()}
-					/>
+					<ListItemText primary={chatName} secondary={setLastMessage()} />
 					<ListItemSecondaryAction>
 						<SendOutlinedIcon
 							className={classNames(classes.listIcon, 'anim-scale')}

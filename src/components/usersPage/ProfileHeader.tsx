@@ -1,9 +1,12 @@
 import { Box, Button, makeStyles, Paper, Typography } from '@material-ui/core';
 import Skeleton from '@material-ui/lab/Skeleton';
 import { FC, ReactElement } from 'react';
+import { useDispatch } from 'react-redux';
+import { useHistory } from 'react-router';
 
-import { DEFAULT_USER_AVATAR } from '../../constants/constants';
 import { User } from '../../store/types';
+import { signOut } from '../../store/user/userActions';
+import { UserAvatar } from './UserAvatar';
 
 const useStyles = makeStyles({
 	profileHeader: {
@@ -12,12 +15,6 @@ const useStyles = makeStyles({
 	userAvatarBlock: {
 		textAlign: 'center',
 		paddingTop: '1rem',
-	},
-	userAvatar: {
-		display: 'inline-block !important',
-		width: '10rem !important',
-		height: '10rem !important',
-		borderRadius: '50% !important',
 	},
 	profileUserName: {
 		fontSize: '1.5rem',
@@ -55,6 +52,8 @@ interface ProfileHeaderProps {
 	user: User;
 	currentUserId: string;
 	onClickWrite?: () => void;
+	onSubscribe?: () => void;
+	isSubscribe?: boolean | undefined;
 }
 
 export const ProfileHeader: FC<ProfileHeaderProps> = ({
@@ -62,8 +61,12 @@ export const ProfileHeader: FC<ProfileHeaderProps> = ({
 	user,
 	currentUserId,
 	onClickWrite,
+	onSubscribe,
+	isSubscribe,
 }): ReactElement => {
 	const classes = useStyles();
+	const dispatch = useDispatch();
+	const history = useHistory();
 
 	return (
 		<Paper variant='elevation' elevation={3} className={classes.profileHeader}>
@@ -71,15 +74,7 @@ export const ProfileHeader: FC<ProfileHeaderProps> = ({
 				component='div'
 				className={classes.userAvatarBlock}
 				onClick={onToggleModal}>
-				{user?.photoUrl ? (
-					<img
-						src={user?.photoUrl || DEFAULT_USER_AVATAR}
-						alt='user'
-						className={classes.userAvatar}
-					/>
-				) : (
-					<Skeleton variant='circle' className={classes.userAvatar} />
-				)}
+				<UserAvatar src={user?.photoUrl} alt={user?.name} />
 			</Box>
 			<Box component='div' className={classes.userNameWrap}>
 				{user?.name ? (
@@ -102,10 +97,16 @@ export const ProfileHeader: FC<ProfileHeaderProps> = ({
 			</Box>
 			{currentUserId === user._id ? (
 				<Box component='div' className={classes.btnWrap}>
-					<Button variant='outlined' className={classes.btn}>
+					<Button
+						variant='outlined'
+						className={classes.btn}
+						onClick={() => history.push('/update-profile')}>
 						Редактировать
 					</Button>
-					<Button variant='outlined' className={classes.btn}>
+					<Button
+						variant='outlined'
+						className={classes.btn}
+						onClick={() => dispatch(signOut())}>
 						Выйти
 					</Button>
 				</Box>
@@ -117,8 +118,12 @@ export const ProfileHeader: FC<ProfileHeaderProps> = ({
 						onClick={onClickWrite}>
 						Написать
 					</Button>
-					<Button variant='outlined' className={classes.btn}>
-						Подписаться
+					<Button
+						variant='outlined'
+						color={isSubscribe ? 'primary' : 'default'}
+						className={classes.btn}
+						onClick={onSubscribe}>
+						{isSubscribe ? 'Отписаться' : 'Подписаться'}
 					</Button>
 				</Box>
 			)}
