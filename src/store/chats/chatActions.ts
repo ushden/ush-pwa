@@ -157,7 +157,7 @@ export const fetchMessages = (
 				.doc(chatId)
 				.collection(MESSAGES)
 				.limit(50)
-				.orderBy('createdAt', 'asc')
+				.orderBy('_id', 'asc')
 				.get();
 
 			doc.forEach((data) => {

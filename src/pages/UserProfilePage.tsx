@@ -6,18 +6,24 @@ import { useHistory, useParams } from 'react-router';
 import { NavigationPanel } from '../components/navigation/NavigationPanel';
 import { createChat } from '../store/chats/chatActions';
 import {
-	fetchSubscriptions,
 	getUser,
 	subscribeOnUser,
 	unsubscribeOnUser,
 } from '../store/user/userActions';
 import {
 	selectAnotherUser,
+	selectAnotherUserFollowers,
 	selectPosts,
-	selectSubscribeOn,
+	selectSubscribeAnotherUser,
 	selectUser,
+	selectUsers,
 } from '../store/selectors';
-import { fetchAnotherUser } from '../store/users/usersActions';
+import {
+	fetchAnotherUser,
+	fetchFollowersAnotherUser,
+	fetchSubscriptionsAnotherUser,
+	fetchUsers,
+} from '../store/users/usersActions';
 import { Chat } from '../store/types';
 import { Modal } from '../components/ImageModal';
 import { ProfileHeader } from '../components/usersPage/ProfileHeader';
@@ -26,6 +32,8 @@ import { Post } from '../components/post/Post';
 import { firestore } from '../firebase';
 import { SUBSCRIPTIONS } from '../constants/constants';
 import { fetchToken, sendNotification } from '../api/notification';
+import { SubscribeListModal } from '../components/SubscribeListModal';
+import { FollowersListModal } from '../components/FollowersListModal';
 
 export const UserProfilePage = () => {
 	const history = useHistory();
@@ -34,9 +42,22 @@ export const UserProfilePage = () => {
 
 	const anotherUser = useSelector(selectAnotherUser);
 	const user = useSelector(selectUser);
+	const users = useSelector(selectUsers);
+	const subscribeOn = useSelector(selectSubscribeAnotherUser);
+	const followMe = useSelector(selectAnotherUserFollowers);
+
+	const isSubscribe = followMe?.includes(user._id);
+
+	const userSubscribeList = users.filter((user) =>
+		subscribeOn?.includes(user._id)
+	);
+
+	const followersList = users.filter((user) => followMe?.includes(user._id));
+
 	const posts = useSelector(selectPosts).filter(
 		(post) => post.user._id === anotherUser._id
 	);
+
 	const rating = posts.reduce((acc, el) => {
 		if (el.rating) {
 			return acc + el.rating;
@@ -44,12 +65,18 @@ export const UserProfilePage = () => {
 
 		return 0;
 	}, 0);
-	const isSubscribe = useSelector(selectSubscribeOn)?.includes(id);
+
 	const subscribs = anotherUser.subscribs;
 	const followers = anotherUser.followers;
 
 	const [modalVisible, setModalVisible] = useState<boolean>(false);
 	const [replaceChatId, setReplaceChatId] = useState<null | string>(null);
+	const [visibleSubscribeModal, setVisibleSubscribeModal] = useState<boolean>(
+		false
+	);
+	const [visibleFollowersModal, setVisibleFollowersModal] = useState<boolean>(
+		false
+	);
 
 	const isChatCreated = useMemo(() => {
 		return user.chatWithUsers?.some((chat) => {
@@ -65,17 +92,36 @@ export const UserProfilePage = () => {
 	}, [anotherUser._id, user.chatWithUsers]);
 
 	useEffect(() => {
-		dispatch(getUser());
-		dispatch(fetchAnotherUser(id));
-	}, [dispatch, id, user._id]);
+		if (!user._id) {
+			dispatch(getUser());
+		}
+
+		if (!anotherUser._id) {
+			console.log('fetchAnotherUser');
+			dispatch(fetchAnotherUser(id));
+		}
+
+		if (users.length === 0) {
+			dispatch(fetchUsers());
+		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [anotherUser._id, dispatch, user._id, users.length]);
+
+	useEffect(() => {
+		if (anotherUser._id) {
+			dispatch(fetchFollowersAnotherUser(id));
+			dispatch(fetchSubscriptionsAnotherUser(id));
+			console.log('fetchFollowersAnotherUser');
+		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [anotherUser._id, dispatch]);
 
 	useEffect(() => {
 		const unsubscribe = firestore
 			.collection(SUBSCRIPTIONS)
 			.doc(id)
 			.onSnapshot(() => {
-				dispatch(fetchSubscriptions());
-				dispatch(fetchAnotherUser(id));
+				dispatch(fetchFollowersAnotherUser(id));
 			});
 
 		return () => unsubscribe();
@@ -123,8 +169,8 @@ export const UserProfilePage = () => {
 			const token: string = await fetchToken(id);
 			const payload = {
 				token,
-				title: `Пользователь ${anotherUser?.name} отписался на Вас!`,
-				body: 'Вот мудак!',
+				title: `Пользователь ${user?.name} отписался на Вас!`,
+				body: 'Вот плохой человек!',
 				url: window.location.href,
 			};
 
@@ -135,7 +181,7 @@ export const UserProfilePage = () => {
 			const token: string = await fetchToken(id);
 			const payload = {
 				token,
-				title: `Пользователь ${anotherUser?.name} подписался на Вас!`,
+				title: `Пользователь ${user?.name} подписался на Вас!`,
 				body: 'Подпишитесь в ответ :)',
 				url: window.location.href,
 			};
@@ -144,9 +190,27 @@ export const UserProfilePage = () => {
 		}
 	};
 
+	const handleSubscribersListClick = () => {
+		setVisibleSubscribeModal((visible) => !visible);
+	};
+
+	const handleFollowersListClick = () => {
+		setVisibleFollowersModal((visible) => !visible);
+	};
+
 	return (
 		<Box component='section'>
 			<NavigationPanel title='' backButton={true} />
+			<SubscribeListModal
+				visible={visibleSubscribeModal}
+				onClose={handleSubscribersListClick}
+				users={userSubscribeList}
+			/>
+			<FollowersListModal
+				visible={visibleFollowersModal}
+				onClose={handleFollowersListClick}
+				users={followersList}
+			/>
 			<ProfileHeader
 				onToggleModal={handleToggleModal}
 				user={anotherUser}
@@ -160,6 +224,8 @@ export const UserProfilePage = () => {
 				rating={rating}
 				subscribs={subscribs}
 				followers={followers}
+				onSubsribersClick={handleSubscribersListClick}
+				onFollowersClick={handleFollowersListClick}
 			/>
 			<Box>
 				{posts.length === 0 ? (

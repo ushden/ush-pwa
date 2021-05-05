@@ -21,6 +21,11 @@ import { PostHeader } from './PostHeader';
 import { PostBody } from './PostBody';
 import { PostFooter } from './PostFooter';
 import { Modal } from '../ImageModal';
+import {
+	fetchToken,
+	sendNotification,
+	sendNotificationParams,
+} from '../../api/notification';
 
 const useStyles = makeStyles({
 	post: {
@@ -86,12 +91,46 @@ export const Post = ({ post, id }: PostPropsType) => {
 		sharePost(data);
 	};
 
-	const handleLikeClick = () => {
-		dispatch(likePost(post._id || id));
+	const handleLikeClick = async () => {
+		try {
+			dispatch(likePost(post._id || id));
+
+			const token = await fetchToken(post.user._id);
+
+			if (token) {
+				const payload: sendNotificationParams = {
+					title: 'Вашему посту поставили оценку!',
+					body: `Пользователь ${user?.displayName} оценил Ваш пост положительно!`,
+					token,
+					url: window.location.href,
+				};
+
+				await sendNotification(payload);
+			}
+		} catch (error) {
+			console.error(error.code, error.message);
+		}
 	};
 
-	const handleDislikeClick = () => {
-		dispatch(dislikePost(post._id || id));
+	const handleDislikeClick = async () => {
+		try {
+			dispatch(dislikePost(post._id || id));
+
+			const token = await fetchToken(post.user._id);
+
+			if (token) {
+				const payload: sendNotificationParams = {
+					title: 'Вашему посту поставили оценку!',
+					body: `Пользователь ${user?.displayName} оценил Ваш пост отрицательно!`,
+					token,
+					url: window.location.href,
+				};
+
+				await sendNotification(payload);
+			}
+		} catch (error) {
+			console.error(error.code, error.message);
+		}
 	};
 
 	const handleMenuOpenClick = (event: React.MouseEvent<HTMLElement>) => {

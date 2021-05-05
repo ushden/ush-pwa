@@ -1,5 +1,5 @@
 /* eslint-disable no-restricted-globals */
-const staticCacheName = 's-app-v4.0.0';
+const staticCacheName = 's-app-v4.8.1';
 // const dynamicCacheName = 'd-app-v2';
 
 const assetUrls = [

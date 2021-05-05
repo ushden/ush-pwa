@@ -8,13 +8,23 @@ import { makeStyles } from '@material-ui/core/styles';
 import { NavigationPanel } from '../components/navigation/NavigationPanel';
 import { Post } from '../components/post/Post';
 import { fetchPost } from '../store/posts/postsActions';
-import { RootState } from '../store/rootReducer';
 import { Loader } from '../components/Loader';
 import { Comment } from '../components/post/comment/Comment';
 import { AddCommentForm } from '../components/post/comment/AddCommentForm';
 import { addComment, fetchComments } from '../store/comments/commentsActions';
 import { firestore } from '../firebase';
 import { COMMENTS } from '../constants/constants';
+import {
+	fetchToken,
+	sendNotification,
+	sendNotificationParams,
+} from '../api/notification';
+import {
+	selectComments,
+	selectPost,
+	selectPostsLoading,
+	selectUser,
+} from '../store/selectors';
 
 const useStyles = makeStyles({
 	container: {
@@ -26,13 +36,10 @@ const useStyles = makeStyles({
 
 export const PostFull = () => {
 	const { id }: { id: string } = useParams();
-	const loadingPost = useSelector(
-		(state: RootState) => state.posts.postLoading
-	);
-	const post = useSelector((state: RootState) => state.posts.post);
-	const comments = useSelector((state: RootState) =>
-		state.comments.comments.sort((a: any, b: any) => b - a)
-	);
+	const loadingPost = useSelector(selectPostsLoading);
+	const user = useSelector(selectUser);
+	const post = useSelector(selectPost);
+	const comments = useSelector(selectComments).sort((a: any, b: any) => b - a);
 
 	const classes = useStyles();
 	const dispatch = useDispatch();
@@ -60,8 +67,26 @@ export const PostFull = () => {
 		setComment((text) => `${text}${emojiObject.emoji}`);
 	};
 
-	const handleAddCommentBtnClick = () => {
-		dispatch(addComment(comment, id));
+	const handleAddCommentBtnClick = async () => {
+		try {
+			dispatch(addComment(comment, id));
+
+			const token = await fetchToken(post.user._id);
+
+			if (token) {
+				const payload: sendNotificationParams = {
+					token,
+					title: 'Новый комментарий!',
+					body: `Под Вашим постом ${post.title} пользователь ${user.name} оставил комментарий!`,
+					url: window.location.href,
+				};
+
+				await sendNotification(payload);
+			}
+		} catch (error) {
+			console.error(error.code, error.message);
+		}
+
 		setComment('');
 	};
 

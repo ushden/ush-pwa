@@ -37,6 +37,10 @@ const fetchSubscriptionsAction = (payload: Array<string>) => ({
 	type: UserActions.FETCH_USER_SUBSCRIPTIONS,
 	payload,
 });
+const fetchFollowersAction = (payload: Array<string>) => ({
+	type: UserActions.FETCH_USER_FOLLOWERS,
+	payload,
+});
 
 export const getUser = (): ThunkAction<void, RootState, unknown, AnyAction> => {
 	return async (dispatch) => {
@@ -138,9 +142,12 @@ export const subscribeOnUser = (
 				await firestore
 					.collection(SUBSCRIPTIONS)
 					.doc(uid)
-					.set({
-						subscribeOn: updateArray.arrayUnion(userId),
-					});
+					.set(
+						{
+							subscribeOn: updateArray.arrayUnion(userId),
+						},
+						{ merge: true }
+					);
 
 				await firestore.collection(USERS).doc(uid).update({
 					subscribs: increment,
@@ -153,9 +160,12 @@ export const subscribeOnUser = (
 				await firestore
 					.collection(SUBSCRIPTIONS)
 					.doc(userId)
-					.set({
-						followMe: updateArray.arrayUnion(uid),
-					});
+					.set(
+						{
+							followMe: updateArray.arrayUnion(uid),
+						},
+						{ merge: true }
+					);
 
 				dispatch(showAlert(ALERT_SUCCESS, 'Вы подписались на пользователя'));
 			}
@@ -177,9 +187,12 @@ export const unsubscribeOnUser = (
 				await firestore
 					.collection(SUBSCRIPTIONS)
 					.doc(uid)
-					.set({
-						subscribeOn: updateArray.arrayRemove(userId),
-					});
+					.set(
+						{
+							subscribeOn: updateArray.arrayRemove(userId),
+						},
+						{ merge: true }
+					);
 
 				await firestore.collection(USERS).doc(uid).update({
 					subscribs: decrement,
@@ -192,9 +205,12 @@ export const unsubscribeOnUser = (
 				await firestore
 					.collection(SUBSCRIPTIONS)
 					.doc(userId)
-					.set({
-						followMe: updateArray.arrayRemove(uid),
-					});
+					.set(
+						{
+							followMe: updateArray.arrayRemove(uid),
+						},
+						{ merge: true }
+					);
 
 				dispatch(showAlert(ALERT_WARNING, 'Вы отписались от пользователя'));
 			}
@@ -221,10 +237,35 @@ export const fetchSubscriptions = (): ThunkAction<
 				const payload: Array<string> = data?.subscribeOn;
 
 				if (payload) {
-					dispatch(fetchSubscriptionsAction(payload));
+					return dispatch(fetchSubscriptionsAction(payload));
+				}
 
-					console.log(payload);
-					return;
+				return null;
+			}
+		} catch (error) {
+			console.error(error.code, error.message);
+			dispatch(showAlert(ALERT_ERROR, 'Произошла ошибка :('));
+		}
+	};
+};
+
+export const fetchFollowers = (): ThunkAction<
+	void,
+	RootState,
+	unknown,
+	AnyAction
+> => {
+	return async (dispatch) => {
+		try {
+			const uid = auth.currentUser?.uid;
+
+			if (uid) {
+				const doc = await firestore.collection(SUBSCRIPTIONS).doc(uid).get();
+				const data = doc.data();
+				const payload: Array<string> = data?.followMe;
+
+				if (payload) {
+					return dispatch(fetchFollowersAction(payload));
 				}
 
 				return null;

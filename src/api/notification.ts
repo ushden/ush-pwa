@@ -30,8 +30,8 @@ export const setToken = async (token: string) => {
 	}
 };
 
-interface sendNotificationParams {
-	token: string;
+export interface sendNotificationParams {
+	token: string | undefined;
 	title: string;
 	body: string;
 	url: string;

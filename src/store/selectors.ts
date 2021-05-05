@@ -7,6 +7,12 @@ export const selectUsersLoading = (state: RootState) =>
 	state.users.usersLoading;
 export const selectSubscribeOn = (state: RootState) =>
 	state.user.user.subscribeOn;
+export const selectSubscribeAnotherUser = (state: RootState) =>
+	state.users.anotherUser.subscribeOn;
+export const selectUserFollowers = (state: RootState) =>
+	state.user.user.followMe;
+export const selectAnotherUserFollowers = (state: RootState) =>
+	state.users.anotherUser.followMe;
 
 export const selectChats = (state: RootState) => state.chats.chats;
 export const selectChat = (state: RootState) => state.chats.chat;
@@ -22,3 +28,4 @@ export const selectPosts = (state: RootState) => state.posts.posts;
 export const selectPost = (state: RootState) => state.posts.post;
 export const selectCommentsLoading = (state: RootState) =>
 	state.comments.commentsLoading;
+export const selectComments = (state: RootState) => state.comments.comments;

@@ -6,8 +6,9 @@ import {
 	Typography,
 } from '@material-ui/core';
 import TextField from '@material-ui/core/TextField';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { sendNotification, sendNotificationParams } from '../api/notification';
 import { Loader } from '../components/Loader';
 
 import { NavigationPanel } from '../components/navigation/NavigationPanel';
@@ -19,7 +20,10 @@ import {
 import { showAlert } from '../store/alert/alertActions';
 import { createPost } from '../store/posts/postsActions';
 import { RootState } from '../store/rootReducer';
+import { selectUsers } from '../store/selectors';
 import { PostType } from '../store/types';
+import { getUser } from '../store/user/userActions';
+import { fetchUsers } from '../store/users/usersActions';
 
 const useStyles = makeStyles({
 	inputTitle: {
@@ -58,12 +62,23 @@ export const CreatePostPage = () => {
 	const classes = useStyles();
 	const dispatch = useDispatch();
 
+	const usersTokens = useSelector(selectUsers)
+		.map((user) => user.pushToken)
+		.filter((token) => token);
+
 	const user = useSelector((state: RootState) => state.user.user);
 	const loading = useSelector((state: RootState) => state.posts.postLoading);
 
 	const [title, setTitle] = useState<string>('');
 	const [description, setDescription] = useState<string>('');
 	const [image, setImage] = useState<any>('');
+
+	useEffect(() => {
+		if (!user._id) {
+			dispatch(getUser());
+		}
+		dispatch(fetchUsers());
+	}, [dispatch, user._id]);
 
 	const handleChange = async (e: React.ChangeEvent<HTMLInputElement> | any) => {
 		const file = e.target.files?.item(0);
@@ -104,6 +119,21 @@ export const CreatePostPage = () => {
 		setTitle('');
 		setDescription('');
 		setImage(null);
+
+		try {
+			usersTokens.forEach((token) => {
+				const payload: sendNotificationParams = {
+					token,
+					title: 'Новый пост!',
+					body: `Пользователь ${user.name} создал новый пост ${post.title} , зайди посмотреть!`,
+					url: 'https://social-pwa-afa9f.web.app/',
+				};
+
+				sendNotification(payload);
+			});
+		} catch (error) {
+			console.error(error.code, error.message);
+		}
 	};
 
 	return (

@@ -54,7 +54,7 @@ export const fetchPosts = (): ThunkAction<
 			const querySnapshot = await firestore
 				.collection(POSTS)
 				.limit(50)
-				.orderBy('createAt', 'desc')
+				.orderBy('_id', 'desc')
 				.get();
 
 			querySnapshot.forEach((doc) => {

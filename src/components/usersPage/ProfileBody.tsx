@@ -38,6 +38,8 @@ interface ProfileBodyProps {
 	rating: number;
 	subscribs: number | undefined;
 	followers: number | undefined;
+	onSubsribersClick: () => void;
+	onFollowersClick: () => void;
 }
 
 export const ProfileBody: FC<ProfileBodyProps> = ({
@@ -45,6 +47,8 @@ export const ProfileBody: FC<ProfileBodyProps> = ({
 	rating,
 	subscribs,
 	followers,
+	onSubsribersClick,
+	onFollowersClick,
 }): ReactElement => {
 	const classes = useStyles();
 
@@ -67,7 +71,10 @@ export const ProfileBody: FC<ProfileBodyProps> = ({
 					<Typography component='span'>{rating * 0.48}</Typography>
 				</ListItem>
 				<Divider />
-				<ListItem className={classes.listItem} button>
+				<ListItem
+					className={classes.listItem}
+					button
+					onClick={onFollowersClick}>
 					<Typography component='p' className={classes.listItemTitle}>
 						<EmojiPeopleOutlinedIcon className={classes.listItemIcon} />
 						Подписчиков
@@ -75,7 +82,10 @@ export const ProfileBody: FC<ProfileBodyProps> = ({
 					<Typography component='span'>{followers || 0}</Typography>
 				</ListItem>
 				<Divider />
-				<ListItem className={classes.listItem} button>
+				<ListItem
+					className={classes.listItem}
+					button
+					onClick={onSubsribersClick}>
 					<Typography component='p' className={classes.listItemTitle}>
 						<SupervisorAccountOutlinedIcon className={classes.listItemIcon} />
 						Подписок

@@ -25,6 +25,7 @@ export enum UserActions {
 	GET_USER = 'GET_USER',
 	SIGN_OUT = 'SIGN_OUT',
 	FETCH_USER_SUBSCRIPTIONS = 'FETCH_USER_SUBSCRIPTIONS',
+	FETCH_USER_FOLLOWERS = 'FETCH_USER_FOLLOWERS',
 	SHOW_USER_LOADER = 'SHOW_LOADER',
 	HIDE_USER_LOADER = 'HIDE_LOADER',
 }
@@ -55,6 +56,10 @@ interface fetchUserSubscriptions {
 	type: UserActions.FETCH_USER_SUBSCRIPTIONS;
 	payload: Array<string>;
 }
+interface fetchUserFollowers {
+	type: UserActions.FETCH_USER_FOLLOWERS;
+	payload: Array<string>;
+}
 export interface UserState {
 	user: User;
 	userLoading: boolean;
@@ -78,13 +83,15 @@ export type UserActionsType =
 	| signOutUser
 	| showUserLoader
 	| hideUserLoader
-	| fetchUserSubscriptions;
+	| fetchUserSubscriptions
+	| fetchUserFollowers;
 
 // users
 export enum UsersActions {
 	FETCH_USERS = 'FETCH_USERS',
 	FETCH_ANOTHER_USER = 'FETCH_ANOTHER_USER',
 	FETCH_ANOTHER_USER_SUBSCRIPTIONS = 'FETCH_ANOTHER_USER_SUBSCRIPTIONS',
+	FETCH_ANOTHER_USER_FOLLOWERS = 'FETCH_ANOTHER_USER_FOLLOWERS',
 	SHOW_USERS_LOADING = 'SHOW_USERS_LOADING',
 	HIDE_USERS_LOADING = 'HIDE_USERS_LOADING',
 }
@@ -97,6 +104,10 @@ export interface UsersState {
 
 interface fetchAnotherUserSubscriptions {
 	type: UsersActions.FETCH_ANOTHER_USER_SUBSCRIPTIONS;
+	payload: Array<string>;
+}
+interface fetchAnotherUserFollowers {
+	type: UsersActions.FETCH_ANOTHER_USER_FOLLOWERS;
 	payload: Array<string>;
 }
 interface fetchAnotherUser {
@@ -121,7 +132,8 @@ export type UsersActionsType =
 	| showUsersLoadingAction
 	| hideUsersLoadingAction
 	| fetchAnotherUser
-	| fetchAnotherUserSubscriptions;
+	| fetchAnotherUserSubscriptions
+	| fetchAnotherUserFollowers;
 
 // post
 export interface PostsState {

@@ -27,7 +27,8 @@ export const Image: FC<
 				<Skeleton
 					variant='rect'
 					style={{
-						width: '18rem',
+						margin: '0 auto',
+						width: '100%',
 						height: '18rem',
 						maxWidth: '100%',
 						objectFit: 'contain',
