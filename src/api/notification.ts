@@ -30,14 +30,28 @@ export const setToken = async (token: string) => {
 	}
 };
 
-export interface sendNotificationParams {
+export interface SendNotificationParams {
 	token: string | undefined;
 	title: string;
 	body: string;
 	url: string;
 }
+export interface SendNotificationParamsToGroup {
+	tokens: Array<string | undefined>;
+	title: string;
+	body: string;
+	url: string;
+}
 
-export const sendNotification = async (payload: sendNotificationParams) => {
+export interface SendImageNotificationParams {
+	token: string | undefined;
+	title: string;
+	body: string;
+	url: string;
+	image: string | undefined;
+}
+
+export const sendNotification = async (payload: SendNotificationParams) => {
 	try {
 		const key = process.env.REACT_APP_SERVER_KEY;
 		const to = payload.token;
@@ -57,6 +71,9 @@ export const sendNotification = async (payload: sendNotificationParams) => {
 			body: JSON.stringify({
 				notification: notification,
 				to: to,
+				condition: 'Club 48',
+				collapse_key: 'Club 48',
+				priority: 'high',
 			}),
 		});
 	} catch (error) {
@@ -85,4 +102,69 @@ export const checkPermission = async () => {
 	}
 
 	return false;
+};
+
+export const sendNotificationToGroupUsers = async (
+	payload: SendNotificationParamsToGroup
+) => {
+	try {
+		const key = process.env.REACT_APP_SERVER_KEY;
+		const to = payload.tokens;
+		const notification = {
+			title: payload.title,
+			body: payload.body,
+			icon: '/images/icons/icon-72x72.png',
+			click_action: payload.url,
+		};
+
+		await fetch('https://fcm.googleapis.com/fcm/send', {
+			method: 'POST',
+			headers: {
+				Authorization: 'key=' + key,
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify({
+				notification: notification,
+				registration_ids: to,
+				condition: 'Club 48',
+				collapse_key: 'Club 48',
+				priority: 'high',
+			}),
+		});
+	} catch (error) {
+		console.error(error.code, error.message);
+	}
+};
+
+export const sendImageNotification = async (
+	payload: SendImageNotificationParams
+) => {
+	try {
+		const key = process.env.REACT_APP_SERVER_KEY;
+		const to = payload.token;
+		const data = {
+			title: payload.title,
+			body: payload.body,
+			icon: '/images/icons/icon-72x72.png',
+			image: payload.image,
+			click_action: payload.url,
+		};
+
+		await fetch('https://fcm.googleapis.com/fcm/send', {
+			method: 'POST',
+			headers: {
+				Authorization: 'key=' + key,
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify({
+				data,
+				to,
+				condition: 'Club 48',
+				collapse_key: 'Club 48',
+				priority: 'high',
+			}),
+		});
+	} catch (error) {
+		console.error(error.code, error.message);
+	}
 };

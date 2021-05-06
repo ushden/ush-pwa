@@ -1,3 +1,8 @@
+import {
+	fetchToken,
+	sendImageNotification,
+	SendImageNotificationParams,
+} from './../../api/notification';
 import { AnyAction } from 'redux';
 import { ThunkAction } from 'redux-thunk';
 import { uploadImage } from '../../api/uploadImage';
@@ -177,7 +182,8 @@ export const fetchMessages = (
 export const sendImageMessage = (
 	uri: string,
 	chatId: string,
-	user: User
+	user: User,
+	notificationId: string
 ): ThunkAction<void, RootState, unknown, AnyAction> => {
 	return async (dispatch) => {
 		try {
@@ -202,6 +208,18 @@ export const sendImageMessage = (
 				.set(payload);
 
 			dispatch(showAlert(ALERT_SUCCESS, 'Успешно!'));
+
+			const token = await fetchToken(notificationId);
+
+			const notificationData: SendImageNotificationParams = {
+				token,
+				title: `${user.name}отправил(-ла) Вам изображение:`,
+				body: payload.createdAt,
+				url: window.location.href,
+				image,
+			};
+
+			await sendImageNotification(notificationData);
 		} catch (error) {
 			console.error(error.code, error.message);
 			dispatch(showAlert(ALERT_ERROR, 'Не удалось отправить изображение'));

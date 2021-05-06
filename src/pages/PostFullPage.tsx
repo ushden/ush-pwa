@@ -17,7 +17,7 @@ import { COMMENTS } from '../constants/constants';
 import {
 	fetchToken,
 	sendNotification,
-	sendNotificationParams,
+	SendNotificationParams,
 } from '../api/notification';
 import {
 	selectComments,
@@ -74,7 +74,7 @@ export const PostFull = () => {
 			const token = await fetchToken(post.user._id);
 
 			if (token) {
-				const payload: sendNotificationParams = {
+				const payload: SendNotificationParams = {
 					token,
 					title: 'Новый комментарий!',
 					body: `Под Вашим постом ${post.title} пользователь ${user.name} оставил комментарий!`,

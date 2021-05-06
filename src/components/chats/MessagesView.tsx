@@ -74,7 +74,12 @@ export const MessagesView: FC<MessagesViewProps> = ({
 
 	useEffect(() => {
 		if (file) {
-			dispatch(sendImageMessage(file, chatId, user));
+			const { _id } =
+				chat.users.firstUser._id === user._id
+					? chat.users.secondUser
+					: chat.users.firstUser;
+
+			dispatch(sendImageMessage(file, chatId, user, _id));
 			setFile(null);
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps

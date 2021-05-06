@@ -24,7 +24,7 @@ import { Modal } from '../ImageModal';
 import {
 	fetchToken,
 	sendNotification,
-	sendNotificationParams,
+	SendNotificationParams,
 } from '../../api/notification';
 
 const useStyles = makeStyles({
@@ -98,7 +98,7 @@ export const Post = ({ post, id }: PostPropsType) => {
 			const token = await fetchToken(post.user._id);
 
 			if (token) {
-				const payload: sendNotificationParams = {
+				const payload: SendNotificationParams = {
 					title: 'Вашему посту поставили оценку!',
 					body: `Пользователь ${user?.displayName} оценил Ваш пост положительно!`,
 					token,
@@ -119,7 +119,7 @@ export const Post = ({ post, id }: PostPropsType) => {
 			const token = await fetchToken(post.user._id);
 
 			if (token) {
-				const payload: sendNotificationParams = {
+				const payload: SendNotificationParams = {
 					title: 'Вашему посту поставили оценку!',
 					body: `Пользователь ${user?.displayName} оценил Ваш пост отрицательно!`,
 					token,

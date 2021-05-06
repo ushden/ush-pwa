@@ -8,7 +8,10 @@ import {
 import TextField from '@material-ui/core/TextField';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { sendNotification, sendNotificationParams } from '../api/notification';
+import {
+	SendNotificationParamsToGroup,
+	sendNotificationToGroupUsers,
+} from '../api/notification';
 import { Loader } from '../components/Loader';
 
 import { NavigationPanel } from '../components/navigation/NavigationPanel';
@@ -92,7 +95,7 @@ export const CreatePostPage = () => {
 		reader.readAsDataURL(file);
 	};
 
-	const handleClick = () => {
+	const handleClick = async () => {
 		if (title === '') {
 			return dispatch(showAlert(ALERT_ERROR, 'Напишите заголовок'));
 		}
@@ -121,16 +124,14 @@ export const CreatePostPage = () => {
 		setImage(null);
 
 		try {
-			usersTokens.forEach((token) => {
-				const payload: sendNotificationParams = {
-					token,
-					title: 'Новый пост!',
-					body: `Пользователь ${user.name} создал новый пост ${post.title} , зайди посмотреть!`,
-					url: 'https://social-pwa-afa9f.web.app/',
-				};
+			const payload: SendNotificationParamsToGroup = {
+				tokens: usersTokens,
+				title: 'Новый пост!',
+				body: `Пользователь ${user.name} создал новый пост ${post.title} , зайди посмотреть!`,
+				url: 'https://social-pwa-afa9f.web.app/',
+			};
 
-				sendNotification(payload);
-			});
+			await sendNotificationToGroupUsers(payload);
 		} catch (error) {
 			console.error(error.code, error.message);
 		}
