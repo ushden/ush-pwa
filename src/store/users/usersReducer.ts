@@ -33,20 +33,12 @@ export const usersReducer = (
 				...state,
 				anotherUser: { ...state.anotherUser, ...action.payload },
 			};
-		case UsersActions.FETCH_ANOTHER_USER_SUBSCRIPTIONS:
-			return {
-				...state,
-				anotherUser: { ...state.anotherUser, subscribeOn: [...action.payload] },
-			};
-		case UsersActions.FETCH_ANOTHER_USER_FOLLOWERS:
-			return {
-				...state,
-				anotherUser: { ...state.anotherUser, followMe: [...action.payload] },
-			};
 		case UsersActions.SHOW_USERS_LOADING:
 			return { ...state, usersLoading: true };
 		case UsersActions.HIDE_USERS_LOADING:
 			return { ...state, usersLoading: false };
+		case UsersActions.RESET_ANOTHER_USER:
+			return { ...state, anotherUser: { ...initialState.anotherUser } };
 		default:
 			return { ...state };
 	}

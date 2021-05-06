@@ -18,19 +18,12 @@ import {
 	selectUser,
 	selectUsers,
 } from '../store/selectors';
-import {
-	fetchAnotherUser,
-	fetchFollowersAnotherUser,
-	fetchSubscriptionsAnotherUser,
-	fetchUsers,
-} from '../store/users/usersActions';
+import { fetchAnotherUser, fetchUsers } from '../store/users/usersActions';
 import { Chat } from '../store/types';
 import { Modal } from '../components/ImageModal';
 import { ProfileHeader } from '../components/usersPage/ProfileHeader';
 import { ProfileBody } from '../components/usersPage/ProfileBody';
 import { Post } from '../components/post/Post';
-import { firestore } from '../firebase';
-import { SUBSCRIPTIONS } from '../constants/constants';
 import { fetchToken, sendNotification } from '../api/notification';
 import { SubscribeListModal } from '../components/SubscribeListModal';
 import { FollowersListModal } from '../components/FollowersListModal';
@@ -92,40 +85,18 @@ export const UserProfilePage = () => {
 	}, [anotherUser._id, user.chatWithUsers]);
 
 	useEffect(() => {
+		dispatch(fetchAnotherUser(id));
+	}, [dispatch, id]);
+
+	useEffect(() => {
 		if (!user._id) {
 			dispatch(getUser());
-		}
-
-		if (!anotherUser._id) {
-			console.log('fetchAnotherUser');
-			dispatch(fetchAnotherUser(id));
 		}
 
 		if (users.length === 0) {
 			dispatch(fetchUsers());
 		}
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [anotherUser._id, dispatch, user._id, users.length]);
-
-	useEffect(() => {
-		if (anotherUser._id) {
-			dispatch(fetchFollowersAnotherUser(id));
-			dispatch(fetchSubscriptionsAnotherUser(id));
-			console.log('fetchFollowersAnotherUser');
-		}
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [anotherUser._id, dispatch]);
-
-	useEffect(() => {
-		const unsubscribe = firestore
-			.collection(SUBSCRIPTIONS)
-			.doc(id)
-			.onSnapshot(() => {
-				dispatch(fetchFollowersAnotherUser(id));
-			});
-
-		return () => unsubscribe();
-	}, [dispatch, id]);
+	}, [dispatch, user._id, users.length]);
 
 	const handleToggleModal = () => {
 		setModalVisible((visible) => !visible);

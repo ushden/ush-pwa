@@ -1,6 +1,8 @@
 import { IconButton, makeStyles } from '@material-ui/core';
 import ArrowBackOutlinedIcon from '@material-ui/icons/ArrowBackOutlined';
+import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router';
+import { resetAnotherUser } from '../store/users/usersActions';
 
 const useStyles = makeStyles({
 	backBtn: {
@@ -12,9 +14,11 @@ const useStyles = makeStyles({
 export const BackButton = () => {
 	const history = useHistory();
 	const classes = useStyles();
+	const dispatch = useDispatch();
 
 	const handleClickButton = () => {
 		history.goBack();
+		dispatch(resetAnotherUser());
 	};
 
 	return (

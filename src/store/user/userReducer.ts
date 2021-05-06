@@ -30,16 +30,6 @@ export const userReducer = (
 			return { ...state, user: { ...action.payload } };
 		case UserActions.SIGN_OUT:
 			return { ...initialState };
-		case UserActions.FETCH_USER_SUBSCRIPTIONS:
-			return {
-				...state,
-				user: { ...state.user, subscribeOn: [...action.payload] },
-			};
-		case UserActions.FETCH_USER_FOLLOWERS:
-			return {
-				...state,
-				user: { ...state.user, followMe: [...action.payload] },
-			};
 		case UserActions.SHOW_USER_LOADER:
 			return { ...state, userLoading: true, user: { ...state.user } };
 		case UserActions.HIDE_USER_LOADER:

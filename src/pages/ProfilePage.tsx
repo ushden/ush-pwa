@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { NavigationPanel } from '../components/navigation/NavigationPanel';
 import { Modal } from '../components/ImageModal';
-import { fetchSubscriptions, getUser } from '../store/user/userActions';
+import { getUser } from '../store/user/userActions';
 import { Post } from '../components/post/Post';
 import {
 	selectPosts,
@@ -29,12 +29,12 @@ export const ProfilePage = () => {
 	const subscribeOn = useSelector(selectSubscribeOn);
 	const followMe = useSelector(selectUserFollowers);
 
-	const subscribeListUsers = users.filter((user) =>
-		subscribeOn?.includes(user._id)
+	const subscribeListUsers = users.filter(
+		(u) => subscribeOn?.includes(u._id) && u._id !== user._id
 	);
 
-	const followersUserList = users.filter((user) =>
-		followMe?.includes(user._id)
+	const followersUserList = users.filter(
+		(u) => followMe?.includes(u._id) && u._id !== user._id
 	);
 
 	const posts = useSelector(selectPosts).filter(
@@ -84,7 +84,6 @@ export const ProfilePage = () => {
 				.doc(user._id)
 				.onSnapshot(() => {
 					dispatch(getUser());
-					dispatch(fetchSubscriptions());
 				});
 
 			return () => unsubscribe();

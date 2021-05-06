@@ -1,11 +1,6 @@
 import { AnyAction } from 'redux';
 import { ThunkAction } from 'redux-thunk';
-import {
-	ALERT_ERROR,
-	ERROR_MESSAGE,
-	SUBSCRIPTIONS,
-	USERS,
-} from '../../constants/constants';
+import { ALERT_ERROR, ERROR_MESSAGE, USERS } from '../../constants/constants';
 import { DocData, firestore } from '../../firebase';
 import { showAlert } from '../alert/alertActions';
 import { RootState } from '../rootReducer';
@@ -21,13 +16,9 @@ const fetchAnotherUserAction = (payload: User | DocData) => ({
 	type: UsersActions.FETCH_ANOTHER_USER,
 	payload,
 });
-const fetchSubscriptionsToAnotherUserAction = (payload: Array<string>) => ({
-	type: UsersActions.FETCH_ANOTHER_USER_SUBSCRIPTIONS,
-	payload,
-});
-const fetchFollowersAnotherUserAction = (payload: Array<string>) => ({
-	type: UsersActions.FETCH_ANOTHER_USER_FOLLOWERS,
-	payload,
+
+export const resetAnotherUser = () => ({
+	type: UsersActions.RESET_ANOTHER_USER,
 });
 
 export const fetchUsers = (): ThunkAction<
@@ -74,48 +65,6 @@ export const fetchAnotherUser = (
 			console.error(error.code, error.message);
 			dispatch(hideUsersLoading());
 			dispatch(showAlert(ALERT_ERROR, ERROR_MESSAGE));
-		}
-	};
-};
-
-export const fetchSubscriptionsAnotherUser = (
-	userId: string
-): ThunkAction<void, RootState, unknown, AnyAction> => {
-	return async (dispatch) => {
-		try {
-			const doc = await firestore.collection(SUBSCRIPTIONS).doc(userId).get();
-			const data = doc.data();
-			const payload: Array<string> = data?.subscribeOn;
-
-			if (payload) {
-				return dispatch(fetchSubscriptionsToAnotherUserAction(payload));
-			}
-
-			return null;
-		} catch (error) {
-			console.error(error.code, error.message);
-			dispatch(showAlert(ALERT_ERROR, 'Произошла ошибка :('));
-		}
-	};
-};
-
-export const fetchFollowersAnotherUser = (
-	userId: string
-): ThunkAction<void, RootState, unknown, AnyAction> => {
-	return async (dispatch) => {
-		try {
-			const doc = await firestore.collection(SUBSCRIPTIONS).doc(userId).get();
-			const data = doc.data();
-			const payload: Array<string> = data?.followMe;
-
-			if (payload) {
-				return dispatch(fetchFollowersAnotherUserAction(payload));
-			}
-
-			return null;
-		} catch (error) {
-			console.error(error.code, error.message);
-			dispatch(showAlert(ALERT_ERROR, 'Произошла ошибка :('));
 		}
 	};
 };

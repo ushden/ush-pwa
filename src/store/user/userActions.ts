@@ -1,3 +1,4 @@
+import { fetchAnotherUser } from './../users/usersActions';
 import { AnyAction } from 'redux';
 import { ThunkAction } from 'redux-thunk';
 import {
@@ -5,7 +6,6 @@ import {
 	ALERT_SUCCESS,
 	ALERT_WARNING,
 	STORAGE_AVATARS,
-	SUBSCRIPTIONS,
 	USERS,
 } from '../../constants/constants';
 import {
@@ -33,14 +33,6 @@ const getUserAction = (payload: User) => ({
 const signOutUserAction = () => ({ type: UserActions.SIGN_OUT });
 const showUserLoaderAction = () => ({ type: UserActions.SHOW_USER_LOADER });
 const hideUserLoaderAction = () => ({ type: UserActions.HIDE_USER_LOADER });
-const fetchSubscriptionsAction = (payload: Array<string>) => ({
-	type: UserActions.FETCH_USER_SUBSCRIPTIONS,
-	payload,
-});
-const fetchFollowersAction = (payload: Array<string>) => ({
-	type: UserActions.FETCH_USER_FOLLOWERS,
-	payload,
-});
 
 export const getUser = (): ThunkAction<void, RootState, unknown, AnyAction> => {
 	return async (dispatch) => {
@@ -140,7 +132,7 @@ export const subscribeOnUser = (
 
 			if (uid) {
 				await firestore
-					.collection(SUBSCRIPTIONS)
+					.collection(USERS)
 					.doc(uid)
 					.set(
 						{
@@ -158,7 +150,7 @@ export const subscribeOnUser = (
 				});
 
 				await firestore
-					.collection(SUBSCRIPTIONS)
+					.collection(USERS)
 					.doc(userId)
 					.set(
 						{
@@ -167,6 +159,7 @@ export const subscribeOnUser = (
 						{ merge: true }
 					);
 
+				dispatch(fetchAnotherUser(userId));
 				dispatch(showAlert(ALERT_SUCCESS, 'Вы подписались на пользователя'));
 			}
 		} catch (error) {
@@ -185,7 +178,7 @@ export const unsubscribeOnUser = (
 
 			if (uid) {
 				await firestore
-					.collection(SUBSCRIPTIONS)
+					.collection(USERS)
 					.doc(uid)
 					.set(
 						{
@@ -203,7 +196,7 @@ export const unsubscribeOnUser = (
 				});
 
 				await firestore
-					.collection(SUBSCRIPTIONS)
+					.collection(USERS)
 					.doc(userId)
 					.set(
 						{
@@ -212,63 +205,8 @@ export const unsubscribeOnUser = (
 						{ merge: true }
 					);
 
+				dispatch(fetchAnotherUser(userId));
 				dispatch(showAlert(ALERT_WARNING, 'Вы отписались от пользователя'));
-			}
-		} catch (error) {
-			console.error(error.code, error.message);
-			dispatch(showAlert(ALERT_ERROR, 'Произошла ошибка :('));
-		}
-	};
-};
-
-export const fetchSubscriptions = (): ThunkAction<
-	void,
-	RootState,
-	unknown,
-	AnyAction
-> => {
-	return async (dispatch) => {
-		try {
-			const uid = auth.currentUser?.uid;
-
-			if (uid) {
-				const doc = await firestore.collection(SUBSCRIPTIONS).doc(uid).get();
-				const data = doc.data();
-				const payload: Array<string> = data?.subscribeOn;
-
-				if (payload) {
-					return dispatch(fetchSubscriptionsAction(payload));
-				}
-
-				return null;
-			}
-		} catch (error) {
-			console.error(error.code, error.message);
-			dispatch(showAlert(ALERT_ERROR, 'Произошла ошибка :('));
-		}
-	};
-};
-
-export const fetchFollowers = (): ThunkAction<
-	void,
-	RootState,
-	unknown,
-	AnyAction
-> => {
-	return async (dispatch) => {
-		try {
-			const uid = auth.currentUser?.uid;
-
-			if (uid) {
-				const doc = await firestore.collection(SUBSCRIPTIONS).doc(uid).get();
-				const data = doc.data();
-				const payload: Array<string> = data?.followMe;
-
-				if (payload) {
-					return dispatch(fetchFollowersAction(payload));
-				}
-
-				return null;
 			}
 		} catch (error) {
 			console.error(error.code, error.message);

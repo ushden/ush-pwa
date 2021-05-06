@@ -24,8 +24,6 @@ export type AlertActions = showAlert | hideAlert;
 export enum UserActions {
 	GET_USER = 'GET_USER',
 	SIGN_OUT = 'SIGN_OUT',
-	FETCH_USER_SUBSCRIPTIONS = 'FETCH_USER_SUBSCRIPTIONS',
-	FETCH_USER_FOLLOWERS = 'FETCH_USER_FOLLOWERS',
 	SHOW_USER_LOADER = 'SHOW_LOADER',
 	HIDE_USER_LOADER = 'HIDE_LOADER',
 }
@@ -51,15 +49,6 @@ export interface User {
 	savedPosts?: Array<string>;
 	chatWithUsers?: Array<chatWhithUsers>;
 }
-
-interface fetchUserSubscriptions {
-	type: UserActions.FETCH_USER_SUBSCRIPTIONS;
-	payload: Array<string>;
-}
-interface fetchUserFollowers {
-	type: UserActions.FETCH_USER_FOLLOWERS;
-	payload: Array<string>;
-}
 export interface UserState {
 	user: User;
 	userLoading: boolean;
@@ -82,18 +71,15 @@ export type UserActionsType =
 	| getUser
 	| signOutUser
 	| showUserLoader
-	| hideUserLoader
-	| fetchUserSubscriptions
-	| fetchUserFollowers;
+	| hideUserLoader;
 
 // users
 export enum UsersActions {
 	FETCH_USERS = 'FETCH_USERS',
 	FETCH_ANOTHER_USER = 'FETCH_ANOTHER_USER',
-	FETCH_ANOTHER_USER_SUBSCRIPTIONS = 'FETCH_ANOTHER_USER_SUBSCRIPTIONS',
-	FETCH_ANOTHER_USER_FOLLOWERS = 'FETCH_ANOTHER_USER_FOLLOWERS',
 	SHOW_USERS_LOADING = 'SHOW_USERS_LOADING',
 	HIDE_USERS_LOADING = 'HIDE_USERS_LOADING',
+	RESET_ANOTHER_USER = 'RESET_ANOTHER_USER',
 }
 
 export interface UsersState {
@@ -102,17 +88,12 @@ export interface UsersState {
 	usersLoading: boolean;
 }
 
-interface fetchAnotherUserSubscriptions {
-	type: UsersActions.FETCH_ANOTHER_USER_SUBSCRIPTIONS;
-	payload: Array<string>;
-}
-interface fetchAnotherUserFollowers {
-	type: UsersActions.FETCH_ANOTHER_USER_FOLLOWERS;
-	payload: Array<string>;
-}
 interface fetchAnotherUser {
 	type: UsersActions.FETCH_ANOTHER_USER;
 	payload: User;
+}
+interface resetAnotherUser {
+	type: UsersActions.RESET_ANOTHER_USER;
 }
 interface fetchUsersAction {
 	type: UsersActions.FETCH_USERS;
@@ -132,9 +113,7 @@ export type UsersActionsType =
 	| showUsersLoadingAction
 	| hideUsersLoadingAction
 	| fetchAnotherUser
-	| fetchAnotherUserSubscriptions
-	| fetchAnotherUserFollowers;
-
+	| resetAnotherUser;
 // post
 export interface PostsState {
 	post: PostType;
