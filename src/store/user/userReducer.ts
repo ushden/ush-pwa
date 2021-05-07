@@ -6,6 +6,9 @@ const initialState: UserState = {
 		name: '',
 		email: '',
 		photoUrl: '',
+		gender: 'Не определился',
+		phone: '',
+		rating: 0,
 		isLogIn: {
 			status: 'offline',
 			lastChanged: '',

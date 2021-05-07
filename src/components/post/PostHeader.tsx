@@ -126,8 +126,7 @@ export const PostHeader = (props: PostHeaderPropsType) => {
 					TransitionComponent={Fade}
 					anchorEl={props.anchorEl}
 					open={Boolean(props.anchorEl)}
-					onClose={props.handleMenuCloseClick}
-					keepMounted>
+					onClose={props.handleMenuCloseClick}>
 					<MenuItem className={classes.menuItem}>
 						<Button
 							variant='text'

@@ -4,11 +4,11 @@ import {
 	InputAdornment,
 	TextField,
 	withStyles,
+	makeStyles,
 } from '@material-ui/core';
 import DeadIcon from '@material-ui/icons/SentimentVeryDissatisfiedOutlined';
 import FileIcon from '@material-ui/icons/AttachFileOutlined';
 import SendIcon from '@material-ui/icons/SendOutlined';
-import { makeStyles } from '@material-ui/styles';
 import { ChangeEvent, FC, ReactElement } from 'react';
 import { COLOR_PRIMARY } from '../../constants/constants';
 import classNames from 'classnames';

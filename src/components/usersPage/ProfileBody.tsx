@@ -35,7 +35,7 @@ const useStyles = makeStyles({
 
 interface ProfileBodyProps {
 	posts: Array<PostType>;
-	rating: number;
+	rating: number | undefined;
 	subscribs: number | undefined;
 	followers: number | undefined;
 	onSubsribersClick: () => void;
@@ -68,7 +68,9 @@ export const ProfileBody: FC<ProfileBodyProps> = ({
 						<StarsOutlinedIcon className={classes.listItemIcon} />
 						Рейтинг
 					</Typography>
-					<Typography component='span'>{rating * 0.48}</Typography>
+					<Typography component='span'>
+						{rating ? Math.floor(rating * 0.48) : 0}
+					</Typography>
 				</ListItem>
 				<Divider />
 				<ListItem

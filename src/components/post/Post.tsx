@@ -93,7 +93,7 @@ export const Post = ({ post, id }: PostPropsType) => {
 
 	const handleLikeClick = async () => {
 		try {
-			dispatch(likePost(post._id || id));
+			dispatch(likePost(post._id || id, post.user._id));
 
 			const token = await fetchToken(post.user._id);
 
@@ -114,7 +114,7 @@ export const Post = ({ post, id }: PostPropsType) => {
 
 	const handleDislikeClick = async () => {
 		try {
-			dispatch(dislikePost(post._id || id));
+			dispatch(dislikePost(post._id || id, post.user._id));
 
 			const token = await fetchToken(post.user._id);
 

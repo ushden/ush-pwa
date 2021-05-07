@@ -1,8 +1,10 @@
+import { incrementRatingForFirstEnter } from './../../firebase';
 import { fetchAnotherUser } from './../users/usersActions';
 import { AnyAction } from 'redux';
 import { ThunkAction } from 'redux-thunk';
 import {
 	ALERT_ERROR,
+	ALERT_INFO,
 	ALERT_SUCCESS,
 	ALERT_WARNING,
 	STORAGE_AVATARS,
@@ -13,6 +15,7 @@ import {
 	decrement,
 	firestore,
 	increment,
+	incrementRatingForFullProfile,
 	updateArray,
 } from '../../firebase';
 import { uploadImage } from '../../api/uploadImage';
@@ -78,6 +81,11 @@ export const signUpUserWithEmailAndPassword = ({
 				};
 
 				await firestore.collection(USERS).doc(user.uid).set(payload);
+
+				await firestore
+					.collection(USERS)
+					.doc(user.uid)
+					.update({ rating: incrementRatingForFirstEnter });
 
 				dispatch(hideUserLoaderAction());
 			}
@@ -211,6 +219,129 @@ export const unsubscribeOnUser = (
 		} catch (error) {
 			console.error(error.code, error.message);
 			dispatch(showAlert(ALERT_ERROR, 'Произошла ошибка :('));
+		}
+	};
+};
+
+export const changePassword = (
+	password: string
+): ThunkAction<void, RootState, unknown, AnyAction> => {
+	return async (dispatch) => {
+		try {
+			const id = auth.currentUser?.uid;
+
+			if (id) {
+				await auth.currentUser?.updatePassword(password);
+
+				dispatch(showAlert(ALERT_SUCCESS, 'Пароль изменен!'));
+			}
+		} catch (error) {
+			console.error(error.code, error.message);
+			dispatch(showAlert(ALERT_ERROR, 'Ошибка при смене пароля!'));
+		}
+	};
+};
+
+interface UpdateProfileArgs {
+	email: string;
+	name: string;
+	phone?: string;
+	gender?: string;
+}
+
+export const updateProfile = (
+	payload: UpdateProfileArgs
+): ThunkAction<void, RootState, unknown, AnyAction> => {
+	return async (dispatch) => {
+		try {
+			const { email, name, phone, gender } = payload;
+			const id = auth.currentUser?.uid;
+			const currentEmail = auth.currentUser?.email;
+			const currentName = auth.currentUser?.displayName;
+
+			if (id && currentEmail && currentName) {
+				dispatch(showAlert(ALERT_INFO, 'Подождите, обновляем профиль....'));
+
+				if (email !== currentEmail) {
+					await auth.currentUser?.updateEmail(email);
+					await firestore.collection(USERS).doc(id).update({ email });
+				}
+
+				if (name !== currentName) {
+					await auth.currentUser?.updateProfile({
+						displayName: name,
+					});
+					await firestore.collection(USERS).doc(id).update({ name });
+				}
+
+				if (phone) {
+					await firestore
+						.collection(USERS)
+						.doc(id)
+						.update({
+							phone: '+380' + phone,
+						});
+				}
+
+				if (gender) {
+					await firestore.collection(USERS).doc(id).update({ gender });
+				}
+
+				dispatch(showAlert(ALERT_SUCCESS, 'Профиль обновлен!'));
+
+				if (name && email && phone && gender) {
+					await firestore
+						.collection(USERS)
+						.doc(id)
+						.update({ rating: incrementRatingForFullProfile });
+
+					setTimeout(
+						() =>
+							dispatch(
+								showAlert(
+									ALERT_SUCCESS,
+									'Вы заполнили все поля и получили + 48 к рейтингу! Поздравляю!'
+								)
+							),
+						5000
+					);
+				}
+			}
+		} catch (error) {
+			console.error(error.code, error.message);
+			dispatch(showAlert(ALERT_ERROR, 'Ошибка при смене пароля!'));
+		}
+	};
+};
+
+export const updateAvatar = (
+	photoUrl: string,
+	name: string
+): ThunkAction<void, RootState, unknown, AnyAction> => {
+	return async (dispatch) => {
+		try {
+			const id = auth.currentUser?.uid;
+
+			if (photoUrl && name && id) {
+				const url = await uploadImage(photoUrl, name, 'user');
+
+				if (url) {
+					await auth.currentUser?.updateProfile({
+						photoURL: url,
+					});
+
+					await firestore.collection(USERS).doc(id).update({
+						photoUrl: url,
+					});
+				}
+
+				dispatch(
+					showAlert(ALERT_SUCCESS, 'Аватар обновлен! Вы отлично выглядите :)')
+				);
+			}
+		} catch (error) {
+			console.error(error.code, error.message);
+			dispatch(showAlert(ALERT_ERROR, 'Не удалось обновить аватар :('));
 		}
 	};
 };

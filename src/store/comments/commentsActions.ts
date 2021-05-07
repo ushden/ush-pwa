@@ -1,4 +1,11 @@
-import { ANIME, DEAD, EMOJI, SAD, SMILE } from './../../constants/constants';
+import {
+	ANIME,
+	DEAD,
+	EMOJI,
+	SAD,
+	SMILE,
+	USERS,
+} from './../../constants/constants';
 import { CommentType, CommentsActions } from './../types';
 import { AnyAction } from 'redux';
 import { ThunkAction } from 'redux-thunk';
@@ -68,6 +75,10 @@ export const addComment = (
 					);
 				await firestore.collection(POSTS).doc(postId).update({
 					comments: increment,
+				});
+
+				await firestore.collection(USERS).doc(user.uid).update({
+					rating: increment,
 				});
 
 				dispatch(hideCommentLoadingAction());
@@ -157,6 +168,11 @@ export const addCommentEmoji = (
 						},
 						{ merge: true }
 					);
+
+				await firestore
+					.collection(USERS)
+					.doc(comment.user._id)
+					.update({ rating: increment });
 			}
 		} catch (error) {
 			console.error(error.code, error.message);

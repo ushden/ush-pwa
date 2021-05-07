@@ -28,6 +28,21 @@ export const TIMESTAMP_FIRESTORE = firebase.firestore.FieldValue.serverTimestamp
 export const TIMESTAMP_DATABASE = firebase.database.ServerValue.TIMESTAMP;
 export const increment = firebase.firestore.FieldValue.increment(1);
 export const decrement = firebase.firestore.FieldValue.increment(-1);
+export const incrementRatingForLike = firebase.firestore.FieldValue.increment(
+	5
+);
+export const decrementRatingForDislike = firebase.firestore.FieldValue.increment(
+	-5
+);
+export const incrementRatingForCreatePost = firebase.firestore.FieldValue.increment(
+	10
+);
+export const incrementRatingForFullProfile = firebase.firestore.FieldValue.increment(
+	48
+);
+export const incrementRatingForFirstEnter = firebase.firestore.FieldValue.increment(
+	100
+);
 export const updateArray = firebase.firestore.FieldValue;
 
 export const auth = firebase.auth();

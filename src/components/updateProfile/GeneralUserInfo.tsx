@@ -4,7 +4,7 @@ import {
 	makeStyles,
 	Typography,
 	Divider,
-	Button,
+	InputAdornment,
 } from '@material-ui/core';
 import { FC } from 'react';
 import { COLOR_PRIMARY } from '../../constants/constants';
@@ -12,22 +12,26 @@ import { COLOR_PRIMARY } from '../../constants/constants';
 const useStyles = makeStyles({
 	title: {
 		marginBottom: '1rem',
+		fontWeight: 'lighter',
+		textAlign: 'center',
+		color: '#ccc',
 	},
 	input: {
 		width: '100%',
 		maxWidth: '100%',
 		marginBottom: '1rem',
 	},
+	inputHide: {
+		display: 'none',
+	},
 	divider: {
 		marginBottom: '1rem',
 	},
-	saveBtn: {
-		marginBottom: '1rem',
-		color: '#fff',
-		backgroundColor: COLOR_PRIMARY,
-		'&:focus': {
-			backgroundColor: COLOR_PRIMARY,
-		},
+	avatarWrap: {
+		display: 'flex',
+		alignItems: 'center',
+		justifyContent: 'center',
+		marginBottom: '2rem',
 	},
 });
 
@@ -53,7 +57,7 @@ const CustomInput = withStyles({
 	},
 })(TextField);
 
-interface GeneralUserInfoPops {
+interface GeneralUserInfoProps {
 	name: string;
 	setName: React.Dispatch<React.SetStateAction<string>>;
 	email: string | undefined;
@@ -62,7 +66,7 @@ interface GeneralUserInfoPops {
 	setPhone: React.Dispatch<React.SetStateAction<string | number>>;
 }
 
-export const GeneralUserInfo: FC<GeneralUserInfoPops> = (props) => {
+export const GeneralUserInfo: FC<GeneralUserInfoProps> = (props) => {
 	const classes = useStyles();
 
 	return (
@@ -82,21 +86,21 @@ export const GeneralUserInfo: FC<GeneralUserInfoPops> = (props) => {
 				label='Ваш емейл'
 				value={props.email}
 				className={classes.input}
+				disabled
 				onChange={(e) => props.setEmail(e.target.value)}
 			/>
 			<CustomInput
 				variant='outlined'
 				label='Ваш телефон'
 				value={props.phone}
-				placeholder='+380 (--) --- -- --'
-				type='tel'
+				placeholder='(---) --- -- --'
+				type='number'
 				className={classes.input}
+				InputProps={{
+					startAdornment: <InputAdornment position='start'>+38</InputAdornment>,
+				}}
 				onChange={(e) => props.setPhone(+e.target.value)}
 			/>
-
-			<Button variant='contained' className={classes.saveBtn}>
-				Сохранить изменения
-			</Button>
 			<Divider component='p' className={classes.divider} />
 		</>
 	);

@@ -21,6 +21,7 @@ import { USERS } from '../constants/constants';
 import { SubscribeListModal } from '../components/SubscribeListModal';
 import { fetchUsers } from '../store/users/usersActions';
 import { FollowersListModal } from '../components/FollowersListModal';
+import { UserInfo } from '../components/usersPage/UserInfo';
 
 export const ProfilePage = () => {
 	const dispatch = useDispatch();
@@ -41,13 +42,6 @@ export const ProfilePage = () => {
 		(post) => post.user._id === user._id
 	);
 
-	const rating = posts.reduce((acc, el) => {
-		if (el.rating) {
-			return acc + el.rating;
-		}
-
-		return 0;
-	}, 0);
 	const subscribs = user.subscribs;
 	const followers = user.followers;
 
@@ -116,9 +110,10 @@ export const ProfilePage = () => {
 				user={user}
 				currentUserId={user._id}
 			/>
+			<UserInfo user={user} />
 			<ProfileBody
 				posts={posts}
-				rating={rating}
+				rating={user.rating}
 				subscribs={subscribs}
 				followers={followers}
 				onSubsribersClick={handleSubscribersListClick}

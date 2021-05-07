@@ -1,4 +1,8 @@
 import {
+	incrementRatingForLike,
+	decrementRatingForDislike,
+} from './../../firebase';
+import {
 	ALERT_ERROR,
 	ALERT_INFO,
 	ALERT_SUCCESS,
@@ -14,6 +18,7 @@ import {
 	decrement,
 	firestore,
 	increment,
+	incrementRatingForCreatePost,
 	updateArray,
 } from '../../firebase';
 import { showAlert } from '../alert/alertActions';
@@ -96,6 +101,11 @@ export const createPost = (
 						),
 					200
 				);
+
+				await firestore
+					.collection(USERS)
+					.doc(post.user._id)
+					.update({ rating: incrementRatingForCreatePost });
 			}
 		} catch (error) {
 			console.error(error.code, error.message);
@@ -127,7 +137,8 @@ export const fetchPost = (
 };
 
 export const likePost = (
-	postId: string
+	postId: string,
+	author: string
 ): ThunkAction<void, RootState, unknown, AnyAction> => {
 	return async (dispatch) => {
 		try {
@@ -148,6 +159,11 @@ export const likePost = (
 						},
 						{ merge: true }
 					);
+				if (author) {
+					await firestore.collection(USERS).doc(user.uid).update({
+						rating: incrementRatingForLike,
+					});
+				}
 			}
 		} catch (error) {
 			console.error(error.code, error.message);
@@ -157,7 +173,8 @@ export const likePost = (
 };
 
 export const dislikePost = (
-	postId: string
+	postId: string,
+	author: string
 ): ThunkAction<void, RootState, unknown, AnyAction> => {
 	return async (dispatch) => {
 		try {
@@ -178,6 +195,11 @@ export const dislikePost = (
 						},
 						{ merge: true }
 					);
+				if (author) {
+					await firestore.collection(USERS).doc(author).update({
+						rating: decrementRatingForDislike,
+					});
+				}
 			}
 		} catch (error) {
 			console.error(error.code, error.message);

@@ -37,6 +37,9 @@ export interface User {
 	name: string;
 	email: string | undefined;
 	photoUrl?: string | undefined;
+	gender?: string;
+	phone?: string;
+	rating?: number;
 	isLogIn?: {
 		status: string;
 		lastChanged: string;

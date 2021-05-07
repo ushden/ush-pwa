@@ -71,8 +71,7 @@ export const sendNotification = async (payload: SendNotificationParams) => {
 			body: JSON.stringify({
 				notification: notification,
 				to: to,
-				condition: 'Club 48',
-				collapse_key: 'Club 48',
+				collapse_key: 'Club_48',
 				priority: 'high',
 			}),
 		});
@@ -126,8 +125,7 @@ export const sendNotificationToGroupUsers = async (
 			body: JSON.stringify({
 				notification: notification,
 				registration_ids: to,
-				condition: 'Club 48',
-				collapse_key: 'Club 48',
+				collapse_key: 'Club_48',
 				priority: 'high',
 			}),
 		});
@@ -159,8 +157,7 @@ export const sendImageNotification = async (
 			body: JSON.stringify({
 				data,
 				to,
-				condition: 'Club 48',
-				collapse_key: 'Club 48',
+				collapse_key: 'Club_48',
 				priority: 'high',
 			}),
 		});

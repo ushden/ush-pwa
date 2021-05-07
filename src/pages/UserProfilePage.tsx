@@ -51,14 +51,6 @@ export const UserProfilePage = () => {
 		(post) => post.user._id === anotherUser._id
 	);
 
-	const rating = posts.reduce((acc, el) => {
-		if (el.rating) {
-			return acc + el.rating;
-		}
-
-		return 0;
-	}, 0);
-
 	const subscribs = anotherUser.subscribs;
 	const followers = anotherUser.followers;
 
@@ -192,7 +184,7 @@ export const UserProfilePage = () => {
 			/>
 			<ProfileBody
 				posts={posts}
-				rating={rating}
+				rating={anotherUser.rating}
 				subscribs={subscribs}
 				followers={followers}
 				onSubsribersClick={handleSubscribersListClick}
