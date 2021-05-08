@@ -4,6 +4,10 @@ const initialState: ChatsState = {
 	chat: {
 		_id: '',
 		createAt: '',
+		isFirstUserHaveNewMessages: false,
+		isSecondUserHaveNewMessages: false,
+		firstUserNewMessagesCount: 0,
+		secondUserNewMessagesCount: 0,
 		users: {
 			firstUser: {
 				_id: '',

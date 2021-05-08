@@ -293,6 +293,10 @@ export interface Message {
 export interface Chat {
 	_id: string;
 	createAt: string;
+	isFirstUserHaveNewMessages?: boolean;
+	isSecondUserHaveNewMessages?: boolean;
+	firstUserNewMessagesCount?: number;
+	secondUserNewMessagesCount?: number;
 	users: {
 		firstUser: User;
 		secondUser: User;

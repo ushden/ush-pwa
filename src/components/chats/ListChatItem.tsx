@@ -52,6 +52,21 @@ export const ListChatItem = ({ chat }: ListChatItemProps) => {
 			<Skeleton variant='text' className={classes.skeletonLastMessage} />
 		);
 	};
+
+	const test = () => {
+		return (
+			<span
+				style={{
+					backgroundColor: COLOR_PRIMARY,
+					padding: '0.2rem 0.5rem',
+					color: '#fff',
+					borderRadius: '0.5rem',
+				}}>
+				У вас 3 новых сообщения
+			</span>
+		);
+	};
+
 	return (
 		<Fragment>
 			<Link
@@ -61,7 +76,8 @@ export const ListChatItem = ({ chat }: ListChatItemProps) => {
 					<ListItemAvatar className='anim-scale'>
 						<ImageAvatar src={chatAvatar} alt={chatName} />
 					</ListItemAvatar>
-					<ListItemText primary={chatName} secondary={setLastMessage()} />
+					{/* <ListItemText primary={chatName} secondary={setLastMessage()} /> */}
+					<ListItemText primary={chatName} secondary={test()} />
 					<ListItemSecondaryAction>
 						<SendOutlinedIcon
 							className={classNames(classes.listIcon, 'anim-scale')}

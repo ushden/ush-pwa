@@ -42,7 +42,7 @@ export const UserListItem = ({ user }: UserItemProps) => {
 					<ListItemAvatar className='anim-scale'>
 						<Badge
 							variant='dot'
-							color={status === 'online' ? 'primary' : 'secondary'}>
+							color={status?.status === 'online' ? 'primary' : 'secondary'}>
 							<ImageAvatar src={user.photoUrl} alt={user.name} />
 						</Badge>
 					</ListItemAvatar>

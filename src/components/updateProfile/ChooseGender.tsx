@@ -22,6 +22,14 @@ export const ChooseGender: FC<ChooseGenderProps> = ({
 }): ReactElement => {
 	const classes = useStyles();
 
+	const gendersList: Array<string> = [
+		'Женщина',
+		'Мужчина',
+		'Боевой вертолёт 3000',
+		'Бэтмен',
+		'Назик',
+	];
+
 	return (
 		<>
 			<FormControl component='fieldset'>
@@ -31,21 +39,15 @@ export const ChooseGender: FC<ChooseGenderProps> = ({
 					name='gender1'
 					value={gender}
 					onChange={onChangeGender}>
-					<FormControlLabel
-						value='Женщина'
-						control={<Radio />}
-						label='Женщина'
-					/>
-					<FormControlLabel
-						value='Мужчина'
-						control={<Radio />}
-						label='Мужчина'
-					/>
-					<FormControlLabel
-						value='Боевой вертолёт 3000'
-						control={<Radio />}
-						label='Боевой вертолёт 3000'
-					/>
+					{gendersList.map((gender) => {
+						return (
+							<FormControlLabel
+								value={gender}
+								control={<Radio />}
+								label={gender}
+							/>
+						);
+					})}
 				</RadioGroup>
 			</FormControl>
 			<Divider className={classes.divider} />
