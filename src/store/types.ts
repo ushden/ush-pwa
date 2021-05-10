@@ -237,14 +237,19 @@ export enum ChatsActions {
 	CREATE_CHAT = 'CREATE_CHAT',
 	SHOW_CHAT_LOADING = 'SHOW_CHAT_LOADING',
 	HIDE_CHAT_LOADING = 'HIDE_CHAT_LOADING',
-	SHOW_IMAGE_LOADING = 'SHOW_IMAGE_LOADING',
-	HIDE_IMAGE_LOADING = 'HIDE_IMAGE_LOADING',
+	SET_UNREAD_MESSAGE_FIRST_USER = 'SET_UNREAD_MESSAGE_FIRST_USER',
+	SET_UNREAD_MESSAGE_SECOND_USER = 'SET_UNREAD_MESSAGE_SECOND_USER',
+	RESET_NEW_MESSAGE_STATE = 'RESET_NEW_MESSAGE_STATE',
 }
-interface hideImageLoading {
-	type: ChatsActions.SHOW_IMAGE_LOADING;
+
+interface setUnreadMessageSecondUser {
+	type: ChatsActions.SET_UNREAD_MESSAGE_SECOND_USER;
 }
-interface showImageLoading {
-	type: ChatsActions.HIDE_IMAGE_LOADING;
+interface resetNewMessageState {
+	type: ChatsActions.RESET_NEW_MESSAGE_STATE;
+}
+interface setUnreadMessageFirstUser {
+	type: ChatsActions.SET_UNREAD_MESSAGE_FIRST_USER;
 }
 interface fetchMesagesAction {
 	type: ChatsActions.FETCH_MESSAGES;
@@ -279,8 +284,9 @@ export type ChatsActionsType =
 	| hideChatLoadingAction
 	| createChatAction
 	| fetchMesagesAction
-	| showImageLoading
-	| hideImageLoading;
+	| setUnreadMessageSecondUser
+	| setUnreadMessageFirstUser
+	| resetNewMessageState;
 
 export interface Message {
 	_id: string;
@@ -295,8 +301,6 @@ export interface Chat {
 	createAt: string;
 	isFirstUserHaveNewMessages?: boolean;
 	isSecondUserHaveNewMessages?: boolean;
-	firstUserNewMessagesCount?: number;
-	secondUserNewMessagesCount?: number;
 	users: {
 		firstUser: User;
 		secondUser: User;

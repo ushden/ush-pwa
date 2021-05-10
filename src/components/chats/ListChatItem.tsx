@@ -16,6 +16,7 @@ import { getChatAvatar, getChatName } from '../../utils/getChatInfo';
 import { useLastMessage } from '../../hooks/useLastMessage';
 import { Skeleton } from '@material-ui/lab';
 import { ImageAvatar } from '../ImageAvatar';
+import { useNewMessageState } from '../../hooks/useNewMessageState';
 
 const useStyles = makeStyles({
 	listIcon: {
@@ -40,20 +41,25 @@ export const ListChatItem = ({ chat }: ListChatItemProps) => {
 	const lastMessage = useLastMessage(chat._id);
 	const chatName = getChatName(chat);
 	const chatAvatar = getChatAvatar(chat);
+	const { isHaveNewMessage, newMessageCount } = useNewMessageState(
+		chat.users.firstUser._id,
+		chat.users.secondUser._id,
+		chat._id
+	);
 
-	const setLastMessage = () => {
+	const LastMessage = () => {
 		if (lastMessage === undefined) {
-			return 'Нет сообщений';
+			return <span>Нет сообщений</span>;
 		}
 
 		return lastMessage ? (
-			lastMessage
+			<span>{lastMessage}</span>
 		) : (
 			<Skeleton variant='text' className={classes.skeletonLastMessage} />
 		);
 	};
 
-	const test = () => {
+	const NewMessageAlert = () => {
 		return (
 			<span
 				style={{
@@ -61,8 +67,9 @@ export const ListChatItem = ({ chat }: ListChatItemProps) => {
 					padding: '0.2rem 0.5rem',
 					color: '#fff',
 					borderRadius: '0.5rem',
+					fontSize: '0.8rem',
 				}}>
-				У вас 3 новых сообщения
+				У вас {newMessageCount} новых сообщений
 			</span>
 		);
 	};
@@ -77,7 +84,10 @@ export const ListChatItem = ({ chat }: ListChatItemProps) => {
 						<ImageAvatar src={chatAvatar} alt={chatName} />
 					</ListItemAvatar>
 					{/* <ListItemText primary={chatName} secondary={setLastMessage()} /> */}
-					<ListItemText primary={chatName} secondary={test()} />
+					<ListItemText
+						primary={chatName}
+						secondary={isHaveNewMessage ? <NewMessageAlert /> : <LastMessage />}
+					/>
 					<ListItemSecondaryAction>
 						<SendOutlinedIcon
 							className={classNames(classes.listIcon, 'anim-scale')}

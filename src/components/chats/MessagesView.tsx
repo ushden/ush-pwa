@@ -12,11 +12,15 @@ import { useDispatch, useSelector } from 'react-redux';
 import { fetchToken, sendNotification } from '../../api/notification';
 import { CHATS, MESSAGES } from '../../constants/constants';
 import { firestore } from '../../firebase';
+import { useNewMessageState } from '../../hooks/useNewMessageState';
 import {
 	deleteMessage,
 	fetchMessages,
+	resetNewMessage,
 	sendImageMessage,
 	sendMessage,
+	setUnreadMessage,
+	updateNewMessageCount,
 } from '../../store/chats/chatActions';
 import {
 	selectChat,
@@ -64,6 +68,11 @@ export const MessagesView: FC<MessagesViewProps> = ({
 	const loading = useSelector(selectChatsLoading);
 	const chat = useSelector(selectChat);
 	const messagesEndRef = useRef<HTMLSpanElement>(null);
+	const { isHaveNewMessage } = useNewMessageState(
+		chat.users.firstUser._id,
+		chat.users.secondUser._id,
+		chat._id
+	);
 
 	const [inputValue, setInputValue] = useState<string>('');
 	const [showIcons, setShowIcons] = useState<boolean>(false);
@@ -84,6 +93,12 @@ export const MessagesView: FC<MessagesViewProps> = ({
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [file]);
+
+	useEffect(() => {
+		if (isHaveNewMessage) {
+			dispatch(resetNewMessage(chatId));
+		}
+	}, [chatId, dispatch, isHaveNewMessage]);
 
 	useEffect(() => {
 		const unsubscribe = firestore
@@ -138,7 +153,7 @@ export const MessagesView: FC<MessagesViewProps> = ({
 				token: token,
 				title: `${user.name} написал(-ла) Вам:`,
 				body: inputValue,
-				url: window.location.href,
+				url: '/',
 			};
 			await sendNotification(payload);
 		}
@@ -146,6 +161,20 @@ export const MessagesView: FC<MessagesViewProps> = ({
 		setInputValue('');
 		setShowIcons(false);
 		setVisibleEmoji(false);
+
+		if (!chat.isFirstUserHaveNewMessages && !chat.isSecondUserHaveNewMessages) {
+			const firstUserId = chat.users.firstUser._id;
+			const secondUserId = chat.users.secondUser._id;
+
+			dispatch(setUnreadMessage(firstUserId, secondUserId, chatId));
+		}
+
+		if (chat.isFirstUserHaveNewMessages || chat.isSecondUserHaveNewMessages) {
+			const firstUserId = chat.users.firstUser._id;
+			const secondUserId = chat.users.secondUser._id;
+
+			dispatch(updateNewMessageCount(firstUserId, secondUserId, chatId));
+		}
 	};
 
 	const handleFileInputChange = async (

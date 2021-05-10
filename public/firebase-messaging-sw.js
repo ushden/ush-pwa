@@ -18,20 +18,20 @@ if (firebase.apps.length === 0) {
 
 const messaging = firebase.messaging();
 
-messaging.onBackgroundMessage((payload) => {
-	const notificationTitle = payload.notification.title;
-	const notificationOptions = {
-		body: payload.notification.body,
-		icon: '/images/icons/icon-72x72.png',
-		tag: 'data-notification',
-		data: {
-			time: new Date(Date.now()).toString(),
-			message: payload.notification.body,
-		},
-	};
+// messaging.onBackgroundMessage((payload) => {
+// 	const notificationTitle = payload.notification.title;
+// 	const notificationOptions = {
+// 		body: payload.notification.body,
+// 		icon: '/images/icons/icon-72x72.png',
+// 		tag: 'data-notification',
+// 		data: {
+// 			time: new Date(Date.now()).toString(),
+// 			message: payload.notification.body,
+// 		},
+// 	};
 
-	self.registration.showNotification(notificationTitle, notificationOptions);
-});
+// 	self.registration.showNotification(notificationTitle, notificationOptions);
+// });
 
 messaging.setBackgroundMessageHandler((payload) => {
 	console.log('Handling background message', payload);

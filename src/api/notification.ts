@@ -55,11 +55,11 @@ export const sendNotification = async (payload: SendNotificationParams) => {
 	try {
 		const key = process.env.REACT_APP_SERVER_KEY;
 		const to = payload.token;
-		const notification = {
+		const data = {
 			title: payload.title,
 			body: payload.body,
 			icon: '/images/icons/icon-72x72.png',
-			click_action: payload.url,
+			click_action: '/',
 		};
 
 		await fetch('https://fcm.googleapis.com/fcm/send', {
@@ -69,9 +69,9 @@ export const sendNotification = async (payload: SendNotificationParams) => {
 				'Content-Type': 'application/json',
 			},
 			body: JSON.stringify({
-				notification: notification,
+				collapse_key: 'club',
+				data,
 				to: to,
-				collapse_key: 'Updates Available',
 				priority: 'high',
 			}),
 		});
@@ -109,11 +109,11 @@ export const sendNotificationToGroupUsers = async (
 	try {
 		const key = process.env.REACT_APP_SERVER_KEY;
 		const to = payload.tokens;
-		const notification = {
+		const data = {
 			title: payload.title,
 			body: payload.body,
 			icon: '/images/icons/icon-72x72.png',
-			click_action: payload.url,
+			click_action: '/',
 		};
 
 		await fetch('https://fcm.googleapis.com/fcm/send', {
@@ -123,9 +123,9 @@ export const sendNotificationToGroupUsers = async (
 				'Content-Type': 'application/json',
 			},
 			body: JSON.stringify({
-				notification: notification,
+				collapse_key: 'club',
+				data,
 				registration_ids: to,
-				collapse_key: 'Updates Available',
 				priority: 'high',
 			}),
 		});
@@ -145,7 +145,7 @@ export const sendImageNotification = async (
 			body: payload.body,
 			icon: '/images/icons/icon-72x72.png',
 			image: payload.image,
-			click_action: payload.url,
+			click_action: '/',
 		};
 
 		await fetch('https://fcm.googleapis.com/fcm/send', {
@@ -155,9 +155,9 @@ export const sendImageNotification = async (
 				'Content-Type': 'application/json',
 			},
 			body: JSON.stringify({
+				collapse_key: 'club',
 				data,
 				to,
-				collapse_key: 'Updates Available',
 				priority: 'high',
 			}),
 		});

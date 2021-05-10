@@ -15,7 +15,13 @@ import {
 	MESSAGES,
 	USERS,
 } from '../../constants/constants';
-import { DocData, firestore, updateArray } from '../../firebase';
+import {
+	auth,
+	DocData,
+	firestore,
+	increment,
+	updateArray,
+} from '../../firebase';
 import { showAlert } from '../alert/alertActions';
 import { RootState } from '../rootReducer';
 import { Chat, ChatsActions, Message, User } from './../types';
@@ -37,6 +43,15 @@ const fetchChatAction = (payload: DocData | Chat) => ({
 const fetchMessagesAction = (payload: Array<DocData | Message>) => ({
 	type: ChatsActions.FETCH_MESSAGES,
 	payload,
+});
+const setUnreadMessageFirstUserAction = () => ({
+	type: ChatsActions.SET_UNREAD_MESSAGE_FIRST_USER,
+});
+const setUnreadMessageSecondUserAction = () => ({
+	type: ChatsActions.SET_UNREAD_MESSAGE_SECOND_USER,
+});
+const resetNewMessageAction = () => ({
+	type: ChatsActions.RESET_NEW_MESSAGE_STATE,
 });
 
 export const createChat = (
@@ -231,7 +246,7 @@ export const deleteMessage = (
 	chatId: string,
 	messageId: string | undefined
 ): ThunkAction<void, RootState, unknown, AnyAction> => {
-	return async (dispath) => {
+	return async (dispatch) => {
 		try {
 			await firestore
 				.collection(CHATS)
@@ -241,7 +256,88 @@ export const deleteMessage = (
 				.delete();
 		} catch (error) {
 			console.error(error.code, error.message);
-			dispath(showAlert(ALERT_ERROR, 'Не удалось удалить сообщение'));
+			dispatch(showAlert(ALERT_ERROR, 'Не удалось удалить сообщение'));
+		}
+	};
+};
+
+export const setUnreadMessage = (
+	firstUserId: string,
+	secondUserId: string,
+	chatId: string
+): ThunkAction<void, RootState, unknown, AnyAction> => {
+	return async (dispatch) => {
+		try {
+			const currentUserId = auth?.currentUser?.uid;
+
+			if (currentUserId) {
+				if (currentUserId === firstUserId) {
+					await firestore.collection(CHATS).doc(chatId).update({
+						isSecondUserHaveNewMessages: true,
+						secondUserNewMessagesCount: 1,
+					});
+
+					return dispatch(setUnreadMessageSecondUserAction());
+				}
+
+				if (currentUserId === secondUserId) {
+					await firestore.collection(CHATS).doc(chatId).update({
+						isFirstUserHaveNewMessages: true,
+						firstUserNewMessagesCount: 1,
+					});
+
+					return dispatch(setUnreadMessageFirstUserAction());
+				}
+			}
+		} catch (error) {
+			console.error(error.code, error.message);
+		}
+	};
+};
+
+export const updateNewMessageCount = (
+	firstUserId: string,
+	secondUserId: string,
+	chatId: string
+): ThunkAction<void, RootState, unknown, AnyAction> => {
+	return async (dispatch) => {
+		try {
+			const currentUserId = auth?.currentUser?.uid;
+
+			if (currentUserId) {
+				if (currentUserId === firstUserId) {
+					await firestore.collection(CHATS).doc(chatId).update({
+						secondUserNewMessagesCount: increment,
+					});
+				}
+
+				if (currentUserId === secondUserId) {
+					await firestore.collection(CHATS).doc(chatId).update({
+						firstUserNewMessagesCount: increment,
+					});
+				}
+			}
+		} catch (error) {
+			console.error(error.code, error.message);
+		}
+	};
+};
+
+export const resetNewMessage = (
+	chatId: string
+): ThunkAction<void, RootState, unknown, AnyAction> => {
+	return async (dispatch) => {
+		try {
+			await firestore.collection(CHATS).doc(chatId).update({
+				isFirstUserHaveNewMessages: false,
+				firstUserNewMessagesCount: 0,
+				isSecondUserHaveNewMessages: false,
+				secondUserNewMessagesCount: 0,
+			});
+
+			dispatch(resetNewMessageAction());
+		} catch (error) {
+			console.error(error.code, error.message);
 		}
 	};
 };

@@ -6,8 +6,6 @@ const initialState: ChatsState = {
 		createAt: '',
 		isFirstUserHaveNewMessages: false,
 		isSecondUserHaveNewMessages: false,
-		firstUserNewMessagesCount: 0,
-		secondUserNewMessagesCount: 0,
 		users: {
 			firstUser: {
 				_id: '',
@@ -37,19 +35,34 @@ export const chatsReducer = (
 		case ChatsActions.FETCH_CHATS:
 			return { ...state, chats: [...action.payload] };
 		case ChatsActions.FETCH_CHAT:
-			return { ...state, chat: { ...action.payload } };
+			return { ...state, chat: { ...state.chat, ...action.payload } };
 		case ChatsActions.FETCH_MESSAGES:
 			return { ...state, messages: [...action.payload] };
+		case ChatsActions.SET_UNREAD_MESSAGE_FIRST_USER:
+			return {
+				...state,
+				chat: { ...state.chat, isFirstUserHaveNewMessages: true },
+			};
+		case ChatsActions.SET_UNREAD_MESSAGE_SECOND_USER:
+			return {
+				...state,
+				chat: { ...state.chat, isSecondUserHaveNewMessages: true },
+			};
+		case ChatsActions.RESET_NEW_MESSAGE_STATE:
+			return {
+				...state,
+				chat: {
+					...state.chat,
+					isSecondUserHaveNewMessages: false,
+					isFirstUserHaveNewMessages: false,
+				},
+			};
 		case ChatsActions.CREATE_CHAT:
 			return { ...state, chat: { ...action.payload } };
 		case ChatsActions.SHOW_CHAT_LOADING:
 			return { ...state, chatsLoading: true };
 		case ChatsActions.HIDE_CHAT_LOADING:
 			return { ...state, chatsLoading: false };
-		case ChatsActions.HIDE_IMAGE_LOADING:
-			return { ...state, imageLoading: false };
-		case ChatsActions.SHOW_IMAGE_LOADING:
-			return { ...state, imageLoading: true };
 		default:
 			return { ...state };
 	}
