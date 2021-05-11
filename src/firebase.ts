@@ -6,8 +6,9 @@ import 'firebase/storage';
 import 'firebase/messaging';
 import 'firebase/database';
 
+// ADD REACT_APP_FIREBASE_KEY
 const firebaseConfig = {
-	apiKey: 'AIzaSyCRSVHLZqOxH63PZzk7APzCBXzi8vQc0Mc',
+	apiKey: process.env.REACT_APP_FIREBASE_KEY,
 	authDomain: 'social-pwa-afa9f.firebaseapp.com',
 	projectId: 'social-pwa-afa9f',
 	databaseURL:
@@ -24,25 +25,21 @@ if (firebase.apps.length === 0) {
 export type User = firebase.User;
 export type DocData = firebase.firestore.DocumentData | undefined;
 
-export const TIMESTAMP_FIRESTORE = firebase.firestore.FieldValue.serverTimestamp();
+export const TIMESTAMP_FIRESTORE =
+	firebase.firestore.FieldValue.serverTimestamp();
 export const TIMESTAMP_DATABASE = firebase.database.ServerValue.TIMESTAMP;
 export const increment = firebase.firestore.FieldValue.increment(1);
 export const decrement = firebase.firestore.FieldValue.increment(-1);
-export const incrementRatingForLike = firebase.firestore.FieldValue.increment(
-	5
-);
-export const decrementRatingForDislike = firebase.firestore.FieldValue.increment(
-	-5
-);
-export const incrementRatingForCreatePost = firebase.firestore.FieldValue.increment(
-	10
-);
-export const incrementRatingForFullProfile = firebase.firestore.FieldValue.increment(
-	48
-);
-export const incrementRatingForFirstEnter = firebase.firestore.FieldValue.increment(
-	100
-);
+export const incrementRatingForLike =
+	firebase.firestore.FieldValue.increment(5);
+export const decrementRatingForDislike =
+	firebase.firestore.FieldValue.increment(-5);
+export const incrementRatingForCreatePost =
+	firebase.firestore.FieldValue.increment(10);
+export const incrementRatingForFullProfile =
+	firebase.firestore.FieldValue.increment(48);
+export const incrementRatingForFirstEnter =
+	firebase.firestore.FieldValue.increment(100);
 export const updateArray = firebase.firestore.FieldValue;
 
 export const auth = firebase.auth();

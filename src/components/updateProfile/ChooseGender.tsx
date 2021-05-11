@@ -39,9 +39,10 @@ export const ChooseGender: FC<ChooseGenderProps> = ({
 					name='gender1'
 					value={gender}
 					onChange={onChangeGender}>
-					{gendersList.map((gender) => {
+					{gendersList.map((gender, i) => {
 						return (
 							<FormControlLabel
+								key={i}
 								value={gender}
 								control={<Radio />}
 								label={gender}

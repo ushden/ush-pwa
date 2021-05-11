@@ -1,4 +1,4 @@
-import { Button, Divider, List, ListItem } from '@material-ui/core';
+import { Badge, Button, Divider, List, ListItem } from '@material-ui/core';
 import LibraryBooksOutlinedIcon from '@material-ui/icons/LibraryBooksOutlined';
 import MessageOutlinedIcon from '@material-ui/icons/MessageOutlined';
 import AccountCircleOutlinedIcon from '@material-ui/icons/AccountCircleOutlined';
@@ -11,7 +11,8 @@ import { makeStyles } from '@material-ui/styles';
 import { Link, NavLink } from 'react-router-dom';
 import { COLOR_DARK, COLOR_PRIMARY } from '../../constants/constants';
 import { signOut } from '../../store/user/userActions';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { selectChats, selectUser } from '../../store/selectors';
 
 const useStyles = makeStyles({
 	navList: {
@@ -35,6 +36,17 @@ const useStyles = makeStyles({
 export const NavigationLinks = () => {
 	const classes = useStyles();
 	const dispatch = useDispatch();
+	const user = useSelector(selectUser);
+	const chats = useSelector(selectChats)
+		.filter(
+			(chat) =>
+				chat.users.firstUser._id === user._id ||
+				chat.users.secondUser._id === user._id
+		)
+		.filter(
+			(chat) =>
+				chat.isFirstUserHaveNewMessages || chat.isSecondUserHaveNewMessages
+		);
 
 	return (
 		<List className={classes.navList}>
@@ -72,13 +84,18 @@ export const NavigationLinks = () => {
 			</ListItem>
 			<ListItem>
 				<MessageOutlinedIcon className={classes.navListIcon} />
-				<NavLink
-					to='/chats'
-					activeClassName='navigation_link-active'
-					activeStyle={{ backgroundColor: COLOR_PRIMARY, color: '#fff' }}
-					className={classes.navLink}>
-					Чаты
-				</NavLink>
+				<Badge
+					color='secondary'
+					badgeContent={'New'}
+					invisible={chats.length === 0 ? true : false}>
+					<NavLink
+						to='/chats'
+						activeClassName='navigation_link-active'
+						activeStyle={{ backgroundColor: COLOR_PRIMARY, color: '#fff' }}
+						className={classes.navLink}>
+						Чаты
+					</NavLink>
+				</Badge>
 			</ListItem>
 			<ListItem>
 				<PeopleAltOutlinedIcon className={classes.navListIcon} />

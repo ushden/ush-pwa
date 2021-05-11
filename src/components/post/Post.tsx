@@ -78,7 +78,9 @@ export const Post = ({ post, id }: PostPropsType) => {
 	}, [ratingAndCommentCountData?.comments, ratingAndCommentCountData?.rating]);
 
 	useEffect(() => {
-		setIsSavePost(savedPostData?.savedPosts.includes(id));
+		if (savedPostData?.savedPosts) {
+			setIsSavePost(savedPostData?.savedPosts.includes(id));
+		}
 	}, [id, savedPostData?.savedPosts]);
 
 	const handleClickShare = () => {

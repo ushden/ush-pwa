@@ -1,5 +1,5 @@
-import { Fragment, useEffect, useState } from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
+import {useState, useEffect, Fragment} from 'react';
 
 import './App.scss';
 
