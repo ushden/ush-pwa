@@ -6,7 +6,7 @@ import {
 	makeStyles,
 	Typography,
 } from '@material-ui/core';
-import { FC } from 'react';
+import { FC, memo } from 'react';
 import classNames from 'classnames';
 
 import { Message } from '../../store/types';
@@ -61,47 +61,49 @@ interface MessageProps {
 	onMessageClick: (_: any, m: Message) => void;
 }
 
-export const MessageLeft: FC<MessageProps> = ({ message, onMessageClick }) => {
-	const classes = useStyles();
+export const MessageLeft: FC<MessageProps> = memo(
+	({ message, onMessageClick }) => {
+		const classes = useStyles();
 
-	const renderImageMessage = () => {
+		const renderImageMessage = () => {
+			return (
+				<Typography className={classes.imageMessage}>
+					<img
+						src={message.image}
+						alt={message.user.name}
+						className={classes.image}
+					/>
+				</Typography>
+			);
+		};
+
+		const renderTextMessage = () => {
+			return <Typography className={classes.text}>{message.text}</Typography>;
+		};
+
 		return (
-			<Typography className={classes.imageMessage}>
-				<img
-					src={message.image}
-					alt={message.user.name}
-					className={classes.image}
-				/>
-			</Typography>
+			<ListItem
+				className={classNames(classes.bubble, 'anim-scale')}
+				alignItems='center'
+				onClick={(e) => onMessageClick(e, message)}
+				button>
+				<ListItemAvatar className={classes.avatarWrap}>
+					<Avatar
+						src={message.user.photoUrl}
+						className={classes.avatar}
+						alt={message.user.name}
+					/>
+				</ListItemAvatar>
+				<ListItemText className={classes.messageInfo}>
+					<Typography component='span' className={classes.name}>
+						{message.user.name}
+					</Typography>
+					{message.image ? renderImageMessage() : renderTextMessage()}
+					<Typography component='span' className={classes.data}>
+						{message.createdAt}
+					</Typography>
+				</ListItemText>
+			</ListItem>
 		);
-	};
-
-	const renderTextMessage = () => {
-		return <Typography className={classes.text}>{message.text}</Typography>;
-	};
-
-	return (
-		<ListItem
-			className={classNames(classes.bubble, 'anim-scale')}
-			alignItems='center'
-			onClick={(e) => onMessageClick(e, message)}
-			button>
-			<ListItemAvatar className={classes.avatarWrap}>
-				<Avatar
-					src={message.user.photoUrl}
-					className={classes.avatar}
-					alt={message.user.name}
-				/>
-			</ListItemAvatar>
-			<ListItemText className={classes.messageInfo}>
-				<Typography component='span' className={classes.name}>
-					{message.user.name}
-				</Typography>
-				{message.image ? renderImageMessage() : renderTextMessage()}
-				<Typography component='span' className={classes.data}>
-					{message.createdAt}
-				</Typography>
-			</ListItemText>
-		</ListItem>
-	);
-};
+	}
+);

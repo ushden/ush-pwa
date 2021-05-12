@@ -1,12 +1,13 @@
 import Picker from 'emoji-picker-react';
 import { Box } from '@material-ui/core';
+import { memo } from 'react';
 
 interface EmojiPropsType {
 	onEmojiClickHandle: (_: any, emojiObject: any) => void;
 	visible: boolean;
 }
 
-export const Emoji = ({ onEmojiClickHandle, visible }: EmojiPropsType) => {
+export const Emoji = memo(({ onEmojiClickHandle, visible }: EmojiPropsType) => {
 	return (
 		<Box
 			component='div'
@@ -29,4 +30,4 @@ export const Emoji = ({ onEmojiClickHandle, visible }: EmojiPropsType) => {
 			/>
 		</Box>
 	);
-};
+});

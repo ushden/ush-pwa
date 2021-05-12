@@ -1,6 +1,6 @@
 import { Box, Button, makeStyles, Paper, Typography } from '@material-ui/core';
 import Skeleton from '@material-ui/lab/Skeleton';
-import { FC, ReactElement } from 'react';
+import { FC, memo, ReactElement } from 'react';
 import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router';
 
@@ -56,77 +56,82 @@ interface ProfileHeaderProps {
 	isSubscribe?: boolean | undefined;
 }
 
-export const ProfileHeader: FC<ProfileHeaderProps> = ({
-	onToggleModal,
-	user,
-	currentUserId,
-	onClickWrite,
-	onSubscribe,
-	isSubscribe,
-}): ReactElement => {
-	const classes = useStyles();
-	const dispatch = useDispatch();
-	const history = useHistory();
+export const ProfileHeader: FC<ProfileHeaderProps> = memo(
+	({
+		onToggleModal,
+		user,
+		currentUserId,
+		onClickWrite,
+		onSubscribe,
+		isSubscribe,
+	}): ReactElement => {
+		const classes = useStyles();
+		const dispatch = useDispatch();
+		const history = useHistory();
 
-	return (
-		<Paper variant='elevation' elevation={3} className={classes.profileHeader}>
-			<Box
-				component='div'
-				className={classes.userAvatarBlock}
-				onClick={onToggleModal}>
-				<UserAvatar src={user?.photoUrl} alt={user?.name} />
-			</Box>
-			<Box component='div' className={classes.userNameWrap}>
-				{user?.name ? (
+		return (
+			<Paper
+				variant='elevation'
+				elevation={3}
+				className={classes.profileHeader}>
+				<Box
+					component='div'
+					className={classes.userAvatarBlock}
+					onClick={onToggleModal}>
+					<UserAvatar src={user?.photoUrl} alt={user?.name} />
+				</Box>
+				<Box component='div' className={classes.userNameWrap}>
+					{user?.name ? (
+						<Typography
+							align='center'
+							component='h3'
+							className={classes.profileUserName}>
+							{user?.name}
+						</Typography>
+					) : (
+						<Skeleton variant='text' className={classes.skeletonText} />
+					)}
+
 					<Typography
 						align='center'
-						component='h3'
-						className={classes.profileUserName}>
-						{user?.name}
+						component='span'
+						className={classes.userRole}>
+						Admninistrator
 					</Typography>
+				</Box>
+				{currentUserId === user._id ? (
+					<Box component='div' className={classes.btnWrap}>
+						<Button
+							variant='outlined'
+							className={classes.btn}
+							onClick={() => history.push('/update-profile')}>
+							Редактировать
+						</Button>
+						<Button
+							variant='outlined'
+							className={classes.btn}
+							onClick={() => dispatch(signOut())}>
+							Выйти
+						</Button>
+					</Box>
 				) : (
-					<Skeleton variant='text' className={classes.skeletonText} />
+					<Box component='div' className={classes.btnWrap}>
+						<Button
+							variant='outlined'
+							className={classes.btn}
+							onClick={onClickWrite}>
+							Написать
+						</Button>
+						<Button
+							variant='outlined'
+							color={isSubscribe ? 'primary' : 'default'}
+							className={classes.btn}
+							onClick={onSubscribe}>
+							{isSubscribe ? 'Отписаться' : 'Подписаться'}
+						</Button>
+					</Box>
 				)}
-
-				<Typography
-					align='center'
-					component='span'
-					className={classes.userRole}>
-					Admninistrator
-				</Typography>
-			</Box>
-			{currentUserId === user._id ? (
-				<Box component='div' className={classes.btnWrap}>
-					<Button
-						variant='outlined'
-						className={classes.btn}
-						onClick={() => history.push('/update-profile')}>
-						Редактировать
-					</Button>
-					<Button
-						variant='outlined'
-						className={classes.btn}
-						onClick={() => dispatch(signOut())}>
-						Выйти
-					</Button>
-				</Box>
-			) : (
-				<Box component='div' className={classes.btnWrap}>
-					<Button
-						variant='outlined'
-						className={classes.btn}
-						onClick={onClickWrite}>
-						Написать
-					</Button>
-					<Button
-						variant='outlined'
-						color={isSubscribe ? 'primary' : 'default'}
-						className={classes.btn}
-						onClick={onSubscribe}>
-						{isSubscribe ? 'Отписаться' : 'Подписаться'}
-					</Button>
-				</Box>
-			)}
-		</Paper>
-	);
-};
+			</Paper>
+		);
+	}
+);

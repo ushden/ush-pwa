@@ -23,7 +23,7 @@ const initialState: ChatsState = {
 	},
 	chats: [],
 	messages: [],
-	chatsLoading: false,
+	chatsLoading: true,
 	imageLoading: false,
 };
 

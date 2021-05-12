@@ -11,8 +11,8 @@ import { makeStyles } from '@material-ui/styles';
 import { Link, NavLink } from 'react-router-dom';
 import { COLOR_DARK, COLOR_PRIMARY } from '../../constants/constants';
 import { signOut } from '../../store/user/userActions';
-import { useDispatch, useSelector } from 'react-redux';
-import { selectChats, selectUser } from '../../store/selectors';
+import { useDispatch } from 'react-redux';
+import { useNewMessageStateGlobal } from '../../hooks/useNewMessageStateGlobal';
 
 const useStyles = makeStyles({
 	navList: {
@@ -36,17 +36,7 @@ const useStyles = makeStyles({
 export const NavigationLinks = () => {
 	const classes = useStyles();
 	const dispatch = useDispatch();
-	const user = useSelector(selectUser);
-	const chats = useSelector(selectChats)
-		.filter(
-			(chat) =>
-				chat.users.firstUser._id === user._id ||
-				chat.users.secondUser._id === user._id
-		)
-		.filter(
-			(chat) =>
-				chat.isFirstUserHaveNewMessages || chat.isSecondUserHaveNewMessages
-		);
+	const isUserHaveNewMessage = useNewMessageStateGlobal();
 
 	return (
 		<List className={classes.navList}>
@@ -87,7 +77,7 @@ export const NavigationLinks = () => {
 				<Badge
 					color='secondary'
 					badgeContent={'New'}
-					invisible={chats.length === 0 ? true : false}>
+					invisible={!isUserHaveNewMessage}>
 					<NavLink
 						to='/chats'
 						activeClassName='navigation_link-active'

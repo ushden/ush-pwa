@@ -7,6 +7,7 @@ import ShareIcon from '@material-ui/icons/ShareOutlined';
 import { makeStyles, Typography, Box, IconButton } from '@material-ui/core';
 import { Message } from '../../store/types';
 import { COLOR_PRIMARY } from '../../constants/constants';
+import { memo } from 'react';
 
 interface ModalProps {
 	open: boolean;
@@ -50,52 +51,49 @@ const useStyles = makeStyles({
 	},
 });
 
-export const MessageModal = ({
-	open,
-	onClose,
-	message,
-	onDeleteClick,
-}: ModalProps) => {
-	const classes = useStyles();
+export const MessageModal = memo(
+	({ open, onClose, message, onDeleteClick }: ModalProps) => {
+		const classes = useStyles();
 
-	return (
-		<Dialog open={open} maxWidth='xl'>
-			<DialogContent>
-				{message?.text ? (
-					<Box className={classes.messageInfo}>
-						<Typography component='span' className={classes.name}>
-							{message.user.name}
-						</Typography>
-						<Typography component='span' className={classes.text}>
-							{message.text}
-						</Typography>
-						<Typography component='span' className={classes.data}>
-							{message.createdAt}
-						</Typography>
+		return (
+			<Dialog open={open} maxWidth='xl'>
+				<DialogContent>
+					{message?.text ? (
+						<Box className={classes.messageInfo}>
+							<Typography component='span' className={classes.name}>
+								{message.user.name}
+							</Typography>
+							<Typography component='span' className={classes.text}>
+								{message.text}
+							</Typography>
+							<Typography component='span' className={classes.data}>
+								{message.createdAt}
+							</Typography>
+						</Box>
+					) : (
+						<img
+							src={message?.image}
+							alt={message?.user.name}
+							className={classes.img}
+						/>
+					)}
+				</DialogContent>
+				<DialogActions className={classes.dialogActions}>
+					<Box component='div'>
+						<IconButton onClick={onDeleteClick}>
+							<DeleteIcon className={classes.deleteBtn} />
+						</IconButton>
+						<IconButton>
+							<ShareIcon className={classes.shareBtn} />
+						</IconButton>
 					</Box>
-				) : (
-					<img
-						src={message?.image}
-						alt={message?.user.name}
-						className={classes.img}
-					/>
-				)}
-			</DialogContent>
-			<DialogActions className={classes.dialogActions}>
-				<Box component='div'>
-					<IconButton onClick={onDeleteClick}>
-						<DeleteIcon className={classes.deleteBtn} />
-					</IconButton>
-					<IconButton>
-						<ShareIcon className={classes.shareBtn} />
-					</IconButton>
-				</Box>
-				<Box component='div'>
-					<Button onClick={onClose} variant='text'>
-						Закрыть
-					</Button>
-				</Box>
-			</DialogActions>
-		</Dialog>
-	);
-};
+					<Box component='div'>
+						<Button onClick={onClose} variant='text'>
+							Закрыть
+						</Button>
+					</Box>
+				</DialogActions>
+			</Dialog>
+		);
+	}
+);

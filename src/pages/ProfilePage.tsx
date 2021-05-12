@@ -22,6 +22,7 @@ import { SubscribeListModal } from '../components/SubscribeListModal';
 import { fetchUsers } from '../store/users/usersActions';
 import { FollowersListModal } from '../components/FollowersListModal';
 import { UserInfo } from '../components/usersPage/UserInfo';
+import { RatingModal } from '../components/RatingModal';
 
 export const ProfilePage = () => {
 	const dispatch = useDispatch();
@@ -46,12 +47,11 @@ export const ProfilePage = () => {
 	const followers = user.followers;
 
 	const [modalVisible, setModalVisible] = useState<boolean>(false);
-	const [modalSubscirbeVisible, setModalSubscirbeVisible] = useState<boolean>(
-		false
-	);
-	const [modalFollowersVisible, setModalFollowersVisible] = useState<boolean>(
-		false
-	);
+	const [modalSubscirbeVisible, setModalSubscirbeVisible] =
+		useState<boolean>(false);
+	const [modalFollowersVisible, setModalFollowersVisible] =
+		useState<boolean>(false);
+	const [ratingModalVisible, setRatingModalVisible] = useState<boolean>(false);
 
 	const handleToggleModal = () => {
 		setModalVisible((visible) => !visible);
@@ -92,9 +92,18 @@ export const ProfilePage = () => {
 		setModalFollowersVisible((visible) => !visible);
 	};
 
+	const handleRatingModalVisible = () => {
+		setRatingModalVisible((visible) => !visible);
+	};
+
 	return (
 		<Box component='section'>
 			<NavigationPanel title='Профиль' />
+			<RatingModal
+				rating={user.rating}
+				visible={ratingModalVisible}
+				onClose={handleRatingModalVisible}
+			/>
 			<SubscribeListModal
 				visible={modalSubscirbeVisible}
 				onClose={handleSubscribersListClick}
@@ -118,6 +127,7 @@ export const ProfilePage = () => {
 				followers={followers}
 				onSubsribersClick={handleSubscribersListClick}
 				onFollowersClick={handleFollowersModalVisible}
+				onRatingClick={handleRatingModalVisible}
 			/>
 			<Box>
 				{posts.map((post) => (

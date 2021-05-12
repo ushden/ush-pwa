@@ -21,11 +21,13 @@ export const ChatPage = () => {
 
 	useEffect(() => {
 		dispatch(fetchChat(id));
+	}, [dispatch, id]);
 
+	useEffect(() => {
 		if (!user._id) {
 			dispatch(getUser());
 		}
-	}, [dispatch, id, user._id]);
+	}, [dispatch, user._id]);
 
 	return (
 		<Box component='section'>

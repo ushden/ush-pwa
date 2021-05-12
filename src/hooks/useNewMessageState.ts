@@ -7,9 +7,8 @@ export const useNewMessageState = (
 	secondUserId: string,
 	chatId: string
 ) => {
-	const [isHaveNewMessage, setIsHaveNewMessage] = useState<boolean | null>(
-		null
-	);
+	const [isHaveNewMessage, setIsHaveNewMessage] =
+		useState<boolean | null>(null);
 	const [newMessageCount, setNewMessageCount] = useState<number | null>(null);
 
 	useEffect(() => {

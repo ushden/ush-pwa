@@ -67,7 +67,7 @@ export const ListChatItem = ({ chat }: ListChatItemProps) => {
 					padding: '0.2rem 0.5rem',
 					color: '#fff',
 					borderRadius: '0.5rem',
-					fontSize: '0.8rem',
+					fontSize: '0.7rem',
 				}}>
 				У вас {newMessageCount} новых сообщений
 			</span>

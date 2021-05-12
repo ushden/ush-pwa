@@ -27,6 +27,8 @@ import { Post } from '../components/post/Post';
 import { fetchToken, sendNotification } from '../api/notification';
 import { SubscribeListModal } from '../components/SubscribeListModal';
 import { FollowersListModal } from '../components/FollowersListModal';
+import { UserInfo } from '../components/usersPage/UserInfo';
+import { RatingModal } from '../components/RatingModal';
 
 export const UserProfilePage = () => {
 	const history = useHistory();
@@ -56,12 +58,11 @@ export const UserProfilePage = () => {
 
 	const [modalVisible, setModalVisible] = useState<boolean>(false);
 	const [replaceChatId, setReplaceChatId] = useState<null | string>(null);
-	const [visibleSubscribeModal, setVisibleSubscribeModal] = useState<boolean>(
-		false
-	);
-	const [visibleFollowersModal, setVisibleFollowersModal] = useState<boolean>(
-		false
-	);
+	const [visibleSubscribeModal, setVisibleSubscribeModal] =
+		useState<boolean>(false);
+	const [visibleFollowersModal, setVisibleFollowersModal] =
+		useState<boolean>(false);
+	const [ratingModalVisible, setRatingModalVisible] = useState<boolean>(false);
 
 	const isChatCreated = useMemo(() => {
 		return user.chatWithUsers?.some((chat) => {
@@ -161,9 +162,18 @@ export const UserProfilePage = () => {
 		setVisibleFollowersModal((visible) => !visible);
 	};
 
+	const handleRatingModalClick = () => {
+		setRatingModalVisible((visible) => !visible);
+	};
+
 	return (
 		<Box component='section'>
 			<NavigationPanel title='' backButton={true} />
+			<RatingModal
+				visible={ratingModalVisible}
+				onClose={handleRatingModalClick}
+				rating={anotherUser.rating}
+			/>
 			<SubscribeListModal
 				visible={visibleSubscribeModal}
 				onClose={handleSubscribersListClick}
@@ -182,6 +192,7 @@ export const UserProfilePage = () => {
 				onSubscribe={handleSubscribeClick}
 				isSubscribe={isSubscribe}
 			/>
+			<UserInfo user={anotherUser} />
 			<ProfileBody
 				posts={posts}
 				rating={anotherUser.rating}
@@ -189,6 +200,7 @@ export const UserProfilePage = () => {
 				followers={followers}
 				onSubsribersClick={handleSubscribersListClick}
 				onFollowersClick={handleFollowersListClick}
+				onRatingClick={handleRatingModalClick}
 			/>
 			<Box>
 				{posts.length === 0 ? (

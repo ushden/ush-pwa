@@ -53,7 +53,7 @@ export const ChatsPage = () => {
 	return (
 		<Box component='section'>
 			<NavigationPanel title='Чаты' />
-			{loading ? (
+			{loading && chats.length === 0 ? (
 				<Loader />
 			) : (
 				<Box>

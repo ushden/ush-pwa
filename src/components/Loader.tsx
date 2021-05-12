@@ -1,7 +1,8 @@
 import { Box } from '@material-ui/core';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import { FC, ReactElement } from 'react';
 
-export const Loader = () => {
+export const Loader: FC = (): ReactElement => {
 	return (
 		<Box
 			component='div'

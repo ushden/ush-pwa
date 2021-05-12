@@ -13,7 +13,7 @@ import EmojiPeopleOutlinedIcon from '@material-ui/icons/EmojiPeopleOutlined';
 
 import { COLOR_PRIMARY } from '../../constants/constants';
 import { PostType } from '../../store/types';
-import { FC, ReactElement } from 'react';
+import { FC, memo, ReactElement } from 'react';
 
 const useStyles = makeStyles({
 	listItem: {
@@ -40,62 +40,66 @@ interface ProfileBodyProps {
 	followers: number | undefined;
 	onSubsribersClick: () => void;
 	onFollowersClick: () => void;
+	onRatingClick: () => void;
 }
 
-export const ProfileBody: FC<ProfileBodyProps> = ({
-	posts,
-	rating,
-	subscribs,
-	followers,
-	onSubsribersClick,
-	onFollowersClick,
-}): ReactElement => {
-	const classes = useStyles();
+export const ProfileBody: FC<ProfileBodyProps> = memo(
+	({
+		posts,
+		rating,
+		subscribs,
+		followers,
+		onSubsribersClick,
+		onFollowersClick,
+		onRatingClick,
+	}): ReactElement => {
+		const classes = useStyles();
 
-	return (
-		<Paper variant='elevation' elevation={3}>
-			<List>
-				<ListItem className={classes.listItem} button>
-					<Typography component='p' className={classes.listItemTitle}>
-						<PostAddOutlinedIcon className={classes.listItemIcon} />
-						Посты
-					</Typography>
-					<Typography component='span'>{posts.length}</Typography>
-				</ListItem>
-				<Divider />
-				<ListItem className={classes.listItem} button>
-					<Typography component='p' className={classes.listItemTitle}>
-						<StarsOutlinedIcon className={classes.listItemIcon} />
-						Рейтинг
-					</Typography>
-					<Typography component='span'>
-						{rating ? Math.floor(rating * 0.48) : 0}
-					</Typography>
-				</ListItem>
-				<Divider />
-				<ListItem
-					className={classes.listItem}
-					button
-					onClick={onFollowersClick}>
-					<Typography component='p' className={classes.listItemTitle}>
-						<EmojiPeopleOutlinedIcon className={classes.listItemIcon} />
-						Подписчиков
-					</Typography>
-					<Typography component='span'>{followers || 0}</Typography>
-				</ListItem>
-				<Divider />
-				<ListItem
-					className={classes.listItem}
-					button
-					onClick={onSubsribersClick}>
-					<Typography component='p' className={classes.listItemTitle}>
-						<SupervisorAccountOutlinedIcon className={classes.listItemIcon} />
-						Подписок
-					</Typography>
-					<Typography component='span'>{subscribs || 0}</Typography>
-				</ListItem>
-				<Divider />
-			</List>
-		</Paper>
-	);
-};
+		return (
+			<Paper variant='elevation' elevation={3}>
+				<List>
+					<ListItem className={classes.listItem} button>
+						<Typography component='p' className={classes.listItemTitle}>
+							<PostAddOutlinedIcon className={classes.listItemIcon} />
+							Посты
+						</Typography>
+						<Typography component='span'>{posts.length}</Typography>
+					</ListItem>
+					<Divider />
+					<ListItem className={classes.listItem} button onClick={onRatingClick}>
+						<Typography component='p' className={classes.listItemTitle}>
+							<StarsOutlinedIcon className={classes.listItemIcon} />
+							Рейтинг
+						</Typography>
+						<Typography component='span'>
+							{rating ? Math.floor(rating * 0.48) : 0}
+						</Typography>
+					</ListItem>
+					<Divider />
+					<ListItem
+						className={classes.listItem}
+						button
+						onClick={onFollowersClick}>
+						<Typography component='p' className={classes.listItemTitle}>
+							<EmojiPeopleOutlinedIcon className={classes.listItemIcon} />
+							Подписчиков
+						</Typography>
+						<Typography component='span'>{followers || 0}</Typography>
+					</ListItem>
+					<Divider />
+					<ListItem
+						className={classes.listItem}
+						button
+						onClick={onSubsribersClick}>
+						<Typography component='p' className={classes.listItemTitle}>
+							<SupervisorAccountOutlinedIcon className={classes.listItemIcon} />
+							Подписок
+						</Typography>
+						<Typography component='span'>{subscribs || 0}</Typography>
+					</ListItem>
+					<Divider />
+				</List>
+			</Paper>
+		);
+	}
+);

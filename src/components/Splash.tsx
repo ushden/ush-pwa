@@ -1,5 +1,6 @@
 import { Box, makeStyles } from '@material-ui/core';
 import classNames from 'classnames';
+import { memo, ReactElement } from 'react';
 
 interface SplashProps {
 	visible: boolean;
@@ -30,11 +31,10 @@ const useStyles = makeStyles({
 		visibility: 'hidden',
 		transform: 'translateX(-500px)',
 		transition: '0.8s',
-		// display: 'none',
 	},
 });
 
-export const Splash = ({ visible }: SplashProps) => {
+export const Splash = memo(({ visible }: SplashProps): ReactElement => {
 	const classes = useStyles();
 
 	return (
@@ -48,4 +48,4 @@ export const Splash = ({ visible }: SplashProps) => {
 			/>
 		</Box>
 	);
-};
+});
