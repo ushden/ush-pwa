@@ -1,12 +1,13 @@
 import { useState } from 'react';
 import { Box, Container } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
+
 import { COLOR_EXTRA_LIGHT } from '../constants/constants';
 import { SignInForm } from '../components/signInPage/SignInForm';
 import { signInUserWithEmailAndPassword } from '../store/user/userActions';
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '../store/rootReducer';
 import { Loader } from '../components/Loader';
+import { selectUserLoading } from '../store/selectors';
 
 const useStyles = makeStyles({
 	section: {
@@ -37,7 +38,7 @@ export const SignInPage = (): React.ReactElement => {
 	const [email, setEmail] = useState<string>('');
 	const [pass, setPass] = useState<string>('');
 
-	const loading = useSelector((state: RootState) => state.user.userLoading);
+	const loading = useSelector(selectUserLoading);
 
 	const handleClickSignInUser = () => {
 		dispatch(signInUserWithEmailAndPassword(email, pass));

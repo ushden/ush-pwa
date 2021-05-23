@@ -15,10 +15,6 @@ export default function App() {
 	const user = useUserState();
 	const [showSplash, setShowSplash] = useState(true);
 
-	const handleOnLoad = () => {
-		setTimeout(() => setShowSplash(false), 2000);
-	};
-
 	useEffect(() => {
 		const isOfflineForDatabase = {
 			status: 'offline',
@@ -52,12 +48,6 @@ export default function App() {
 	}, [user?.uid]);
 
 	useEffect(() => {
-		window.addEventListener('load', handleOnLoad);
-
-		return () => window.removeEventListener('load', handleOnLoad);
-	}, []);
-
-	useEffect(() => {
 		if (user) {
 			firestore
 				.collection(USERS)
@@ -67,6 +57,10 @@ export default function App() {
 				});
 		}
 	}, [user]);
+
+	useEffect(() => {
+		setTimeout(() => setShowSplash(false), 4000);
+	}, []);
 
 	return (
 		<Router>

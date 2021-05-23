@@ -21,7 +21,7 @@ const initialState: UserState = {
 		savedPosts: [],
 		chatWithUsers: [],
 	},
-	userLoading: true,
+	userLoading: false,
 };
 
 export const userReducer = (
