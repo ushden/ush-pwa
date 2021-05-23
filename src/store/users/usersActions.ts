@@ -1,6 +1,6 @@
 import { AnyAction } from 'redux';
 import { ThunkAction } from 'redux-thunk';
-import { ALERT_ERROR, ERROR_MESSAGE, USERS } from '../../constants/constants';
+import { ALERT_ERROR, USERS } from '../../constants/constants';
 import { DocData, firestore } from '../../firebase';
 import { showAlert } from '../alert/alertActions';
 import { RootState } from '../rootReducer';
@@ -44,7 +44,9 @@ export const fetchUsers = (): ThunkAction<
 		} catch (error) {
 			console.error(error.code, error.message);
 			dispatch(hideUsersLoading());
-			dispatch(showAlert(ALERT_ERROR, ERROR_MESSAGE));
+			dispatch(
+				showAlert(ALERT_ERROR, 'Произошла ошибка при загрузке пользователей :(')
+			);
 		}
 	};
 };
@@ -64,7 +66,9 @@ export const fetchAnotherUser = (
 		} catch (error) {
 			console.error(error.code, error.message);
 			dispatch(hideUsersLoading());
-			dispatch(showAlert(ALERT_ERROR, ERROR_MESSAGE));
+			dispatch(
+				showAlert(ALERT_ERROR, 'Произошла ошибка при загрузке пользователя :(')
+			);
 		}
 	};
 };

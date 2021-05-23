@@ -18,7 +18,6 @@ export const HIDE_ALERT = 'HIDE_ALERT';
 export const EMAIL_VALID_ERROR = 'Ошибка в поле email';
 export const PASS_VALID_ERROR = 'Ошибка в поле пароля';
 export const NAME_VALID_ERROR = 'Введите имя';
-export const ERROR_MESSAGE = 'Произошла ошибка :(';
 
 export const USERS = 'users';
 export const STORAGE_AVATARS = 'avatars';

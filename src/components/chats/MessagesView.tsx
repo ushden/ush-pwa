@@ -11,7 +11,7 @@ import {
 } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchToken, sendNotification } from '../../api/notification';
-import { CHATS, MESSAGES } from '../../constants/constants';
+import { CHATS, MESSAGES, USERS } from '../../constants/constants';
 import { firestore } from '../../firebase';
 import { useNewMessageState } from '../../hooks/useNewMessageState';
 import {
@@ -138,7 +138,7 @@ export const MessagesView: FC<MessagesViewProps> = memo(
 		};
 
 		const handleSendMessage = async () => {
-			if (inputValue) {
+			if (inputValue && user._id) {
 				dispatch(sendMessage(chatId, inputValue, user));
 			}
 
@@ -178,6 +178,15 @@ export const MessagesView: FC<MessagesViewProps> = memo(
 				const secondUserId = chat.users.secondUser._id;
 
 				dispatch(updateNewMessageCount(firstUserId, secondUserId, chatId));
+			}
+
+			if (user._id) {
+				firestore
+					.collection(USERS)
+					.doc(user._id)
+					.update({
+						isLogIn: { lastChanged: Date.now() },
+					});
 			}
 		};
 
@@ -246,7 +255,6 @@ export const MessagesView: FC<MessagesViewProps> = memo(
 						})}
 					</List>
 				</CardContent>
-				<span ref={messagesEndRef} className={classes.endMessageBlock}></span>
 				<SendMessageForm
 					inputValue={inputValue}
 					onChangeMessageInput={handleMessageInputChange}
@@ -257,6 +265,7 @@ export const MessagesView: FC<MessagesViewProps> = memo(
 					visibleEmoji={visibleEmoji}
 					setVisibleEmoji={setVisibleEmoji}
 				/>
+				<span ref={messagesEndRef} className={classes.endMessageBlock}></span>
 			</Card>
 		);
 	}

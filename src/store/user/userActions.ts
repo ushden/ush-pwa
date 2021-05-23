@@ -172,7 +172,7 @@ export const subscribeOnUser = (
 			}
 		} catch (error) {
 			console.error(error.code, error.message);
-			dispatch(showAlert(ALERT_ERROR, 'Произошла ошибка :('));
+			dispatch(showAlert(ALERT_ERROR, 'Произошла ошибка при подписке :('));
 		}
 	};
 };
@@ -218,7 +218,7 @@ export const unsubscribeOnUser = (
 			}
 		} catch (error) {
 			console.error(error.code, error.message);
-			dispatch(showAlert(ALERT_ERROR, 'Произошла ошибка :('));
+			dispatch(showAlert(ALERT_ERROR, 'Произошла ошибка при отписке :('));
 		}
 	};
 };

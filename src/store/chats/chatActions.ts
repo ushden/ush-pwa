@@ -11,7 +11,6 @@ import {
 	ALERT_INFO,
 	ALERT_SUCCESS,
 	CHATS,
-	ERROR_MESSAGE,
 	MESSAGES,
 	USERS,
 } from '../../constants/constants';
@@ -86,7 +85,13 @@ export const createChat = (
 		} catch (error) {
 			console.error(error.code, error.message);
 			dispatch(hideChatsLoadingAction());
-			setTimeout(() => dispatch(showAlert(ALERT_ERROR, ERROR_MESSAGE)), 500);
+			setTimeout(
+				() =>
+					dispatch(
+						showAlert(ALERT_ERROR, 'Произошла ошибка при создании чата')
+					),
+				500
+			);
 		}
 	};
 };
@@ -115,7 +120,13 @@ export const fetchChats = (): ThunkAction<
 		} catch (error) {
 			console.error(error.code, error.message);
 			dispatch(hideChatsLoadingAction());
-			setTimeout(() => dispatch(showAlert(ALERT_ERROR, ERROR_MESSAGE)), 500);
+			setTimeout(
+				() =>
+					dispatch(
+						showAlert(ALERT_ERROR, 'Произошла ошибка при загрузке чатов :(')
+					),
+				500
+			);
 		}
 	};
 };
@@ -133,7 +144,7 @@ export const fetchChat = (
 			setTimeout(() => dispatch(hideChatsLoadingAction()), 500);
 		} catch (error) {
 			console.error(error.code, error.message);
-			dispatch(showAlert(ALERT_ERROR, ERROR_MESSAGE));
+			dispatch(showAlert(ALERT_ERROR, 'Произошла ошибка при загрузке чата'));
 			setTimeout(() => dispatch(hideChatsLoadingAction()), 500);
 		}
 	};
@@ -228,7 +239,7 @@ export const sendImageMessage = (
 
 			const notificationData: SendImageNotificationParams = {
 				token,
-				title: `${user.name}отправил(-ла) Вам изображение:`,
+				title: `${user.name} отправил(-ла) Вам изображение:`,
 				body: payload.createdAt,
 				url: window.location.href,
 				image,

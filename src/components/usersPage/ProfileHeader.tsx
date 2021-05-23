@@ -3,6 +3,8 @@ import Skeleton from '@material-ui/lab/Skeleton';
 import { FC, memo, ReactElement } from 'react';
 import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router';
+import TimeAgo from 'timeago-react';
+import { useUserStatus } from '../../hooks/useUserStatus';
 
 import { User } from '../../store/types';
 import { signOut } from '../../store/user/userActions';
@@ -69,6 +71,8 @@ export const ProfileHeader: FC<ProfileHeaderProps> = memo(
 		const dispatch = useDispatch();
 		const history = useHistory();
 
+		const status = useUserStatus(user._id);
+
 		return (
 			<Paper
 				variant='elevation'
@@ -96,7 +100,13 @@ export const ProfileHeader: FC<ProfileHeaderProps> = memo(
 						align='center'
 						component='span'
 						className={classes.userRole}>
-						Admninistrator
+						{status === 'online' ? (
+							<Typography style={{ color: 'green' }}>Online</Typography>
+						) : !user.isLogIn?.lastChanged ? (
+							''
+						) : (
+							<TimeAgo datetime={user.isLogIn?.lastChanged as string} />
+						)}
 					</Typography>
 				</Box>
 				{currentUserId === user._id ? (

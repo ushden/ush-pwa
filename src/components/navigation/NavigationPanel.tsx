@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from 'react';
+import React, { Fragment, ReactElement, useState } from 'react';
 import AppBar from '@material-ui/core/AppBar';
 import useScrollTrigger from '@material-ui/core/useScrollTrigger';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -26,7 +26,7 @@ const useStyles = makeStyles({
 });
 
 interface PropsType {
-	title: string;
+	title: string | ReactElement;
 	backButton?: boolean;
 }
 

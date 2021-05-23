@@ -220,7 +220,9 @@ export const deletePost = (
 			dispatch(showAlert(ALERT_SUCCESS, 'Пост успешно удален :)'));
 		} catch (error) {
 			console.error(error.code, error.message);
-			dispatch(showAlert(ALERT_ERROR, 'Произошла ошибка :('));
+			dispatch(
+				showAlert(ALERT_ERROR, 'Произошла ошибка при удалении поста :(')
+			);
 		}
 	};
 };
@@ -244,7 +246,9 @@ export const savePost = (
 			dispatch(showAlert(ALERT_INFO, 'Пост сохранен'));
 		} catch (error) {
 			console.error(error.code, error.message);
-			dispatch(showAlert(ALERT_ERROR, 'Произошла ошибка :('));
+			dispatch(
+				showAlert(ALERT_ERROR, 'Произошла ошибка при сохранении поста :(')
+			);
 		}
 	};
 };
@@ -268,7 +272,12 @@ export const unSavePost = (
 			dispatch(showAlert(ALERT_INFO, 'Пост больше не сохранен'));
 		} catch (error) {
 			console.error(error.code, error.message);
-			dispatch(showAlert(ALERT_ERROR, 'Произошла ошибка :('));
+			dispatch(
+				showAlert(
+					ALERT_ERROR,
+					'Произошла ошибка удалении поста с сохранненых :('
+				)
+			);
 		}
 	};
 };

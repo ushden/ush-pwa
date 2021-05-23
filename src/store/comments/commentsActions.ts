@@ -130,7 +130,9 @@ export const deleteComment = (
 			dispatch(showAlert(ALERT_SUCCESS, 'Комментарий успешно удален :)'));
 		} catch (error) {
 			console.error(error.code, error.message);
-			dispatch(showAlert(ALERT_ERROR, 'Произошла ошибка :('));
+			dispatch(
+				showAlert(ALERT_ERROR, 'Произошла ошибка при удалении комментария :(')
+			);
 		}
 	};
 };
