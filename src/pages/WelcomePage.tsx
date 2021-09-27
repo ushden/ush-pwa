@@ -87,27 +87,30 @@ export const WelcomePage = () => {
 							className={classes.logo}
 						/>
 						<Typography component='h2' className={classes.title}>
-							Добро пожаловать!
+							Welcome!
 						</Typography>
 						<Typography variant='body1'>
-							В приложение Club 48. Здесь я может напишу какой-то крутой текст.
-							Что в приложении будет, какие возможности будут и еще что-то
-							придумаю
+							A social network where you can chat with friends, create and rate
+							posts, write comments and mark your favorites, receive
+							notifications, subscribe to people that interest you.
 						</Typography>
+						<Box component='h3'>If you do not want to register</Box>
+						<Box component='p'>Login: test@test.com</Box>
+						<Box component='p'>Password: 123456</Box>
 						<Box component='div' className={classes.buttons}>
 							<Button
 								variant='contained'
 								className={classes.btnLog}
 								onClick={handleClickSignIn}
 								endIcon={<TouchAppOutlinedIcon />}>
-								Войти
+								Sign In
 							</Button>
 							<Button
 								variant='outlined'
 								onClick={handleClickSignUp}
 								className={classes.btnReg}
 								endIcon={<InsertEmoticonOutlinedIcon />}>
-								Регистрация
+								Sign Up
 							</Button>
 						</Box>
 					</Box>

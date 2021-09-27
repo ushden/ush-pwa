@@ -79,6 +79,8 @@ export const InstalModal = () => {
 		if (userChoice.outcome === 'accepted') {
 			setVisibleModal(false);
 			dispatch(showAlert(ALERT_SUCCESS, 'Спасибо за установку :)'));
+		} else {
+			setVisibleModal(false);
 		}
 	};
 
@@ -93,11 +95,11 @@ export const InstalModal = () => {
 			</DialogTitle>
 			<DialogContent>
 				<Typography component='h2' align='center' className={classes.helloText}>
-					Приветствую Вас!
+					Welcome!
 				</Typography>
 				<Typography component='span'>
-					Пожалуйста установите это приложение, это необходимо для дальнейшей
-					работы. Спасибо :)
+					Please install this application, it is necessary for further work.
+					Thanks :)
 				</Typography>
 			</DialogContent>
 			<DialogActions className={classes.btnContainer}>
@@ -105,7 +107,10 @@ export const InstalModal = () => {
 					onClick={handleInstallClick}
 					variant='contained'
 					className={classes.installBtn}>
-					Установить
+					Install
+				</Button>
+				<Button variant='text' onClick={() => setVisibleModal(false)}>
+					Close
 				</Button>
 			</DialogActions>
 		</Dialog>
